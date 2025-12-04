@@ -51,16 +51,25 @@ function App() {
   }
 
   // 將所有路由包裹在 MainLayout 內
-  const PageWrapper = ({ element }) => (
-    <MainLayout
-      currentSemester={currentSemester}
-      onSemesterChange={setCurrentSemester}
-      semesterOptions={semesterOptions}
-    >
-      {/* 頁面組件本身也需要接收學期值，用於數據獲取 */}
-      {React.cloneElement(element, { currentSemester, semesterOptions })}
-    </MainLayout>
-  );
+  const PageWrapper = ({ element }) => {
+    // Don't forward `semesterOptions` or `currentSemester` onto plain DOM elements.
+    // If `element` is a React component (function/class), clone it and inject props.
+    // If it's a DOM element (e.g. <h2>...), render it as-is.
+    let child = element;
+    if (React.isValidElement(element) && typeof element.type !== 'string') {
+      child = React.cloneElement(element, { currentSemester, semesterOptions });
+    }
+
+    return (
+      <MainLayout
+        currentSemester={currentSemester}
+        onSemesterChange={setCurrentSemester}
+        semesterOptions={semesterOptions}
+      >
+        {child}
+      </MainLayout>
+    );
+  };
 
   return (
     <Router>
