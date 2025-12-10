@@ -118,7 +118,7 @@ styles.cardsContainer = {
 styles.card = {
     border: '1px solid #e6e9ee',
     borderRadius: '8px',
-    padding: '12px',
+    padding: '12px 20px',
     background: '#fff',
     boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
 };
@@ -156,6 +156,8 @@ const Home = ({ currentSemester }) => {
     const [results, setResults] = useState([]);
     // 搜尋模式：'name' | 'teacher' | 'code'
     const [searchMode, setSearchMode] = useState('name');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         let mounted = true;
@@ -225,11 +227,13 @@ const Home = ({ currentSemester }) => {
         const q = String(text || '').trim();
         if (!q) {
             setResults([]);
+            setCurrentPage(1);
             return;
         }
         const tokens = normalize(q).split(/\s+/).filter(Boolean);
         if (!allCourses) {
             setResults([]);
+            setCurrentPage(1);
             return;
         }
 
@@ -266,6 +270,7 @@ const Home = ({ currentSemester }) => {
         }
 
         setResults(matched);
+        setCurrentPage(1);
     };
 
     const handleSearch = () => {
@@ -278,7 +283,13 @@ const Home = ({ currentSemester }) => {
 
     // 決定要顯示的內容：若沒有輸入搜尋，顯示建議的前 2-3 筆課程
     const isQueryEmpty = !searchText.trim();
-    const displayed = isQueryEmpty ? (allCourses && allCourses.length > 0 ? allCourses.slice(0, 3) : []) : results;
+    const allDisplayed = isQueryEmpty ? (allCourses && allCourses.length > 0 ? allCourses.slice(0, 3) : []) : results;
+
+    // 分頁邏輯
+    const totalPages = Math.ceil(allDisplayed.length / itemsPerPage);
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    const displayed = allDisplayed.slice(startIdx, endIdx);
 
     // 格式化課程時間為 "週幾 / 節次, 節次" 格式
     const formatCourseTime = (timeObj) => {
@@ -356,11 +367,11 @@ const Home = ({ currentSemester }) => {
                         <div>載入課程中…</div>
                     ) : (
                         <div>
-                            {displayed.length === 0 ? (
+                            {allDisplayed.length === 0 ? (
                                 <div style={{ color: '#666' }}>{isQueryEmpty ? '尚無可顯示的建議課程（請稍候或切換學期）。' : '尚無搜尋結果。請嘗試其他關鍵字。'}</div>
                             ) : (
                                 <div>
-                                    <div style={{ marginBottom: '8px', color: '#333' }}></div>
+                                    <div style={{ margin: '12px 2px 8px', color: '#464646' }}>共 {allDisplayed.length} 筆結果，第 {currentPage} / {totalPages} 頁</div>
                                     <div style={styles.cardsContainer}>
                                         {displayed.map((c) => (
                                             <div key={c.id} style={styles.card}>
@@ -396,6 +407,56 @@ const Home = ({ currentSemester }) => {
                                             </div>
                                         ))}
                                     </div>
+                                    {/* 分頁控制 */}
+                                    {(
+                                        <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center' }}>
+                                            <button
+                                                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                                disabled={currentPage === 1}
+                                                style={{
+                                                    padding: '8px 12px',
+                                                    borderRadius: '6px',
+                                                    border: '1px solid #ccc',
+                                                    backgroundColor: currentPage === 1 ? '#f0f0f0' : '#fff',
+                                                    cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                                                    color: currentPage === 1 ? '#999' : '#333'
+                                                }}
+                                            >
+                                                上一頁
+                                            </button>
+                                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                                                <button
+                                                    key={page}
+                                                    onClick={() => setCurrentPage(page)}
+                                                    style={{
+                                                        padding: '8px 12px',
+                                                        borderRadius: '6px',
+                                                        border: '1px solid #ccc',
+                                                        backgroundColor: currentPage === page ? '#96C6DB' : '#fff',
+                                                        color: currentPage === page ? '#fff' : '#333',
+                                                        cursor: 'pointer',
+                                                        fontWeight: currentPage === page ? '600' : 'normal'
+                                                    }}
+                                                >
+                                                    {page}
+                                                </button>
+                                            ))}
+                                            <button
+                                                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                                disabled={currentPage === totalPages}
+                                                style={{
+                                                    padding: '8px 12px',
+                                                    borderRadius: '6px',
+                                                    border: '1px solid #ccc',
+                                                    backgroundColor: currentPage === totalPages ? '#f0f0f0' : '#fff',
+                                                    cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                                                    color: currentPage === totalPages ? '#999' : '#333'
+                                                }}
+                                            >
+                                                下一頁
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
