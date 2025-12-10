@@ -9,6 +9,7 @@ const styles = {
     },
     table: {
         minWidth: '1100px', // 強制表格較寬以擴大顯示範圍
+        minHeight: '700px',
         borderCollapse: 'collapse',
         textAlign: 'center',
         tableLayout: 'fixed',
@@ -23,7 +24,7 @@ const styles = {
         border: '1px solid #ccc',
         padding: '12px',
         minHeight: '120px',
-        verticalAlign: 'top',
+        verticalAlign: 'middle',
         position: 'relative',
         cursor: 'default',
         backgroundColor: '#f9f9f9', // 允許拖曳區的背景色
@@ -38,7 +39,7 @@ const styles = {
         borderRadius: '4px',
         padding: '5px',
         fontSize: '0.8em',
-        height: '100%',
+        height: '50%',
         lineHeight: '1.2',
         fontWeight: 'bold',
         color: isConflict ? '#a94442' : '#31708f',

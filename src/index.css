@@ -1,0 +1,31 @@
+/* Apply Manrope as the global font for the app */
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Manrope", "Noto Sans TC", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #222;
+}
+
+/* Ensure form controls use the same font */
+input,
+button,
+select,
+textarea {
+    font-family: inherit;
+}
+
+/* Small accessibility adjustments */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #F6F7F8;
+    margin: 0;
+    min-height: 100vh;
+}

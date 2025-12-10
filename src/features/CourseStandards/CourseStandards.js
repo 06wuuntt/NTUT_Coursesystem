@@ -170,7 +170,6 @@ const CourseStandards = ({ currentSemester, semesterOptions = [] }) => {
               options={departmentOptions
                 .filter(d => !selectedProgram || String(d.value).startsWith(`${selectedProgram}-`))
                 .map(d => ({
-                  // 移除 label 中的括號部分，例如 "電機系 (四技)" -> "電機系"
                   value: d.value,
                   label: String(d.label).replace(/\s*\(.+\)\s*$/, '')
                 }))}

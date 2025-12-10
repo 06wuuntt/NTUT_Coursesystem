@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ClassFilter from './ClassFilter';
 import CardView from './CardView';
 import TimeTableView from './TimeTableView';
-import { MOCK_SCHEDULE_DATA } from '../../constants/mockData';
+// import { MOCK_SCHEDULE_DATA } from '../../constants/mockData';
 import { fetchAllSemesterCourses, filterAndConvertSchedule } from '../../api/CourseService';
 
 const styles = {

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faUser, faLocationDot, faStar, faLandmark } from '@fortawesome/free-solid-svg-icons';
 import { fetchCalendarEvents, fetchAllSemesterCourses } from '../../api/CourseService';
 
 // 假設的近期行事曆事件 (作為 fetch 失敗時的 fallback)
@@ -9,27 +11,67 @@ const MOCK_RECENT_EVENTS = [
 ];
 
 const styles = {
-    searchContainer: {
-        padding: '30px',
-        backgroundColor: '#f0f4f7',
-        borderRadius: '10px',
-        marginBottom: '40px',
+    title: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '5px',
         textAlign: 'center',
+        marginBottom: '70px',
+    },
+    container: {
+        backgroundColor: '#f2f2f2',
+        margin: '70px auto',
+        borderRadius: '30px',
+        padding: '30px 50px',
+        // boxShadow: '8px 8px 30px #e9e9e9ff',
+        maxWidth: '1200px'
+    },
+    searchContainer: {
+        borderRadius: '10px',
+        marginBototm: '40px',
+    },
+    searchPart: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 10%',
+        margin: '0 10px',
     },
     searchInput: {
-        width: '60%',
         padding: '12px 15px',
         fontSize: '18px',
-        borderRadius: '25px',
-        border: '2px solid #007bff',
+        borderRadius: '15px',
+        border: 'solid 0.5px #B4B4B4',
         marginRight: '10px',
+    },
+    modeButtons: {
+        margin: '0 10px 15px 10px',
+        minHeight: '50px',
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr',
+        gap: '8px',
+        padding: '5px',
+        backgroundColor: '#E0E0E0',
+        borderRadius: '15px',
+        boxShadow: 'inset 0px 0px 8px #d1d1d1ff'
+    },
+    modeButton: {
+        padding: '6px 12px',
+        borderRadius: '12px',
+        border: 'None',
+        background: 'None',
+        cursor: 'pointer',
+        fontSize: '16px',
+        color: '#464646',
+    },
+    modeButtonActive: {
+        background: '#F6F7F8',
+        color: '#464646',
     },
     searchButton: {
         padding: '12px 25px',
         fontSize: '18px',
-        borderRadius: '25px',
+        borderRadius: '15px',
         border: 'none',
-        backgroundColor: '#007bff',
+        backgroundColor: '#96C6DB',
         color: 'white',
         cursor: 'pointer',
     },
@@ -80,17 +122,40 @@ styles.card = {
     background: '#fff',
     boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
 };
-styles.cardTitle = { fontSize: '16px', fontWeight: 700, marginBottom: '6px' };
+styles.cardTitle = { fontSize: '16px', fontWeight: '500' };
 styles.cardMeta = { color: '#666', fontSize: '13px', marginBottom: '8px' };
 styles.cardRight = { textAlign: 'right', minWidth: '88px' };
-styles.cardButton = { padding: '6px 10px', borderRadius: '6px', border: 'none', background: '#007bff', color: '#fff', cursor: 'pointer' };
+styles.cardButton = { padding: '5px 8px', borderRadius: '6px', border: 'none', background: '#96C6DB', color: '#fff', cursor: 'pointer' };
+styles.information = { display: 'flex', fontSize: '12px', color: '#7f7f7fff', flexDirection: 'row', alignItems: 'center' }
 
 const Home = ({ currentSemester }) => {
+    // 將學期代碼（例如 "114-1"）格式化為中文顯示（例如 "114 上學期"）
+    const formatSemester = (s) => {
+        if (!s) return '未選定學期';
+        const str = String(s).trim();
+        // 常見格式："114-1"
+        if (str.includes('-')) {
+            const [year, sem] = str.split('-');
+            const map = { '1': '上學期', '2': '下學期', '3': '暑期' };
+            return `${year} ${map[sem] || sem}`;
+        }
+        // 退而求其次：如果最後一個字是學期編號
+        const m = str.match(/^(\d+)(?:.*?)([123])$/);
+        if (m) {
+            const year = m[1];
+            const sem = m[2];
+            const map = { '1': '上學期', '2': '下學期', '3': '暑期' };
+            return `${year} ${map[sem] || sem}`;
+        }
+        return str;
+    };
     const [searchText, setSearchText] = useState('');
     const [recentEvents, setRecentEvents] = useState(MOCK_RECENT_EVENTS);
     const [allCourses, setAllCourses] = useState(null);
     const [loadingCourses, setLoadingCourses] = useState(false);
     const [results, setResults] = useState([]);
+    // 搜尋模式：'name' | 'teacher' | 'code'
+    const [searchMode, setSearchMode] = useState('name');
 
     useEffect(() => {
         let mounted = true;
@@ -162,32 +227,43 @@ const Home = ({ currentSemester }) => {
             setResults([]);
             return;
         }
-
         const tokens = normalize(q).split(/\s+/).filter(Boolean);
         if (!allCourses) {
             setResults([]);
             return;
         }
 
-        const matched = allCourses.filter(course => {
-            // build searchable text
-            const parts = [];
-            // 名稱（中文/英文）
-            parts.push(course.name?.zh || '');
-            parts.push(course.name?.en || '');
-            // 授課教師
-            if (Array.isArray(course.teacher)) parts.push(course.teacher.map(t => t.name).join(' '));
-            // 課號、代碼
-            parts.push(course.id || '');
-            parts.push(course.code || '');
-            // 所屬班級
-            if (Array.isArray(course.class)) parts.push(course.class.map(c => c.name || c.code || c.id).join(' '));
+        let matched = [];
 
-            const hay = normalize(parts.join(' '));
-
-            // tokens 必須全部存在於 hay 中（AND 搜尋）
-            return tokens.every(tok => hay.includes(tok));
-        });
+        if (searchMode === 'name') {
+            matched = allCourses.filter(course => {
+                const hay = normalize(((course.name?.zh || '') + ' ' + (course.name?.en || '')).trim());
+                return tokens.every(tok => hay.includes(tok));
+            });
+        } else if (searchMode === 'teacher') {
+            matched = allCourses.filter(course => {
+                const hay = normalize(Array.isArray(course.teacher) ? course.teacher.map(t => t.name).join(' ') : '');
+                return tokens.every(tok => hay.includes(tok));
+            });
+        } else if (searchMode === 'code') {
+            matched = allCourses.filter(course => {
+                const hay = normalize(course.id || course.code || '');
+                return tokens.every(tok => hay.includes(tok));
+            });
+        } else {
+            // fallback: generic search across common fields
+            matched = allCourses.filter(course => {
+                const parts = [];
+                parts.push(course.name?.zh || '');
+                parts.push(course.name?.en || '');
+                if (Array.isArray(course.teacher)) parts.push(course.teacher.map(t => t.name).join(' '));
+                parts.push(course.id || '');
+                parts.push(course.code || '');
+                if (Array.isArray(course.class)) parts.push(course.class.map(c => c.name || c.code || c.id).join(' '));
+                const hay = normalize(parts.join(' '));
+                return tokens.every(tok => hay.includes(tok));
+            });
+        }
 
         setResults(matched);
     };
@@ -204,65 +280,130 @@ const Home = ({ currentSemester }) => {
     const isQueryEmpty = !searchText.trim();
     const displayed = isQueryEmpty ? (allCourses && allCourses.length > 0 ? allCourses.slice(0, 3) : []) : results;
 
+    // 格式化課程時間為 "週幾 / 節次, 節次" 格式
+    const formatCourseTime = (timeObj) => {
+        if (!timeObj || typeof timeObj !== 'object') return '無時間資訊';
+
+        const dayMap = { mon: '一', tue: '二', wed: '三', thu: '四', fri: '五', sat: '六', sun: '日' };
+        const timeSlots = [];
+
+        for (const [day, periods] of Object.entries(timeObj)) {
+            if (Array.isArray(periods) && periods.length > 0) {
+                const dayName = dayMap[day] || day;
+                const periodStr = periods.join(', ');
+                timeSlots.push(`${dayName} / ${periodStr}`);
+            }
+        }
+
+        return timeSlots.length > 0 ? timeSlots.join('；') : '無時間資訊';
+    };
+
     return (
         <div>
-            <h2>首頁</h2>
-
-            {/* 課程搜尋欄位 */}
-            <div style={styles.searchContainer}>
-                <h3>快速課程搜尋</h3>
-                <input
-                    type="text"
-                    placeholder="輸入課程名稱、代碼或教師..."
-                    style={styles.searchInput}
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    onKeyPress={(e) => {
-                        if (e.key === 'Enter') handleSearch();
-                    }}
-                />
-                <button style={styles.searchButton} onClick={handleSearch}>
-                    搜尋
-                </button>
+            <div style={styles.title}>
+                <h2 style={{ margin: '0' }}>歡迎回到北科課程系統</h2>
+                <div>當前學期為 {formatSemester(currentSemester)}</div>
             </div>
 
-            {/* 搜尋結果 */}
-            <div style={{ maxWidth: '980px', margin: '0 auto 30px', padding: '10px' }}>
-                {loadingCourses ? (
-                    <div>載入課程中…</div>
-                ) : (
-                    <div>
-                        {displayed.length === 0 ? (
-                            <div style={{ color: '#666' }}>{isQueryEmpty ? '尚無可顯示的建議課程（請稍候或切換學期）。' : '尚無搜尋結果。請嘗試其他關鍵字。'}</div>
-                        ) : (
-                            <div>
-                                <div style={{ marginBottom: '8px', color: '#333' }}></div>
-                                <div style={styles.cardsContainer}>
-                                    {displayed.map((c) => (
-                                        <div key={c.id} style={styles.card}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                <div style={{ flex: 1 }}>
-                                                    <div style={styles.cardTitle}>{c.name?.zh || c.name?.en || '未知課程'}</div>
-                                                    <div style={styles.cardMeta}>{c.id || ''} • 授課：{(c.teacher || []).map(t => t.name).join('、') || '未知'}</div>
-                                                    <div style={{ color: '#444', fontSize: '13px' }}>{(c.class || []).slice(0, 3).map(cl => cl.name || cl.code || cl.id).join('，')}</div>
-                                                </div>
-                                                <div style={styles.cardRight}>
-                                                    <div style={{ fontWeight: 700 }}>{c.credit || ''} 學分</div>
-                                                    <div style={{ marginTop: '8px' }}>
-                                                        <button style={styles.cardButton} onClick={() => alert('尚未實作：查看課表')}>查看課表</button>
+            <div style={styles.container}>
+                {/* 課程搜尋欄位 */}
+                <div style={styles.searchContainer}>
+                    <h3 style={{ color: '#464646', fontSize: '1.5rem', margin: '0 0 20px' }}>搜尋課程</h3>
+                    <div style={styles.modeButtons}>
+                        <button
+                            type="button"
+                            style={{ ...styles.modeButton, ...(searchMode === 'name' ? styles.modeButtonActive : {}) }}
+                            onClick={() => setSearchMode('name')}
+                        >
+                            以名稱搜尋
+                        </button>
+                        <button
+                            type="button"
+                            style={{ ...styles.modeButton, ...(searchMode === 'teacher' ? styles.modeButtonActive : {}) }}
+                            onClick={() => setSearchMode('teacher')}
+                        >
+                            以教師搜尋
+                        </button>
+                        <button
+                            type="button"
+                            style={{ ...styles.modeButton, ...(searchMode === 'code' ? styles.modeButtonActive : {}) }}
+                            onClick={() => setSearchMode('code')}
+                        >
+                            以課號搜尋
+                        </button>
+                    </div>
+                    <div style={styles.searchPart}>
+                        <input
+                            type="text"
+                            placeholder={searchMode === 'name' ? '輸入課程名稱...' : searchMode === 'teacher' ? '輸入教師名稱...' : '輸入課程代碼...'}
+                            style={styles.searchInput}
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') handleSearch();
+                            }}
+                        />
+                        <button style={styles.searchButton} onClick={handleSearch}>
+                            搜尋
+                        </button>
+                    </div>
+
+                </div>
+
+                {/* 搜尋結果 */}
+                <div style={{ margin: '0 0 30px', padding: '10px' }}>
+                    {loadingCourses ? (
+                        <div>載入課程中…</div>
+                    ) : (
+                        <div>
+                            {displayed.length === 0 ? (
+                                <div style={{ color: '#666' }}>{isQueryEmpty ? '尚無可顯示的建議課程（請稍候或切換學期）。' : '尚無搜尋結果。請嘗試其他關鍵字。'}</div>
+                            ) : (
+                                <div>
+                                    <div style={{ marginBottom: '8px', color: '#333' }}></div>
+                                    <div style={styles.cardsContainer}>
+                                        {displayed.map((c) => (
+                                            <div key={c.id} style={styles.card}>
+                                                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1.5fr auto', gap: '16px', alignItems: 'center' }}>
+                                                    <div>
+                                                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
+                                                            <div style={styles.cardTitle}>{c.name.zh}</div>
+                                                            <div style={{ fontSize: '12px', backgroundColor: '#C3E6F5', padding: '3px 8px', borderRadius: '10px' }}>{c.id}</div>
+                                                        </div>
+                                                        <div style={styles.information}>
+                                                            <FontAwesomeIcon icon={faClock} style={{ marginRight: '4px', fontSize: '12px', }} />
+                                                            授課時間：{formatCourseTime(c.time)}
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                                        <div style={styles.information}><FontAwesomeIcon icon={faStar} style={{ marginRight: '4px', fontSize: '12px' }} />
+                                                            學分：{c.credit}
+                                                        </div>
+                                                        <div style={styles.information}><FontAwesomeIcon icon={faUser} style={{ marginRight: '4px', fontSize: '12px' }} />
+                                                            教師：{Array.isArray(c.teacher) && c.teacher.length > 0 ? c.teacher.map(t => t.name).join('、') : '無教師資訊'}
+                                                        </div>
+                                                        <div style={styles.information}><FontAwesomeIcon icon={faLocationDot} style={{ marginRight: '4px', fontSize: '12px' }} />
+                                                            地點：{Array.isArray(c.classroom) && c.classroom.length > 0 ? c.classroom.map(t => t.name).join('、') : '無教室資訊'}
+                                                        </div>
+                                                        <div style={styles.information}><FontAwesomeIcon icon={faLandmark} style={{ marginRight: '4px', fontSize: '12px' }} />
+                                                            班級：{Array.isArray(c.class) && c.class.length > 0 ? c.class.map(t => t.name).join('、') : '無班級資訊'}
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                        <button style={styles.cardButton}>查看詳情</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
-                )}
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {/* 近期校園行事曆主要事件 */}
+            {/* 近期校園行事曆主要事件
             <div style={styles.calendarContainer}>
                 <h3>近期行事曆</h3>
                 <ul style={styles.eventList}>
@@ -278,7 +419,7 @@ const Home = ({ currentSemester }) => {
                         ))
                     )}
                 </ul>
-            </div>
+            </div> */}
         </div>
     );
 };

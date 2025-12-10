@@ -4,7 +4,8 @@ import { fetchCalendarEvents } from '../../api/CourseService';
 
 const styles = {
   container: {
-    maxWidth: '900px',
+    maxWidth: '1500px',
+    maxHeight: '1000px',
     margin: '0 auto',
     textAlign: 'center',
   },

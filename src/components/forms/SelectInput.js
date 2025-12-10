@@ -9,9 +9,6 @@ import React from 'react';
  */
 const SelectInput = ({ label, value, onChange, options, name }) => {
   const styles = {
-    container: {
-      marginBottom: '15px',
-    },
     label: {
       display: 'block',
       marginBottom: '5px',
@@ -28,7 +25,7 @@ const SelectInput = ({ label, value, onChange, options, name }) => {
 
   return (
     <div style={styles.container}>
-      <label htmlFor={name} style={styles.label}>{label}</label>
+      {/* <label htmlFor={name} style={styles.label}>{label}</label> */}
       <select
         id={name}
         name={name}
