@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { faExternalLinkAlt, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
 import { ROUTES } from '../../constants/routes';
 import SelectInput from '../forms/SelectInput'; // 引入 SelectInput
 // import { MOCK_SEMESTERS } from '../../constants/mockData'; // 引入學期資料
@@ -23,7 +23,7 @@ const styles = {
     margin: '10px 0px 70px 0px',
     display: 'flex',
     justifyContent: 'space-between', // 讓內容分散
-    gap: '1.2rem',
+    gap: '18px',
     alignItems: 'center',
     borderRadius: '20px',
     boxShadow: '8px 8px 30px #e9e9e9ff'
@@ -32,6 +32,8 @@ const styles = {
     fontSize: '25px',
     fontWeight: '700',
     color: '#464646',
+    cursor: 'pointer',
+    textDecoration: 'none',
   },
   navLinks: {
     display: 'flex',
@@ -42,9 +44,16 @@ const styles = {
   link: {
     color: '#797979ff',
     fontWeight: '500',
-    margin: '0 15px',
+    margin: '0 6px',
     textDecoration: 'none',
     fontSize: '18px',
+    padding: '8px 12px',
+    borderRadius: '12px',
+    transition: 'background-color 0.2s ease, color 0.2s ease',
+  },
+  linkHover: {
+    backgroundColor: '#F6F7F8',
+    color: '#336F8B',
   },
   semesterSelect: {
     width: '180px',
@@ -91,6 +100,7 @@ const styles = {
  * * @param {Array} semesterOptions - 所有的學期選項 (從 API 動態載入)
  */
 const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptions }) => {
+  const [hoveredLink, setHoveredLink] = React.useState(null);
   const handleSemesterChange = (e) => {
     onSemesterChange(e.target.value);
   };
@@ -104,10 +114,21 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
         {/* 導覽列容器 */}
         <div style={styles.navContainer}>
           {/* 左側標題容器（固定寬度，用來平衡右側選單，使中間連結置中） */}
-          <div style={styles.title}>北科課程系統</div>
+          <Link to="/" style={styles.title}>
+            <FontAwesomeIcon icon={faGraduationCap} style={{ marginRight: '10px' }} />北科課程系統
+          </Link>
           <nav style={styles.navLinks}>
             {ROUTES.map(route => (
-              <Link key={route.id} to={route.path} style={styles.link}>
+              <Link
+                key={route.id}
+                to={route.path}
+                style={{
+                  ...styles.link,
+                  ...(hoveredLink === route.id ? styles.linkHover : {})
+                }}
+                onMouseEnter={() => setHoveredLink(route.id)}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
                 {route.name}
               </Link>
             ))}
@@ -141,9 +162,9 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
         {/* <hr  style={{color: '#B4B4B4'}}/> */}
         <div style={styles.footerLinks}>
           <a href="https://nportal.ntut.edu.tw/index.do?thetime=1761978968598" style={styles.footerLink} target='_blank' rel='noreferrer'>校園入口網站 <FontAwesomeIcon icon={faExternalLinkAlt} style={{ marginLeft: '6px', fontSize: '12px' }} /></a>
-          <a href="https://www.ntut.edu.tw/" style={styles.footerLink}  target='_blank' rel='noreferrer'>校園首頁 <FontAwesomeIcon icon={faExternalLinkAlt} style={{ marginLeft: '6px', fontSize: '12px' }} /></a>
-          <a href="https://lib.ntut.edu.tw/mp.asp?mp=100" style={styles.footerLink}  target='_blank' rel='noreferrer'>台北科技大學圖書館 <FontAwesomeIcon icon={faExternalLinkAlt} style={{ marginLeft: '6px', fontSize: '12px' }} /></a>
-          <a href="https://oaa.ntut.edu.tw/p/412-1008-15509.php?Lang=zh-tw" style={styles.footerLink}  target='_blank' rel='noreferrer'>微學程專區 <FontAwesomeIcon icon={faExternalLinkAlt} style={{ marginLeft: '6px', fontSize: '12px' }} /></a>
+          <a href="https://www.ntut.edu.tw/" style={styles.footerLink} target='_blank' rel='noreferrer'>校園首頁 <FontAwesomeIcon icon={faExternalLinkAlt} style={{ marginLeft: '6px', fontSize: '12px' }} /></a>
+          <a href="https://lib.ntut.edu.tw/mp.asp?mp=100" style={styles.footerLink} target='_blank' rel='noreferrer'>台北科技大學圖書館 <FontAwesomeIcon icon={faExternalLinkAlt} style={{ marginLeft: '6px', fontSize: '12px' }} /></a>
+          <a href="https://oaa.ntut.edu.tw/p/412-1008-15509.php?Lang=zh-tw" style={styles.footerLink} target='_blank' rel='noreferrer'>微學程專區 <FontAwesomeIcon icon={faExternalLinkAlt} style={{ marginLeft: '6px', fontSize: '12px' }} /></a>
         </div>
         <p style={{ margin: '0', color: '#41809E' }}>北科課程系統 ｜ Copyright © 2025</p>
       </footer>

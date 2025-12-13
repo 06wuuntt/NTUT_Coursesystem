@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faUser, faLocationDot, faStar, faLandmark } from '@fortawesome/free-solid-svg-icons';
 import { fetchCalendarEvents, fetchAllSemesterCourses } from '../../api/CourseService';
 
 // 假設的近期行事曆事件 (作為 fetch 失敗時的 fallback)
@@ -43,28 +41,34 @@ const styles = {
         marginRight: '10px',
     },
     modeButtons: {
-        margin: '0 10px 15px 10px',
-        minHeight: '50px',
+        margin: '0 10px 20px 10px',
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr',
-        gap: '8px',
-        padding: '5px',
+        gap: '6px',
+        padding: '6px',
         backgroundColor: '#E0E0E0',
-        borderRadius: '15px',
-        boxShadow: 'inset 0px 0px 8px #d1d1d1ff'
+        borderRadius: '16px',
+        boxShadow: 'inset 0px 0px 8px #d1d1d1ff',
     },
     modeButton: {
-        padding: '6px 12px',
-        borderRadius: '12px',
-        border: 'None',
-        background: 'None',
+        padding: '10px',
+        borderRadius: '10px',
+        border: 'none',
+        backgroundColor: 'transparent',
         cursor: 'pointer',
-        fontSize: '16px',
+        fontSize: '15px',
         color: '#464646',
+        transition: 'all 0.2s ease',
+        fontWeight: '500',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     modeButtonActive: {
-        background: '#F6F7F8',
+        backgroundColor: '#F6F7F8',
         color: '#464646',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+        fontWeight: '600',
     },
     searchButton: {
         padding: '12px 25px',
@@ -112,21 +116,86 @@ const styles = {
 // 卡片樣式（放在同一檔案以維持簡潔）
 styles.cardsContainer = {
     display: 'grid',
-    gridTemplateColumns: '1fr',
-    gap: '12px',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+    gap: '20px',
 };
 styles.card = {
-    border: '1px solid #e6e9ee',
-    borderRadius: '8px',
-    padding: '12px 20px',
-    background: '#fff',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+    backgroundColor: '#FFFFFF',
+    borderRadius: '16px',
+    border: '1px solid #F1F5F9',
+    padding: '20px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
 };
-styles.cardTitle = { fontSize: '16px', fontWeight: '500' };
-styles.cardMeta = { color: '#666', fontSize: '13px', marginBottom: '8px' };
-styles.cardRight = { textAlign: 'right', minWidth: '88px' };
-styles.cardButton = { padding: '5px 8px', borderRadius: '6px', border: 'none', background: '#96C6DB', color: '#fff', cursor: 'pointer' };
-styles.information = { display: 'flex', fontSize: '12px', color: '#7f7f7fff', flexDirection: 'row', alignItems: 'center' }
+styles.cardHeader = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+};
+styles.cardTitle = {
+    fontSize: '1.1rem',
+    fontWeight: '700',
+    color: '#1E293B',
+    margin: 0,
+    lineHeight: '1.4',
+};
+styles.cardId = {
+    fontSize: '0.8rem',
+    color: '#64748B',
+    backgroundColor: '#D7EFFA',
+    padding: '2px 8px',
+    borderRadius: '6px',
+    fontFamily: 'monospace',
+};
+styles.cardBody = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+};
+styles.information = {
+    display: 'flex',
+    fontSize: '0.9rem',
+    color: '#475569',
+    alignItems: 'center',
+    lineHeight: '1.5',
+};
+styles.divider = {
+    height: '1px',
+    backgroundColor: '#aaaaaaff',
+    margin: '4px 0',
+};
+
+const Icons = {
+    Clock: () => (
+        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    ),
+    User: () => (
+        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+    ),
+    Location: () => (
+        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+    ),
+    Star: () => (
+        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+        </svg>
+    ),
+    Landmark: () => (
+        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+    )
+};
 
 const Home = ({ currentSemester }) => {
     // 將學期代碼（例如 "114-1"）格式化為中文顯示（例如 "114 上學期"）
@@ -157,7 +226,7 @@ const Home = ({ currentSemester }) => {
     // 搜尋模式：'name' | 'teacher' | 'code'
     const [searchMode, setSearchMode] = useState('name');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 12; // 增加每頁顯示數量，因為現在是 Grid
 
     useEffect(() => {
         let mounted = true;
@@ -283,7 +352,7 @@ const Home = ({ currentSemester }) => {
 
     // 決定要顯示的內容：若沒有輸入搜尋，顯示建議的前 2-3 筆課程
     const isQueryEmpty = !searchText.trim();
-    const allDisplayed = isQueryEmpty ? (allCourses && allCourses.length > 0 ? allCourses.slice(0, 3) : []) : results;
+    const allDisplayed = isQueryEmpty ? (allCourses && allCourses.length > 0 ? allCourses.slice(0, 6) : []) : results;
 
     // 分頁邏輯
     const totalPages = Math.ceil(allDisplayed.length / itemsPerPage);
@@ -309,10 +378,54 @@ const Home = ({ currentSemester }) => {
         return timeSlots.length > 0 ? timeSlots.join('；') : '無時間資訊';
     };
 
-    return (
+    const CourseCard = ({ c }) => {
+        const [isHovered, setIsHovered] = useState(false);
+        return (
+            <div
+                style={{
+                    ...styles.card,
+                    cursor: isHovered ? 'pointer' : '',
+                    transform: isHovered ? 'translateY(-2px)' : 'none',
+                    boxShadow: isHovered ? '0 12px 20px -8px rgba(0, 0, 0, 0.15)' : styles.card.boxShadow
+                }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                <div style={styles.cardHeader}>
+                    <div style={styles.cardTitle}>{c.name.zh}</div>
+                    <div style={styles.cardId}>{c.id}</div>
+                </div>
+
+                <div style={styles.divider} />
+
+                <div style={styles.cardBody}>
+                    <div style={styles.information}>
+                        <Icons.User />
+                        <span>{Array.isArray(c.teacher) && c.teacher.length > 0 ? c.teacher.map(t => t.name).join('、') : '無教師資訊'}</span>
+                    </div>
+                    <div style={styles.information}>
+                        <Icons.Clock />
+                        <span>{formatCourseTime(c.time)}</span>
+                    </div>
+                    <div style={styles.information}>
+                        <Icons.Location />
+                        <span>{Array.isArray(c.classroom) && c.classroom.length > 0 ? c.classroom.map(t => t.name).join('、') : '無教室資訊'}</span>
+                    </div>
+                    <div style={styles.information}>
+                        <Icons.Star />
+                        <span>{c.credit} 學分</span>
+                    </div>
+                    <div style={styles.information}>
+                        <Icons.Landmark />
+                        <span>{Array.isArray(c.class) && c.class.length > 0 ? c.class.map(t => t.name).join('、') : '無班級'}</span>
+                    </div>
+                </div>
+            </div>
+        );
+    }; return (
         <div>
             <div style={styles.title}>
-                <h2 style={{ margin: '0' }}>歡迎回到北科課程系統</h2>
+                <h2 style={{ margin: '0', fontSize: '40px' }}>歡迎回到北科課程系統</h2>
                 <div>當前學期為 {formatSemester(currentSemester)}</div>
             </div>
 
@@ -345,6 +458,8 @@ const Home = ({ currentSemester }) => {
                     </div>
                     <div style={styles.searchPart}>
                         <input
+                            id="course-search-input"
+                            name="course-search"
                             type="text"
                             placeholder={searchMode === 'name' ? '輸入課程名稱...' : searchMode === 'teacher' ? '輸入教師名稱...' : '輸入課程代碼...'}
                             style={styles.searchInput}
@@ -367,94 +482,85 @@ const Home = ({ currentSemester }) => {
                         <div>載入課程中…</div>
                     ) : (
                         <div>
-                            {allDisplayed.length === 0 ? (
-                                <div style={{ color: '#666' }}>{isQueryEmpty ? '尚無可顯示的建議課程（請稍候或切換學期）。' : '尚無搜尋結果。請嘗試其他關鍵字。'}</div>
-                            ) : (
+                            {isQueryEmpty ? (
+                                // 建議課程顯示（未輸入搜尋時）
                                 <div>
-                                    <div style={{ margin: '12px 2px 8px', color: '#464646' }}>共 {allDisplayed.length} 筆結果，第 {currentPage} / {totalPages} 頁</div>
-                                    <div style={styles.cardsContainer}>
-                                        {displayed.map((c) => (
-                                            <div key={c.id} style={styles.card}>
-                                                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1.5fr auto', gap: '16px', alignItems: 'center' }}>
-                                                    <div>
-                                                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
-                                                            <div style={styles.cardTitle}>{c.name.zh}</div>
-                                                            <div style={{ fontSize: '12px', backgroundColor: '#C3E6F5', padding: '3px 8px', borderRadius: '10px' }}>{c.id}</div>
-                                                        </div>
-                                                        <div style={styles.information}>
-                                                            <FontAwesomeIcon icon={faClock} style={{ marginRight: '4px', fontSize: '12px', }} />
-                                                            授課時間：{formatCourseTime(c.time)}
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                                        <div style={styles.information}><FontAwesomeIcon icon={faStar} style={{ marginRight: '4px', fontSize: '12px' }} />
-                                                            學分：{c.credit}
-                                                        </div>
-                                                        <div style={styles.information}><FontAwesomeIcon icon={faUser} style={{ marginRight: '4px', fontSize: '12px' }} />
-                                                            教師：{Array.isArray(c.teacher) && c.teacher.length > 0 ? c.teacher.map(t => t.name).join('、') : '無教師資訊'}
-                                                        </div>
-                                                        <div style={styles.information}><FontAwesomeIcon icon={faLocationDot} style={{ marginRight: '4px', fontSize: '12px' }} />
-                                                            地點：{Array.isArray(c.classroom) && c.classroom.length > 0 ? c.classroom.map(t => t.name).join('、') : '無教室資訊'}
-                                                        </div>
-                                                        <div style={styles.information}><FontAwesomeIcon icon={faLandmark} style={{ marginRight: '4px', fontSize: '12px' }} />
-                                                            班級：{Array.isArray(c.class) && c.class.length > 0 ? c.class.map(t => t.name).join('、') : '無班級資訊'}
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                        <button style={styles.cardButton}>查看詳情</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
+                                    <div style={{ marginBottom: '20px' }}>
+                                        <div style={{ margin: '12px 2px 8px', color: '#464646' }}>建議課程</div>
                                     </div>
-                                    {/* 分頁控制 */}
-                                    {(
-                                        <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center' }}>
-                                            <button
-                                                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                                                disabled={currentPage === 1}
-                                                style={{
-                                                    padding: '8px 12px',
-                                                    borderRadius: '6px',
-                                                    border: '1px solid #ccc',
-                                                    backgroundColor: currentPage === 1 ? '#f0f0f0' : '#fff',
-                                                    cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-                                                    color: currentPage === 1 ? '#999' : '#333'
-                                                }}
-                                            >
-                                                上一頁
-                                            </button>
-                                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                                                <button
-                                                    key={page}
-                                                    onClick={() => setCurrentPage(page)}
-                                                    style={{
-                                                        padding: '8px 12px',
-                                                        borderRadius: '6px',
-                                                        border: '1px solid #ccc',
-                                                        backgroundColor: currentPage === page ? '#96C6DB' : '#fff',
-                                                        color: currentPage === page ? '#fff' : '#333',
-                                                        cursor: 'pointer',
-                                                        fontWeight: currentPage === page ? '600' : 'normal'
-                                                    }}
-                                                >
-                                                    {page}
-                                                </button>
+                                    {allCourses && allCourses.length > 0 ? (
+                                        <div style={styles.cardsContainer}>
+                                            {allCourses.slice(0, 6).map((c) => (
+                                                <CourseCard key={c.id} c={c} />
                                             ))}
-                                            <button
-                                                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                                                disabled={currentPage === totalPages}
-                                                style={{
-                                                    padding: '8px 12px',
-                                                    borderRadius: '6px',
-                                                    border: '1px solid #ccc',
-                                                    backgroundColor: currentPage === totalPages ? '#f0f0f0' : '#fff',
-                                                    cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-                                                    color: currentPage === totalPages ? '#999' : '#333'
-                                                }}
-                                            >
-                                                下一頁
-                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div style={{ margin: '12px 2px 8px', color: '#464646' }}>尚無可顯示的建議課程（請稍候或切換學期）。</div>
+                                    )}
+                                </div>
+                            ) : (
+                                // 搜尋結果顯示（輸入搜尋時）
+                                <div>
+                                    {results.length === 0 ? (
+                                        <div style={{ margin: '12px 2px 8px', color: '#464646' }}>尚無搜尋結果。請嘗試其他關鍵字。</div>
+                                    ) : (
+                                        <div>
+                                            <div style={{ margin: '12px 2px 8px', color: '#464646' }}>共 {results.length} 筆結果，第 {currentPage} / {totalPages} 頁</div>
+                                            <div style={styles.cardsContainer}>
+                                                {displayed.map((c) => (
+                                                    <CourseCard key={c.id} c={c} />
+                                                ))}
+                                            </div>
+                                            {/* 分頁控制（僅搜尋結果時顯示） */}
+                                            {totalPages > 1 && (
+                                                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center' }}>
+                                                    <button
+                                                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                                        disabled={currentPage === 1}
+                                                        style={{
+                                                            padding: '8px 12px',
+                                                            borderRadius: '6px',
+                                                            border: '1px solid #ccc',
+                                                            backgroundColor: currentPage === 1 ? '#f0f0f0' : '#fff',
+                                                            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                                                            color: currentPage === 1 ? '#999' : '#333'
+                                                        }}
+                                                    >
+                                                        上一頁
+                                                    </button>
+                                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                                                        <button
+                                                            key={page}
+                                                            onClick={() => setCurrentPage(page)}
+                                                            style={{
+                                                                padding: '8px 12px',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #ccc',
+                                                                backgroundColor: currentPage === page ? '#96C6DB' : '#fff',
+                                                                color: currentPage === page ? '#fff' : '#333',
+                                                                cursor: 'pointer',
+                                                                fontWeight: currentPage === page ? '600' : 'normal'
+                                                            }}
+                                                        >
+                                                            {page}
+                                                        </button>
+                                                    ))}
+                                                    <button
+                                                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                                        disabled={currentPage === totalPages}
+                                                        style={{
+                                                            padding: '8px 12px',
+                                                            borderRadius: '6px',
+                                                            border: '1px solid #ccc',
+                                                            backgroundColor: currentPage === totalPages ? '#f0f0f0' : '#fff',
+                                                            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                                                            color: currentPage === totalPages ? '#999' : '#333'
+                                                        }}
+                                                    >
+                                                        下一頁
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -463,24 +569,6 @@ const Home = ({ currentSemester }) => {
                     )}
                 </div>
             </div>
-
-            {/* 近期校園行事曆主要事件
-            <div style={styles.calendarContainer}>
-                <h3>近期行事曆</h3>
-                <ul style={styles.eventList}>
-                    {recentEvents.length === 0 ? (
-                        <li style={{ padding: '10px 0' }}>目前沒有近期活動。</li>
-                    ) : (
-                        recentEvents.map((event, index) => (
-                            <li key={index} style={styles.eventItem}>
-                                <span style={styles.eventDate}>{event.date}</span>
-                                <span style={styles.eventDescription}>{event.description}</span>
-                                <a href={event.link} style={styles.eventLink}>查看詳情 &gt;</a>
-                            </li>
-                        ))
-                    )}
-                </ul>
-            </div> */}
         </div>
     );
 };

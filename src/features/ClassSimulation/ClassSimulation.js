@@ -4,6 +4,9 @@ import CourseSearchPanel from './CourseSearchPanel';
 import { MOCK_ALL_COURSES } from '../../constants/mockData';
 
 const styles = {
+    containers: {
+        margin: '0 100px',
+    },
     container: {
         display: 'flex',
         gap: '20px',
@@ -206,7 +209,7 @@ const Scheduler = ({ currentSemester }) => {
     }, []);
 
     return (
-        <div>
+        <div style={styles.containers}>
             <div style={styles.headerBar}>
                 <h2>排課模擬器</h2>
                 <div style={styles.creditDisplay}>已選學分數：{totalCredits} 學分</div>

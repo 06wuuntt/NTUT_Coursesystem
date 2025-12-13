@@ -1,124 +1,249 @@
 import React from 'react';
 import { MOCK_PERIODS } from '../../constants/mockData';
 
-const styles = {
-    table: {
-        width: '100%',
-        borderCollapse: 'collapse',
-        textAlign: 'center',
-        tableLayout: 'fixed',
-    },
-    th: {
-        border: '1px solid #ccc',
-        padding: '10px',
-        backgroundColor: '#eee',
-    },
-    td: {
-        border: '1px solid #ccc',
-        padding: '5px',
-        minHeight: '80px',
-        verticalAlign: 'top',
-        position: 'relative',
-    },
-    periodCell: {
-        backgroundColor: '#f7f7f7',
-        fontWeight: 'bold',
-    },
-    courseBlock: {
-        backgroundColor: '#d9edf7',
-        border: '1px solid #bce8f1',
-        borderRadius: '4px',
-        padding: '5px',
-        fontSize: '0.85em',
-        cursor: 'pointer',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        lineHeight: '1.2',
-        fontWeight: 'bold',
-        color: '#31708f',
-    },
-    location: {
-        fontSize: '0.75em',
-        fontWeight: 'normal',
-        color: '#666',
-        marginTop: '3px',
-    }
-};
-
-const DayNames = ['節次', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
-
-/**
- * 時間表形式課表顯示
- * @param {Array} courses - 課程列表
- */
 const TimeTableView = ({ courses }) => {
-    // 建立一個網格結構來存放課程 (Day[1-7] x Period[1-10])
-    // 每個格子會是一個陣列，允許多堂課重疊
-    const grid = {}; // 例如：grid['1_3'] = [courseA, courseB]
+    const styles = {
+        container: {
+            backgroundColor: '#FFFFFF',
+            borderRadius: '8px',
+            padding: '20px',
+            boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
+        },
+        gridContainer: {
+            display: 'grid',
+            gridTemplateColumns: '60px 1fr 1fr 1fr 1fr 1fr 1fr',
+            gap: '2px',
+            backgroundColor: '#EDEEF1',
+            padding: '2px',
+            borderRadius: '4px',
+            overflow: 'hidden',
+            position: 'relative', // Ensure z-index works
+        },
+        headerCell: {
+            backgroundColor: '#F8F9FA',
+            padding: '12px 8px',
+            fontWeight: '600',
+            fontSize: '0.9em',
+            color: '#464646',
+            textAlign: 'center',
+            minHeight: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        timeCell: {
+            backgroundColor: '#F8F9FA',
+            padding: '8px',
+            fontWeight: '600',
+            fontSize: '0.85em',
+            color: '#464646',
+            textAlign: 'center',
+            minHeight: '60px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '4px',
+        },
+        periodLabel: {
+            fontSize: '0.75em',
+            color: '#888888',
+        },
+        courseCell: {
+            backgroundColor: '#FFFFFF',
+            padding: '4px',
+            minHeight: '60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        courseCard: {
+            backgroundColor: 'rgba(199, 196, 196, 0.6)',
+            border: 'None',
+            borderRadius: '6px',
+            padding: '8px',
+            cursor: 'pointer',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center',
+            transition: 'all 0.2s',
+            fontSize: '0.875em',
+            color: '#464646',
+            fontWeight: '500',
+            lineHeight: '1.2',
+            backdropFilter: 'blur(2px)',
+            WebkitBackdropFilter: 'blur(2px)',
+        },
+        courseCardHover: {
+            backgroundColor: 'rgba(209, 209, 209, 0.6)',
+            transform: 'scale(1.03)',
+        },
+    };
 
-    // 填充網格
+    // 星期一到星期六的标签
+    const dayLabels = ['一', '二', '三', '四', '五', '六'];
+
+    // 构建课程网格数据 - grid[day_period] = [courses]（支持多堂课程重疊）
+    const grid = {};
     courses.forEach(course => {
-        course.time.forEach(t => {
-            // 處理 '3-5' 這種連續節次
-            const [start, end] = t.period.split('-').map(Number);
-            for (let p = start; p <= (end || start); p++) {
-                const key = `${t.day}_${p}`; // e.g., '1_3'
+        course.time?.forEach(t => {
+            const raw = String(t.period);
+            if (raw.includes('-')) {
+                const [startLabel, endLabel] = raw.split('-');
+                const periodIds = MOCK_PERIODS.map(p => String(p.id));
+                const startIdx = periodIds.indexOf(String(startLabel));
+                const endIdx = periodIds.indexOf(String(endLabel));
+                if (startIdx !== -1 && endIdx !== -1 && startIdx <= endIdx) {
+                    for (let i = startIdx; i <= endIdx; i++) {
+                        const pid = periodIds[i];
+                        const key = `${t.day}_${pid}`;
+                        if (!grid[key]) grid[key] = [];
+                        grid[key].push({ name: course.name, location: course.location, id: course.id });
+                    }
+                }
+            } else {
+                const key = `${t.day}_${raw}`;
                 if (!grid[key]) grid[key] = [];
-                grid[key].push({
-                    name: course.name,
-                    location: course.location,
-                    id: course.id,
-                });
+                grid[key].push({ name: course.name, location: course.location, id: course.id });
             }
         });
     });
 
-    return (
-        <table style={styles.table}>
-            <thead>
-                <tr>
-                    {DayNames.map(day => (
-                        <th key={day} style={styles.th}>{day}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {MOCK_PERIODS.map(period => (
-                    <tr key={period.id}>
-                        {/* 第一欄：節次與時間 */}
-                        <td style={{...styles.td, ...styles.periodCell}}>
-                            {period.id} ({period.time})
-                        </td>
-                        
-                        {/* 星期一到日 (1 到 7) */}
-                        {[1, 2, 3, 4, 5, 6, 7].map(dayIndex => {
-                            const key = `${dayIndex}_${period.id}`;
-                            const cell = grid[key] || [];
+    // Pre-calculate spans for merging consecutive cells
+    const cellConfig = {};
+    [1, 2, 3, 4, 5, 6].forEach(day => {
+        for (let i = 0; i < MOCK_PERIODS.length; i++) {
+            const period = MOCK_PERIODS[i];
+            const key = `${day}_${period.id}`;
 
-                            return (
-                                <td key={key} style={styles.td}>
-                                    {cell.length === 0 && null}
-                                    {cell.length === 1 && (
-                                        <div style={styles.courseBlock} title={cell[0].name}>
-                                            {cell[0].name}
-                                            <div style={styles.location}>{cell[0].location}</div>
-                                        </div>
-                                    )}
-                                    {cell.length > 1 && (
-                                        <div style={{ padding: 8, backgroundColor: '#fff4e6', borderRadius: 4, border: '1px dashed #f0ad4e' }}>
-                                            <div style={{ fontWeight: 'bold', color: '#8a6d3b' }}>多堂課包含於此</div>
-                                            <div style={{ fontSize: '0.85em', color: '#8a6d3b' }}>請點選卡片形式以查看該時段課程</div>
-                                        </div>
-                                    )}
-                                </td>
-                            );
-                        })}
-                    </tr>
+            if (cellConfig[key]?.skip) continue;
+
+            const coursesInCell = grid[key] || [];
+            if (coursesInCell.length === 1) {
+                const courseId = coursesInCell[0].id;
+                let span = 1;
+
+                // Look ahead for same course
+                for (let j = i + 1; j < MOCK_PERIODS.length; j++) {
+                    const nextPeriod = MOCK_PERIODS[j];
+                    const nextKey = `${day}_${nextPeriod.id}`;
+                    const nextCourses = grid[nextKey] || [];
+
+                    if (nextCourses.length === 1 && nextCourses[0].id === courseId) {
+                        span++;
+                        cellConfig[nextKey] = { skip: true };
+                    } else {
+                        break;
+                    }
+                }
+                cellConfig[key] = { span, skip: false };
+            } else {
+                cellConfig[key] = { span: 1, skip: false };
+            }
+        }
+    });
+
+    const [hoveredCell, setHoveredCell] = React.useState(null);
+
+    return (
+        <div style={styles.container}>
+            <div style={styles.gridContainer}>
+                {/* 1. Headers */}
+                <div style={{ gridColumn: 1, gridRow: 1, ...styles.headerCell }}></div>
+                {dayLabels.map((day, index) => (
+                    <div key={day} style={{ gridColumn: index + 2, gridRow: 1, ...styles.headerCell }}>{day}</div>
                 ))}
-            </tbody>
-        </table>
+
+                {/* 2. Background Grid (Time Cells + Empty White Cells) */}
+                {MOCK_PERIODS.map((period, index) => {
+                    const row = index + 2;
+                    return (
+                        <React.Fragment key={`bg-${period.id}`}>
+                            {/* Time Cell */}
+                            <div style={{ gridColumn: 1, gridRow: row, ...styles.timeCell }}>
+                                <div>{period.id}</div>
+                            </div>
+                            {/* White Background Cells (Always Rendered) */}
+                            {[1, 2, 3, 4, 5, 6].map(dayIndex => (
+                                <div key={`cell-${dayIndex}-${period.id}`} style={{
+                                    gridColumn: dayIndex + 1,
+                                    gridRow: row,
+                                    ...styles.courseCell,
+                                    zIndex: 0
+                                }} />
+                            ))}
+                        </React.Fragment>
+                    );
+                })}
+
+                {/* 3. Course Cards (Overlay) */}
+                {[1, 2, 3, 4, 5, 6].map(dayIndex => {
+                    return MOCK_PERIODS.map((period, pIndex) => {
+                        const key = `${dayIndex}_${period.id}`;
+                        const config = cellConfig[key] || { span: 1, skip: false };
+
+                        if (config.skip) return null;
+
+                        const coursesInCell = grid[key] || [];
+                        if (coursesInCell.length === 0) return null;
+
+                        const hasOverlap = coursesInCell.length > 1;
+                        const row = pIndex + 2;
+
+                        return (
+                            <div
+                                key={`course-${key}`}
+                                style={{
+                                    gridColumn: dayIndex + 1,
+                                    gridRow: `${row} / span ${config.span}`,
+                                    zIndex: 1, // On top of background
+                                    padding: '4px', // Match cell padding
+                                    pointerEvents: 'none', // Allow clicks to pass through to cell if needed, but card needs interaction
+                                    // Actually, we want the card to be interactive.
+                                    // Since it's on top, it will capture events.
+                                    pointerEvents: 'auto',
+                                }}
+                                onMouseEnter={() => setHoveredCell(key)}
+                                onMouseLeave={() => setHoveredCell(null)}
+                            >
+                                {hasOverlap ? (
+                                    // 多堂課程重疊時顯示提示
+                                    <div
+                                        style={{
+                                            ...styles.courseCard,
+                                            backgroundColor: 'rgba(157, 198, 219, 0.4)',
+                                            color: '#648392ff',
+                                        }}
+                                        title={`有 ${coursesInCell.length} 堂課程重疊`}
+                                    >
+                                        <div style={{ fontSize: '0.75em', fontWeight: '600' }}>多堂課程重疊</div>
+                                        <div style={{ fontSize: '0.65em', marginTop: '2px' }}>請切換模式</div>
+                                    </div>
+                                ) : (
+                                    // 單堂課程正常顯示
+                                    <div
+                                        style={{
+                                            ...styles.courseCard,
+                                            ...(hoveredCell === key ? styles.courseCardHover : {})
+                                        }}
+                                        title={`${coursesInCell[0].name} (${coursesInCell[0].location})`}
+                                    >
+                                        <div>{coursesInCell[0].name}</div>
+                                        <div style={{ fontSize: '0.7em', marginTop: '4px', color: '#7e7e7eff' }}>
+                                            {coursesInCell[0].location}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    });
+                })}
+            </div>
+        </div>
     );
 };
 

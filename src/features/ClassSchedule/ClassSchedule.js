@@ -2,10 +2,43 @@ import React, { useState, useEffect } from 'react';
 import ClassFilter from './ClassFilter';
 import CardView from './CardView';
 import TimeTableView from './TimeTableView';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTableCells, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons';
 // import { MOCK_SCHEDULE_DATA } from '../../constants/mockData';
 import { fetchAllSemesterCourses, filterAndConvertSchedule } from '../../api/CourseService';
 
+// 將學期代碼格式化為中文顯示
+const formatSemester = (s) => {
+    if (!s) return '未選定學期';
+    const str = String(s).trim();
+    // 常見格式："114-1"
+    if (str.includes('-')) {
+        const [year, sem] = str.split('-');
+        const map = { '1': '上學期', '2': '下學期', '3': '暑期' };
+        return `${year} ${map[sem] || sem}`;
+    }
+    // 退而求其次：如果最後一個字是學期編號
+    const m = str.match(/^(\d+)(?:.*?)([123])$/);
+    if (m) {
+        const year = m[1];
+        const sem = m[2];
+        const map = { '1': '上學期', '2': '下學期', '3': '暑期' };
+        return `${year} ${map[sem] || sem}`;
+    }
+    return str;
+};
+
 const styles = {
+    container: {
+        margin: '0 auto',
+        maxWidth: '1100px',
+    },
+    filterCard: {
+        padding: '30px 50px',
+        backgroundColor: '#FFFFFF',
+        borderRadius: '8px',
+        marginBottom: '20px',
+    },
     viewToggle: {
         textAlign: 'right',
         marginBottom: '15px',
@@ -14,20 +47,21 @@ const styles = {
         padding: '8px 15px',
         margin: '0 5px',
         cursor: 'pointer',
-        border: `1px solid ${isActive ? '#007bff' : '#ccc'}`,
-        backgroundColor: isActive ? '#007bff' : '#fff',
-        color: isActive ? 'white' : '#333',
+        border: `1px solid ${isActive ? '#D7EFFA' : '#fff'}`,
+        backgroundColor: isActive ? '#D7EFFA' : '#fff',
+        color: isActive ? '#336F8B' : '#333',
         borderRadius: '4px',
         fontWeight: 'bold',
     }),
     message: {
         textAlign: 'center',
-        padding: '40px',
-        fontSize: '1.2em',
-        color: '#666',
-        backgroundColor: '#f0f0f0',
+        padding: '60px 40px',
+        fontSize: '1.1em',
+        color: '#888888',
+        backgroundColor: '#FFFFFF',
         borderRadius: '8px',
         margin: '20px 0',
+        boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
     }
 };
 
@@ -123,46 +157,35 @@ const ClassSchedule = ({ currentSemester }) => {
 
     return (
         <div>
-            <h2>班級課表 - {currentSemester}</h2>
+            <div style={styles.container}>
+                <div style={{ fontSize: '40px', fontWeight: 'Bold' }}>班級課表</div>
+                <div style={{ fontSize: '14px', color: '#888888', marginBottom: '70px' }}>瀏覽全校所有班級開課課程，當前學期為 {formatSemester(currentSemester)}</div>
+                {/* 班級篩選器傳遞學期值 */}
+                <div style={styles.filterCard}>
+                    <h3 style={{ color: '#464646', fontSize: '1.5rem', margin: '0 0 20px' }}>選擇班級</h3>
+                    <ClassFilter onFilterChange={handleFilterChange} currentSemester={currentSemester} />
+                </div>
 
-            {/* 班級篩選器傳遞學期值 */}
-            <ClassFilter onFilterChange={handleFilterChange} currentSemester={currentSemester} />
 
-            {/* Debug panel: show selected key and counts to help troubleshoot
-            <div style={{ margin: '12px 0', padding: '10px', background: '#fff7e6', border: '1px solid #ffd580', borderRadius: 6 }}>
-                <strong>Debug</strong>
-                <div>Selected Key: <code>{String(selectedClassCode ?? '')}</code></div>
-                <div>Total courses loaded: <code>{allSemesterCourses ? allSemesterCourses.length : 0}</code></div>
-                <div>Filtered courses: <code>{courses ? courses.length : 0}</code></div>
-                {courses && courses.length > 0 && (
-                    <div style={{ marginTop: 8 }}>
-                        <div>Sample courses:</div>
-                        <ul>
-                            {courses.slice(0, 3).map(c => (
-                                <li key={c.id}>{c.name} — {c.credits} 學分 — {c.teacher}</li>
-                            ))}
-                        </ul>
+                {selectedClassCode && !message && (
+                    <div style={styles.viewToggle}>
+                        <button style={styles.toggleButton(viewMode === 'table')} onClick={() => setViewMode('table')}><FontAwesomeIcon icon={faTableCells} style={{ marginRight: '4px', fontSize: '14px' }} />時間表形式</button>
+                        <button style={styles.toggleButton(viewMode === 'card')} onClick={() => setViewMode('card')}><FontAwesomeIcon icon={faTableCellsLarge} style={{ marginRight: '4px', fontSize: '14px' }} />卡片形式</button>
                     </div>
                 )}
-            </div> */}
 
-            {selectedClassCode && !message && (
-                <div style={styles.viewToggle}>
-                    <button style={styles.toggleButton(viewMode === 'table')} onClick={() => setViewMode('table')}>時間表形式</button>
-                    <button style={styles.toggleButton(viewMode === 'card')} onClick={() => setViewMode('card')}>卡片形式</button>
-                </div>
-            )}
-
-            {/* 顯示內容或訊息 */}
-            {message ? (
-                <div style={styles.message}>{message}</div>
-            ) : (
-                <>
-                    {courses && viewMode === 'table' && <TimeTableView courses={courses} />}
-                    {courses && viewMode === 'card' && <CardView courses={courses} />}
-                </>
-            )}
+                {/* 顯示內容或訊息 */}
+                {message ? (
+                    <div style={styles.message}>{message}</div>
+                ) : (
+                    <>
+                        {courses && viewMode === 'table' && <TimeTableView courses={courses} />}
+                        {courses && viewMode === 'card' && <CardView courses={courses} />}
+                    </>
+                )}
+            </div>
         </div>
+
     );
 };
 

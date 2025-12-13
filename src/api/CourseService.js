@@ -290,10 +290,22 @@ export function filterAndConvertSchedule(allCourses, selectedClassKey) {
             // 3. 獲取教室名稱
             const location = course.classroom?.[0]?.name || course.notes || '無教室資訊';
 
+            const typeMap = {
+                '○': '共同必修',
+                '△': '共同必修',
+                '☆': '共同選修',
+                '●': '專業必修',
+                '▲': '專業必修',
+                '★': '專業選修'
+            };
+            const typeSymbol = course.courseType || '';
+            const typeName = typeMap[typeSymbol] || typeSymbol || '選修';
+
             schedule.push({
                 id: course.id,
                 name: course.name?.zh || course.name?.en || '未知課程',
-                credits: parseFloat(course.credit) || 0,
+                credits: course.credit || '0',
+                type: typeName,
                 teacher: course.teacher?.[0]?.name || '未知教師',
                 location: location.split('/')[0].trim(),
                 time: times,

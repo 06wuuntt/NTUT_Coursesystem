@@ -7,10 +7,7 @@ const styles = {
         display: 'flex',
         gap: '20px',
         alignItems: 'flex-end',
-        padding: '20px',
-        backgroundColor: '#f8f8f8',
-        borderRadius: '8px',
-        marginBottom: '20px',
+        
     },
     filterBlock: {
         flex: 1,
