@@ -1,9 +1,3 @@
-import {
-    MOCK_ACADEMIES,
-    MOCK_SCHEDULE_DATA,
-    MOCK_STANDARDS
-} from '../constants/mockData';
-
 const BASE_URL = "https://gnehs.github.io/ntut-course-crawler-node/";
 const FAKE_DELAY = 500;
 const convertSemesterId = (semesterId) => {

@@ -18,9 +18,9 @@ const styles = {
   },
   navContainer: {
     backgroundColor: '#FFFFFF',
-    maxWidth: '1fr',
+    maxWidth: '0.7fr',
     padding: '20px 40px',
-    margin: '10px 0px 70px 0px',
+    margin: '10px 50px 70px',
     display: 'flex',
     justifyContent: 'space-between', // 讓內容分散
     gap: '18px',

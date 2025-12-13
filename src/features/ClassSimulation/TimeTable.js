@@ -1,159 +1,236 @@
 import React from 'react';
-import { MOCK_PERIODS } from '../../constants/mockData';
+import { PERIODS } from '../../constants/periods';
 
 const styles = {
-    // 外層容器會允許水平滾動，讓表格可以更寬
-    outer: {
-        overflowX: 'auto',
-        width: '100%',
+    container: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: '8px',
+        padding: '20px',
+        boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
+        flexGrow: 1,
+        overflowY: 'auto',
+        boxSizing: 'border-box',
+        minHeight: 0, // Important for flex child scrolling
     },
-    table: {
-        minWidth: '1100px', // 強制表格較寬以擴大顯示範圍
-        minHeight: '700px',
-        borderCollapse: 'collapse',
-        textAlign: 'center',
-        tableLayout: 'fixed',
-    },
-    th: {
-        border: '1px solid #ccc',
-        padding: '12px',
-        backgroundColor: '#eee',
-        fontSize: '14px',
-    },
-    td: {
-        border: '1px solid #ccc',
-        padding: '12px',
-        minHeight: '120px',
-        verticalAlign: 'middle',
-        position: 'relative',
-        cursor: 'default',
-        backgroundColor: '#f9f9f9', // 允許拖曳區的背景色
-    },
-    periodCell: {
-        backgroundColor: '#f7f7f7',
-        fontWeight: 'bold',
-    },
-    courseBlock: (isConflict) => ({
-        backgroundColor: isConflict ? '#ffdddd' : '#d9edf7',
-        border: isConflict ? '1px solid #d9534f' : '1px solid #bce8f1',
+    gridContainer: {
+        display: 'grid',
+        gridTemplateColumns: '60px repeat(6, 1fr)', // 6 days
+        gap: '2px',
+        backgroundColor: '#EDEEF1',
+        padding: '2px',
         borderRadius: '4px',
-        padding: '5px',
-        fontSize: '0.8em',
-        height: '50%',
-        lineHeight: '1.2',
-        fontWeight: 'bold',
-        color: isConflict ? '#a94442' : '#31708f',
-        position: 'absolute', // 讓方塊可以重疊
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        overflow: 'hidden',
+        position: 'relative',
+    },
+    headerCell: {
+        backgroundColor: '#F8F9FA',
+        padding: '12px 8px',
+        fontWeight: '600',
+        fontSize: '0.9em',
+        color: '#464646',
+        textAlign: 'center',
+        minHeight: '40px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    timeCell: {
+        backgroundColor: '#F8F9FA',
+        padding: '8px',
+        fontWeight: '600',
+        fontSize: '0.85em',
+        color: '#464646',
+        textAlign: 'center',
+        minHeight: '50px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        zIndex: 10,
-    }),
-    location: {
-        fontSize: '0.85em',
-        fontWeight: 'normal',
-        color: '#666',
-        marginTop: '6px',
+        alignItems: 'center',
+        gap: '4px',
     },
-    dragOver: {
-        boxShadow: '0 0 10px 3px rgba(0, 123, 255, 0.5)',
-        backgroundColor: '#e6f7ff',
+    courseCell: {
+        backgroundColor: '#FFFFFF',
+        padding: '4px',
+        minHeight: '50px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+    },
+    courseCard: {
+        backgroundColor: 'rgba(199, 196, 196, 0.6)',
+        border: 'None',
+        borderRadius: '6px',
+        padding: '8px',
+        cursor: 'pointer',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        transition: 'all 0.2s',
+        fontSize: '0.875em',
+        color: '#464646',
+        fontWeight: '500',
+        lineHeight: '1.2',
+        backdropFilter: 'blur(2px)',
+        WebkitBackdropFilter: 'blur(2px)',
+        boxSizing: 'border-box',
+    },
+    courseCardHover: {
+        backgroundColor: 'rgba(209, 209, 209, 0.6)',
+        transform: 'scale(1.03)',
+        zIndex: 10,
     },
 };
 
-const DayNames = ['節次', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+const DayNames = ['一', '二', '三', '四', '五', '六'];
 
-/**
- * 排課模擬器課表
- * @param {object} scheduleGrid - 包含課程 ID 和位置的網格
- * @param {Array} courseData - 包含所有已選課程的完整資訊
- * @param {function} onRemoveCourse - 移除課程的回調函數
- */
 const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse }) => {
-    // 建立一個集合來追蹤哪些格子是衝突的
-    const conflictGrid = {};
+    const [hoveredCell, setHoveredCell] = React.useState(null);
 
-    // 檢查網格內是否有時間衝突的課程 (簡化：只檢查格子內是否有重複 ID)
-    Object.values(scheduleGrid).forEach(courseId => {
-        // 這裡需要更複雜的邏輯來檢查不同課程在同一個格子的情況
-        // 由於我們只顯示課程方塊，只要 grid[key] 有值就代表有課。
+    // Pre-calculate spans for merging consecutive cells
+    const cellConfig = {};
+    [1, 2, 3, 4, 5, 6].forEach(day => {
+        for (let i = 0; i < PERIODS.length; i++) {
+            const period = PERIODS[i];
+            const key = `${day}_${period.id}`;
+
+            if (cellConfig[key]?.skip) continue;
+
+            const courseId = scheduleGrid[key];
+
+            if (courseId) {
+                let span = 1;
+                // Look ahead for same course
+                for (let j = i + 1; j < PERIODS.length; j++) {
+                    const nextPeriod = PERIODS[j];
+                    const nextKey = `${day}_${nextPeriod.id}`;
+                    const nextCourseId = scheduleGrid[nextKey];
+
+                    if (nextCourseId === courseId) {
+                        span++;
+                        cellConfig[nextKey] = { skip: true };
+                    } else {
+                        break;
+                    }
+                }
+                cellConfig[key] = { span, skip: false };
+            } else {
+                cellConfig[key] = { span: 1, skip: false };
+            }
+        }
     });
 
     const handleDragOver = (e) => {
-        e.preventDefault(); // 允許拖曳放下
-        // e.currentTarget.style.backgroundColor = '#e6f7ff'; // 可以視覺化拖曳目標
-    };
-
-    const handleDrop = (e, dayIndex, periodId) => {
         e.preventDefault();
-        // 獲取被拖曳的課程 ID
-        const draggedCourseId = e.dataTransfer.getData("courseId");
-
-        if (draggedCourseId && onRemoveCourse) {
-            // 實際排課邏輯由父組件處理
-            // 我們可以將課程 ID 和拖曳目標（DayIndex, PeriodId）傳遞給父組件，但排課操作是針對左側課程列表，而不是單一格子。
-            // 為了簡化，我們只允許從左側列表拖曳到整個課表，而不是精確到格子。
-            // **重要：由於我們需要將課程排入所有上課時間，這裡只處理移除邏輯。**
-        }
     };
 
-    // 點擊課程方塊來移除課程
-    const handleCourseClick = (courseId) => {
-        if (window.confirm(`確定要從課表中移除此課程 (ID: ${courseId}) 嗎？`)) {
+    const handleDrop = (e) => {
+        e.preventDefault();
+    };
+
+    const handleCourseClick = (courseId, courseName) => {
+        if (window.confirm(`確定要移除課程 ${courseName} 嗎？`)) {
             onRemoveCourse(courseId);
         }
-    }
+    };
 
+    const getLocation = (course) => {
+        if (!course) return '';
+        if (course.location) return course.location;
+        if (Array.isArray(course.classroom) && course.classroom.length > 0) {
+            return course.classroom[0].name || course.classroom[0] || '';
+        }
+        return '';
+    };
 
     return (
-        <div style={styles.outer}>
-            <table style={styles.table}>
-                <thead>
-                    <tr>
-                        {DayNames.map(day => (
-                            <th key={day} style={styles.th}>{day}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody onDragOver={handleDragOver} onDrop={(e) => handleDrop(e)}>
-                    {MOCK_PERIODS.map(period => (
-                        <tr key={period.id}>
-                            <td style={{ ...styles.td, ...styles.periodCell }}>
-                                {period.id} ({period.time})
-                            </td>
+        <div style={styles.container}>
+            <div style={styles.gridContainer} onDragOver={handleDragOver} onDrop={handleDrop}>
+                {/* 1. Headers */}
+                <div style={{ gridColumn: 1, gridRow: 1, ...styles.headerCell }}></div>
+                {DayNames.map((day, index) => (
+                    <div key={day} style={{ gridColumn: index + 2, gridRow: 1, ...styles.headerCell }}>{day}</div>
+                ))}
 
-                            {[1, 2, 3, 4, 5, 6, 7].map(dayIndex => {
-                                const key = `${dayIndex}_${period.id}`;
-                                const courseId = scheduleGrid[key];
-                                const course = courseId ? courseData[courseId] : null;
+                {/* 2. Background Grid (Time Cells + Empty White Cells) */}
+                {PERIODS.map((period, index) => {
+                    const row = index + 2;
+                    return (
+                        <React.Fragment key={`bg-${period.id}`}>
+                            {/* Time Cell */}
+                            <div style={{ gridColumn: 1, gridRow: row, ...styles.timeCell }}>
+                                <div>{period.id}</div>
+                            </div>
+                            {/* White Background Cells (Always Rendered) */}
+                            {[1, 2, 3, 4, 5, 6].map(dayIndex => (
+                                <div key={`cell-${dayIndex}-${period.id}`} style={{
+                                    gridColumn: dayIndex + 1,
+                                    gridRow: row,
+                                    ...styles.courseCell,
+                                    zIndex: 0
+                                }} />
+                            ))}
+                        </React.Fragment>
+                    );
+                })}
 
-                                return (
-                                    <td
-                                        key={key}
-                                        style={styles.td}
-                                    >
-                                        {course && (
-                                            <div
-                                                style={styles.courseBlock(conflictGrid[key])}
-                                                onClick={() => handleCourseClick(courseId)}
-                                            >
-                                                {course.name}
-                                                <div style={styles.location}>{course.location}</div>
-                                            </div>
-                                        )}
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                {/* 3. Course Cards (Overlay) */}
+                {[1, 2, 3, 4, 5, 6].map(dayIndex => {
+                    return PERIODS.map((period, pIndex) => {
+                        const key = `${dayIndex}_${period.id}`;
+                        const config = cellConfig[key] || { span: 1, skip: false };
+
+                        if (config.skip) return null;
+
+                        const courseId = scheduleGrid[key];
+                        if (!courseId) return null;
+
+                        const course = courseData[courseId];
+                        const row = pIndex + 2;
+                        const isHovered = hoveredCell === key;
+                        const location = getLocation(course);
+
+                        return (
+                            <div
+                                key={`course-${key}`}
+                                style={{
+                                    gridColumn: dayIndex + 1,
+                                    gridRow: `${row} / span ${config.span}`,
+                                    padding: '4px',
+                                    zIndex: 1,
+                                    pointerEvents: 'none', // Let clicks pass through to the card inside
+                                    display: 'flex',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        ...styles.courseCard,
+                                        ...(isHovered ? styles.courseCardHover : {}),
+                                        pointerEvents: 'auto', // Re-enable pointer events
+                                    }}
+                                    onMouseEnter={() => setHoveredCell(key)}
+                                    onMouseLeave={() => setHoveredCell(null)}
+                                    onClick={() => handleCourseClick(courseId, course?.name)}
+                                    title="點擊以移除課程"
+                                >
+                                    <div>{course?.name}</div>
+                                    {location && (
+                                        <div style={{ fontSize: '0.8em', marginTop: '4px', opacity: 0.8 }}>
+                                            {location}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    });
+                })}
+            </div>
         </div>
     );
 };
 
-export default SchedulerTable;
+export default React.memo(SchedulerTable);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MOCK_PERIODS } from '../../constants/mockData';
+import { PERIODS } from '../../constants/periods';
 
 const TimeTableView = ({ courses }) => {
     const styles = {
@@ -84,17 +84,17 @@ const TimeTableView = ({ courses }) => {
         },
     };
 
-    // 星期一到星期六的标签
+    // 星期一到星期六的標籤
     const dayLabels = ['一', '二', '三', '四', '五', '六'];
 
-    // 构建课程网格数据 - grid[day_period] = [courses]（支持多堂课程重疊）
+    // 構建課程網格數據 - grid[day_period] = [courses]（支持多個課程衝突）
     const grid = {};
     courses.forEach(course => {
         course.time?.forEach(t => {
             const raw = String(t.period);
             if (raw.includes('-')) {
                 const [startLabel, endLabel] = raw.split('-');
-                const periodIds = MOCK_PERIODS.map(p => String(p.id));
+                const periodIds = PERIODS.map(p => String(p.id));
                 const startIdx = periodIds.indexOf(String(startLabel));
                 const endIdx = periodIds.indexOf(String(endLabel));
                 if (startIdx !== -1 && endIdx !== -1 && startIdx <= endIdx) {
@@ -116,8 +116,8 @@ const TimeTableView = ({ courses }) => {
     // Pre-calculate spans for merging consecutive cells
     const cellConfig = {};
     [1, 2, 3, 4, 5, 6].forEach(day => {
-        for (let i = 0; i < MOCK_PERIODS.length; i++) {
-            const period = MOCK_PERIODS[i];
+        for (let i = 0; i < PERIODS.length; i++) {
+            const period = PERIODS[i];
             const key = `${day}_${period.id}`;
 
             if (cellConfig[key]?.skip) continue;
@@ -128,8 +128,8 @@ const TimeTableView = ({ courses }) => {
                 let span = 1;
 
                 // Look ahead for same course
-                for (let j = i + 1; j < MOCK_PERIODS.length; j++) {
-                    const nextPeriod = MOCK_PERIODS[j];
+                for (let j = i + 1; j < PERIODS.length; j++) {
+                    const nextPeriod = PERIODS[j];
                     const nextKey = `${day}_${nextPeriod.id}`;
                     const nextCourses = grid[nextKey] || [];
 
@@ -159,7 +159,7 @@ const TimeTableView = ({ courses }) => {
                 ))}
 
                 {/* 2. Background Grid (Time Cells + Empty White Cells) */}
-                {MOCK_PERIODS.map((period, index) => {
+                {PERIODS.map((period, index) => {
                     const row = index + 2;
                     return (
                         <React.Fragment key={`bg-${period.id}`}>
@@ -182,7 +182,7 @@ const TimeTableView = ({ courses }) => {
 
                 {/* 3. Course Cards (Overlay) */}
                 {[1, 2, 3, 4, 5, 6].map(dayIndex => {
-                    return MOCK_PERIODS.map((period, pIndex) => {
+                    return PERIODS.map((period, pIndex) => {
                         const key = `${dayIndex}_${period.id}`;
                         const config = cellConfig[key] || { span: 1, skip: false };
 
@@ -211,20 +211,20 @@ const TimeTableView = ({ courses }) => {
                                 onMouseLeave={() => setHoveredCell(null)}
                             >
                                 {hasOverlap ? (
-                                    // 多堂課程重疊時顯示提示
+                                    // 多個課程衝突時的顯示樣式
                                     <div
                                         style={{
                                             ...styles.courseCard,
                                             backgroundColor: 'rgba(157, 198, 219, 0.4)',
                                             color: '#648392ff',
                                         }}
-                                        title={`有 ${coursesInCell.length} 堂課程重疊`}
+                                        title={`共${coursesInCell.length}個課程衝突`}
                                     >
-                                        <div style={{ fontSize: '0.75em', fontWeight: '600' }}>多堂課程重疊</div>
-                                        <div style={{ fontSize: '0.65em', marginTop: '2px' }}>請切換模式</div>
+                                        <div style={{ fontSize: '0.75em', fontWeight: '600' }}>多個課程衝突</div>
+                                        <div style={{ fontSize: '0.65em', marginTop: '2px' }}>請查看模擬</div>
                                     </div>
                                 ) : (
-                                    // 單堂課程正常顯示
+                                    // 單個課程正常顯示
                                     <div
                                         style={{
                                             ...styles.courseCard,

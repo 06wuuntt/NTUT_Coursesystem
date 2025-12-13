@@ -122,7 +122,7 @@ const SingleCard = ({ course }) => {
         <div
             style={{
                 ...styles.card,
-                transform: isHovered ? 'translateY(-5px)' : 'none',
+                transform: isHovered ? 'translateY(-2px)' : 'none',
                 boxShadow: isHovered ? '0 12px 20px -8px rgba(0, 0, 0, 0.15)' : styles.card.boxShadow
             }}
             onMouseEnter={() => setIsHovered(true)}
