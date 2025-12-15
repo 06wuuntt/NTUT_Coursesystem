@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import TimeTable from './TimeTable';
 import CourseSearchPanel from './CourseSearchPanel';
+import { PERIODS } from '../../constants/periods';
 
 const styles = {
     containers: {
@@ -180,12 +181,34 @@ const styles = {
 const updateGrid = (grid, course) => {
     const newGrid = { ...grid };
     course.time.forEach(t => {
-        const [start, end] = t.period.split('-').map(Number);
-        for (let p = start; p <= (end || start); p++) {
-            const key = `${t.day}_${p}`;
-            // 檢查衝突：這裡簡化處理，如果格子已被其他課程佔用，則不應覆蓋
-            // 由於我們只從左側拖曳，且拖曳的是未加入的課，所以不會有覆蓋問題
-            newGrid[key] = course.id;
+        const parts = String(t.period).split('-');
+        const startStr = parts[0];
+        const endStr = parts[1] || startStr;
+
+        // Find indices in PERIODS array
+        const startIndex = PERIODS.findIndex(p => String(p.id) === String(startStr));
+        const endIndex = PERIODS.findIndex(p => String(p.id) === String(endStr));
+
+        if (startIndex !== -1 && endIndex !== -1 && startIndex <= endIndex) {
+            for (let i = startIndex; i <= endIndex; i++) {
+                const periodId = PERIODS[i].id;
+                const key = `${t.day}_${periodId}`;
+                newGrid[key] = course.id;
+            }
+        } else {
+            // Fallback for simple numeric calculation if not found in PERIODS (backward compatibility)
+            // or if it's a single period not in PERIODS (unlikely but safe to keep)
+            const [start, end] = t.period.split('-').map(Number);
+            if (!isNaN(start)) {
+                for (let p = start; p <= (end || start); p++) {
+                    const key = `${t.day}_${p}`;
+                    newGrid[key] = course.id;
+                }
+            } else {
+                // Single non-numeric period fallback
+                const key = `${t.day}_${t.period}`;
+                newGrid[key] = course.id;
+            }
         }
     });
     return newGrid;

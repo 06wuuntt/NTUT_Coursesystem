@@ -127,9 +127,29 @@ export async function fetchCalendarEvents() {
         .filter(event => event.type === 'VEVENT' && event.start) // 確保是事件且有開始日期
         .map(event => {
             // API 的日期是 ISO 格式 (e.g., "2019-05-27T00:00:00.000Z")
-            // 我們需要將其轉換成 YYYY-MM-DD 格式，方便比對
-            const startDate = event.start.split('T')[0];
-            const endDate = event.end ? event.end.split('T')[0] : startDate;
+            // 如果事件不是從 00:00:00 開始，則視為隔天開始
+            const startDateTime = new Date(event.start);
+            const startTime = event.start.split('T')[1]; // 取得時間部分
+
+            // 如果時間不是 00:00:00.000Z，則將日期加一天
+            if (startTime && !startTime.startsWith('00:00:00')) {
+                startDateTime.setDate(startDateTime.getDate() + 1);
+            }
+
+            const startDate = startDateTime.toISOString().split('T')[0];
+
+            // 結束日期也進行同樣處理
+            let endDate = startDate;
+            if (event.end) {
+                const endDateTime = new Date(event.end);
+                const endTime = event.end.split('T')[1];
+
+                if (endTime && !endTime.startsWith('00:00:00')) {
+                    endDateTime.setDate(endDateTime.getDate() + 1);
+                }
+
+                endDate = endDateTime.toISOString().split('T')[0];
+            }
 
             return {
                 date: startDate,

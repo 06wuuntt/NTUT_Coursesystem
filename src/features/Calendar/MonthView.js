@@ -1,65 +1,139 @@
-import React from 'react';
-
-// 為了讓行事曆有內容，我們使用模擬事件
-// Note: 實際開發時，事件應根據當前 year/month 透過 API 獲取
-const MOCK_EVENTS = [
-  { date: '2025-11-01', description: '校慶補假日' },
-  { date: '2025-11-25', description: '期中考試週開始' },
-  { date: '2025-12-05', description: '課程加退選截止' },
-  { date: '2025-12-25', description: '聖誕節' },
-  { date: '2026-01-10', description: '學期結束' },
-];
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 
 const styles = {
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(7, 1fr)',
-    borderTop: '1px solid #ccc',
-    borderLeft: '1px solid #ccc',
+    gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', // Force equal width
+    backgroundColor: '#FFFFFF',
+    border: '1px solid #E2E8F0',
+    borderRadius: '12px',
+    overflow: 'hidden',
   },
   dayHeader: {
-    backgroundColor: '#eee',
-    padding: '10px 5px',
-    borderRight: '1px solid #ccc',
-    borderBottom: '1px solid #ccc',
-    fontWeight: 'bold',
+    backgroundColor: '#F8FAFC',
+    padding: '16px 8px',
+    borderBottom: '1px solid #E2E8F0',
+    borderRight: '1px solid #E2E8F0', // Add vertical dividers
+    color: '#64748B',
+    fontWeight: '600',
+    fontSize: '0.9rem',
     textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
   },
   dayCell: {
-    minHeight: '100px',
-    padding: '5px',
-    borderRight: '1px solid #ccc',
-    borderBottom: '1px solid #ccc',
-    overflow: 'hidden',
-    backgroundColor: '#fff',
+    minHeight: '120px',
+    padding: '8px',
+    borderBottom: '1px solid #E2E8F0',
+    borderRight: '1px solid #E2E8F0', // Add vertical dividers
+    backgroundColor: '#FFFFFF',
+    position: 'relative',
+    transition: 'background-color 0.2s',
   },
   dateNum: {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    marginBottom: '5px',
+    fontSize: '0.95rem',
+    fontWeight: '600',
+    color: '#334155',
+    marginBottom: '8px',
+    width: '28px',
+    height: '28px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
   },
   event: {
-    fontSize: '12px',
-    backgroundColor: '#e6f7ff',
-    color: '#0056b3',
-    padding: '2px 4px',
-    borderRadius: '3px',
-    marginTop: '3px',
+    fontSize: '0.8rem',
+    backgroundColor: '#EFF6FF',
+    color: '#1D4ED8',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    marginBottom: '4px',
+    borderLeft: '3px solid #3B82F6',
+    cursor: 'pointer',
+    whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
+    fontWeight: '500',
+    transition: 'all 0.2s',
   },
   weekend: {
-    backgroundColor: '#fefefe', // 週末顏色略有不同
+    backgroundColor: '#FAFAFA',
   },
   today: {
-    backgroundColor: '#ffffdd', // 標示今天
-    border: '2px solid #ffcc00',
+    backgroundColor: '#3B82F6',
+    color: '#FFFFFF',
   },
   otherMonth: {
-    backgroundColor: '#f5f5f5', // 非本月日期
-    color: '#aaa',
-  }
+    backgroundColor: '#F8FAFC',
+    color: '#CBD5E1',
+  },
+  modal: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: '12px',
+    padding: '24px',
+    maxWidth: '500px',
+    width: '90%',
+    maxHeight: '80vh',
+    overflow: 'auto',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+  },
+  modalHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: '20px',
+    paddingBottom: '16px',
+    borderBottom: '2px solid #E2E8F0',
+  },
+  modalTitle: {
+    fontSize: '1.2rem',
+    fontWeight: '700',
+    color: '#1E293B',
+    margin: 0,
+    flex: 1,
+  },
+  closeButton: {
+    background: 'none',
+    border: 'none',
+    fontSize: '1.5rem',
+    cursor: 'pointer',
+    color: '#64748B',
+    padding: '0 4px',
+    marginLeft: '12px',
+    transition: 'color 0.2s',
+  },
+  modalBody: {
+    color: '#475569',
+  },
+  infoRow: {
+    marginBottom: '16px',
+  },
+  infoLabel: {
+    fontWeight: '600',
+    color: '#334155',
+    marginBottom: '4px',
+    fontSize: '0.9rem',
+  },
+  infoValue: {
+    color: '#64748B',
+    fontSize: '0.95rem',
+    lineHeight: '1.6',
+  },
 };
 
 const DayNames = ['日', '一', '二', '三', '四', '五', '六'];
@@ -76,21 +150,18 @@ const MonthView = ({ year, month, allEvents }) => {
   const days = [];
   const today = new Date();
 
-  // 輔助函數：檢查指定日期 (YYYY-MM-DD) 是否在某事件的時間範圍內
-  const isDateInRange = (dateStr, startStr, endStr) => {
-    // 由於 API 的 end 日期是獨佔的 (例如 6/1 結束，表示事件發生在 5/31 或之前)
-    // 這裡需要調整：API 返回的 end 日期實際上是事件發生範圍的 "次日"
-    // 為了安全起見，我們先將 API 日期轉為 Date 物件進行比較
-    const date = new Date(dateStr);
-    const start = new Date(startStr);
-    const end = new Date(endStr);
+  // 模態視窗狀態
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
-    // 將 end 日期減一天，使其包含在範圍內
-    const actualEnd = new Date(end);
-    actualEnd.setDate(actualEnd.getDate() - 1);
+  // 調試：顯示當前月份的事件數量
+  console.log(`MonthView rendering ${year}-${month + 1}, total events: ${allEvents?.length || 0}`);
 
-    return date >= start && date <= actualEnd;
-  };
+  // 篩選當前月份的事件用於調試
+  const currentMonthEvents = allEvents?.filter(event => {
+    const eventDate = new Date(event.date);
+    return eventDate.getFullYear() === year && eventDate.getMonth() === month;
+  }) || [];
+  console.log(`Events in ${year}-${month + 1}:`, currentMonthEvents);
 
   // 格式化 Date 為 YYYY-MM-DD
   const fmt = (d) => {
@@ -113,6 +184,22 @@ const MonthView = ({ year, month, allEvents }) => {
     return diff;
   }
 
+  // 格式化日期為易讀格式
+  const formatDateDisplay = (dateStr) => {
+    const d = new Date(dateStr);
+    return `${d.getFullYear()} 年 ${d.getMonth() + 1} 月 ${d.getDate()} 日`;
+  }
+
+  // 處理事件點擊
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+  }
+
+  // 關閉模態視窗
+  const closeModal = () => {
+    setSelectedEvent(null);
+  }
+
   // 1. 填補前置空白天數
   for (let i = 0; i < firstDayOfMonth; i++) {
     days.push(<div key={`prev-${i}`} style={{ ...styles.dayCell, ...styles.otherMonth }}></div>);
@@ -127,7 +214,7 @@ const MonthView = ({ year, month, allEvents }) => {
     // - 單日事件：當日顯示
     // - 跨日事件：只在開始日與實際結束日顯示標記（若開始或結束在此月份）
     const dailyEvents = [];
-    allEvents.forEach(event => {
+    (allEvents || []).forEach(event => {
       const start = new Date(event.date);
       const endAct = actualEndDate(event.endDate) || new Date(event.date);
       const startStr = fmt(start);
@@ -156,21 +243,35 @@ const MonthView = ({ year, month, allEvents }) => {
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
     // 組合樣式
-    let cellStyle = styles.dayCell;
+    let cellStyle = { ...styles.dayCell };
     if (isWeekend) cellStyle = { ...cellStyle, ...styles.weekend };
-    if (isToday) cellStyle = { ...cellStyle, ...styles.today };
+    // 注意：我們不再改變整個單元格的背景色來標示今天，而是改變數字的樣式
 
     days.push(
       <div
         key={fullDateStr}
         style={cellStyle}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8FAFC'}
+        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = isWeekend ? '#FAFAFA' : '#FFFFFF'}
       >
-        <div style={styles.dateNum}>{date}</div>
+        <div style={{
+          ...styles.dateNum,
+          ...(isToday ? styles.today : {})
+        }}>
+          {date}
+        </div>
         {dailyEvents.map((event, index) => {
           const title = `${event.description} (${event.location || '無地點'})`;
           if (event._kind === 'single') {
             return (
-              <div key={index} style={styles.event} title={title}>
+              <div
+                key={index}
+                style={styles.event}
+                title={title}
+                onClick={() => handleEventClick(event)}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(2px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
+              >
                 {event.description}
               </div>
             );
@@ -178,16 +279,30 @@ const MonthView = ({ year, month, allEvents }) => {
 
           if (event._kind === 'start') {
             return (
-              <div key={index} style={{ ...styles.event, fontWeight: 'bold', backgroundColor: '#dff0d8' }} title={title}>
-                {event.description} — 開始 ({event._days} 天)
+              <div
+                key={index}
+                style={{ ...styles.event, backgroundColor: '#DCFCE7', color: '#166534', borderLeftColor: '#22C55E' }}
+                title={title}
+                onClick={() => handleEventClick(event)}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(2px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
+              >
+                {event.description} (開始)
               </div>
             );
           }
 
           if (event._kind === 'end') {
             return (
-              <div key={index} style={{ ...styles.event, fontStyle: 'italic', backgroundColor: '#f2dede' }} title={title}>
-                {event.description} — 結束 ({event._days} 天)
+              <div
+                key={index}
+                style={{ ...styles.event, backgroundColor: '#FEE2E2', color: '#991B1B', borderLeftColor: '#EF4444' }}
+                title={title}
+                onClick={() => handleEventClick(event)}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(2px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
+              >
+                {event.description} (結束)
               </div>
             );
           }
@@ -208,6 +323,42 @@ const MonthView = ({ year, month, allEvents }) => {
         ))}
         {days}
       </div>
+
+      {/* 事件詳情模態視窗 */}
+      {selectedEvent && (
+        <div style={styles.modal} onClick={closeModal}>
+          <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div style={styles.modalHeader}>
+              <h3 style={styles.modalTitle}>{selectedEvent.description}</h3>
+              <button
+                style={styles.closeButton}
+                onClick={closeModal}
+                onMouseEnter={(e) => e.currentTarget.style.color = '#1E293B'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#64748B'}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={styles.modalBody}>
+              <div style={styles.infoRow}>
+                <div style={styles.infoLabel}>
+                  <FontAwesomeIcon icon={faCalendarDays} style={{ marginRight: '6px' }} />
+                  時間：
+                  {(() => {
+                    // 計算實際結束日期（API 的 endDate 是獨佔的）
+                    const actualEnd = actualEndDate(selectedEvent.endDate);
+                    const actualEndStr = actualEnd ? fmt(actualEnd) : selectedEvent.date;
+                    const isSingleDay = selectedEvent.date === actualEndStr;
+
+                    return isSingleDay ? selectedEvent.date : `${selectedEvent.date} ~ ${actualEndStr}`;
+                  })()}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

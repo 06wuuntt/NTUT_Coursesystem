@@ -31,6 +31,7 @@ const formatSemester = (s) => {
 const styles = {
     container: {
         margin: '0 auto',
+        padding: '0 20px',
         maxWidth: '1100px',
     },
     filterCard: {
