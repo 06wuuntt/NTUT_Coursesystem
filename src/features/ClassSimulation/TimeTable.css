@@ -1,0 +1,108 @@
+.simulation-timetable-container {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    flex-grow: 1;
+    overflow-y: auto;
+    box-sizing: border-box;
+    min-height: 0;
+}
+
+.simulation-timetable-grid-container {
+    display: grid;
+    grid-template-columns: 60px repeat(6, 1fr);
+    gap: 2px;
+    background-color: #EDEEF1;
+    padding: 2px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.simulation-timetable-header-cell {
+    background-color: #F8F9FA;
+    padding: 12px 8px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #464646;
+    text-align: center;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.simulation-timetable-time-cell {
+    background-color: #F8F9FA;
+    padding: 8px;
+    font-weight: 600;
+    font-size: 0.85em;
+    color: #464646;
+    text-align: center;
+    min-height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.simulation-timetable-course-cell {
+    background-color: #FFFFFF;
+    padding: 4px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.simulation-timetable-course-card {
+    background-color: rgba(199, 196, 196, 0.6);
+    border: none;
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: all 0.2s;
+    font-size: 0.875em;
+    color: #464646;
+    font-weight: 500;
+    line-height: 1.2;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    box-sizing: border-box;
+}
+
+.simulation-timetable-course-card:hover,
+.simulation-timetable-course-card.hover {
+    background-color: rgba(209, 209, 209, 0.6);
+    transform: scale(1.03);
+    z-index: 10;
+}
+
+.simulation-timetable-conflict-card {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #B91C1C;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.simulation-timetable-conflict-card:hover {
+    background-color: rgba(239, 68, 68, 0.25);
+}
+
+.simulation-timetable-course-name {
+    margin-bottom: 4px;
+}
+
+.simulation-timetable-course-location {
+    font-size: 0.75em;
+    opacity: 0.8;
+}

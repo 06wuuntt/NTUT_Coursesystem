@@ -1,19 +1,6 @@
 import React from 'react';
 import SelectInput from '../../components/forms/SelectInput';
-
-const styles = {
-    forms: {
-        marginBottom: '20px',
-        padding: '30px 50px',
-        backgroundColor: '#FFFFFF',
-        borderRadius: '8px',
-    },
-    form: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '20px',
-    },
-};
+import './StandardSearchForm.css';
 
 const StandardSearchForm = ({
     selectedYear,
@@ -26,9 +13,9 @@ const StandardSearchForm = ({
     onChange
 }) => {
     return (
-        <div style={styles.forms}>
-            <h3 style={{ color: '#464646', fontSize: '1.5rem', margin: '0 0 20px' }}>選擇入學年度及系所</h3>
-            <div style={styles.form}>
+        <div className="standard-search-form-container">
+            <h3 className="standard-search-form-title">選擇入學年度及系所</h3>
+            <div className="standard-search-form-grid">
                 <SelectInput
                     label="入學年分"
                     name="year"
@@ -38,7 +25,7 @@ const StandardSearchForm = ({
                 />
 
                 {loadingOptions ? (
-                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#3B82F6', padding: '20px' }}>
+                    <div className="standard-search-loading">
                         正在載入系所選項...
                     </div>
                 ) : (

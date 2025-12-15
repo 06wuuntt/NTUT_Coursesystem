@@ -5,6 +5,7 @@ import TimeTableView from './TimeTableView';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTableCells, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons';
 import { fetchAllSemesterCourses, filterAndConvertSchedule } from '../../api/CourseService';
+import './ClassSchedule.css';
 
 // 將學期代碼格式化為中文顯示
 const formatSemester = (s) => {
@@ -27,51 +28,18 @@ const formatSemester = (s) => {
     return str;
 };
 
-const styles = {
-    container: {
-        margin: '0 auto',
-        padding: '0 20px',
-        maxWidth: '1100px',
-    },
-    filterCard: {
-        padding: '30px 50px',
-        backgroundColor: '#FFFFFF',
-        borderRadius: '8px',
-        marginBottom: '20px',
-    },
-    viewToggle: {
-        textAlign: 'right',
-        marginBottom: '15px',
-    },
-    toggleButton: (isActive) => ({
-        padding: '8px 15px',
-        margin: '0 5px',
-        cursor: 'pointer',
-        border: `1px solid ${isActive ? '#D7EFFA' : '#fff'}`,
-        backgroundColor: isActive ? '#D7EFFA' : '#fff',
-        color: isActive ? '#336F8B' : '#333',
-        borderRadius: '4px',
-        fontWeight: 'bold',
-    }),
-    message: {
-        textAlign: 'center',
-        padding: '60px 40px',
-        fontSize: '1.1em',
-        color: '#888888',
-        backgroundColor: '#FFFFFF',
-        borderRadius: '8px',
-        margin: '20px 0',
-        boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
-    }
-};
-
 /**
  * 班級課表主頁面
  * @param {string} currentSemester - 從 App.js 傳遞過來的全域學期
  */
 const ClassSchedule = ({ currentSemester }) => {
-    const [selectedClassCode, setSelectedClassCode] = useState(null);
-    const [viewMode, setViewMode] = useState('table');
+    // Initialize state from sessionStorage if available
+    const [selectedClassCode, setSelectedClassCode] = useState(() => {
+        return sessionStorage.getItem('schedule_selectedClassCode') || null;
+    });
+    const [viewMode, setViewMode] = useState(() => {
+        return sessionStorage.getItem('schedule_viewMode') || 'table';
+    });
 
     const [courses, setCourses] = useState(null); // 最終篩選出的課表
     const [allSemesterCourses, setAllSemesterCourses] = useState(null); // 該學期所有課程總表
@@ -88,7 +56,8 @@ const ClassSchedule = ({ currentSemester }) => {
             setIsLoadingTotal(true);
             setError(null);
             setAllSemesterCourses(null);
-            setSelectedClassCode(null);
+            // Don't clear selectedClassCode here, let ClassFilter validate it
+            // setSelectedClassCode(null); 
             setCourses(null);
 
             try {
@@ -99,7 +68,8 @@ const ClassSchedule = ({ currentSemester }) => {
                 setAllSemesterCourses(data);
 
                 // 重設課表和篩選器
-                setSelectedClassCode(null);
+                // Don't clear selectedClassCode here either
+                // setSelectedClassCode(null);
                 setCourses(null);
             } catch (err) {
                 console.error("載入課程總表失敗:", err);
@@ -133,7 +103,16 @@ const ClassSchedule = ({ currentSemester }) => {
     // Log changes to selectedClassCode to see who/when clears it
     useEffect(() => {
         // selection changed
+        if (selectedClassCode) {
+            sessionStorage.setItem('schedule_selectedClassCode', selectedClassCode);
+        } else {
+            sessionStorage.removeItem('schedule_selectedClassCode');
+        }
     }, [selectedClassCode]);
+
+    useEffect(() => {
+        sessionStorage.setItem('schedule_viewMode', viewMode);
+    }, [viewMode]);
     // --------------------------------------------------------
 
     const handleFilterChange = (classCode) => {
@@ -157,26 +136,30 @@ const ClassSchedule = ({ currentSemester }) => {
 
     return (
         <div>
-            <div style={styles.container}>
-                <div style={{ fontSize: '40px', fontWeight: 'Bold' }}>班級課表</div>
-                <div style={{ fontSize: '14px', color: '#888888', marginBottom: '70px' }}>瀏覽全校所有班級開課課程，當前學期為 {formatSemester(currentSemester)}</div>
+            <div className="class-schedule-container">
+                <div className="class-schedule-title">班級課表</div>
+                <div className="class-schedule-subtitle">瀏覽全校所有班級開課課程，當前學期為 {formatSemester(currentSemester)}</div>
                 {/* 班級篩選器傳遞學期值 */}
-                <div style={styles.filterCard}>
-                    <h3 style={{ color: '#464646', fontSize: '1.5rem', margin: '0 0 20px' }}>選擇班級</h3>
-                    <ClassFilter onFilterChange={handleFilterChange} currentSemester={currentSemester} />
+                <div className="class-schedule-filter-card">
+                    <h3 className="class-schedule-filter-title">選擇班級</h3>
+                    <ClassFilter 
+                        onFilterChange={handleFilterChange} 
+                        currentSemester={currentSemester} 
+                        initialClassId={selectedClassCode}
+                    />
                 </div>
 
 
                 {selectedClassCode && !message && (
-                    <div style={styles.viewToggle}>
-                        <button style={styles.toggleButton(viewMode === 'table')} onClick={() => setViewMode('table')}><FontAwesomeIcon icon={faTableCells} style={{ marginRight: '4px', fontSize: '14px' }} />時間表形式</button>
-                        <button style={styles.toggleButton(viewMode === 'card')} onClick={() => setViewMode('card')}><FontAwesomeIcon icon={faTableCellsLarge} style={{ marginRight: '4px', fontSize: '14px' }} />卡片形式</button>
+                    <div className="class-schedule-view-toggle">
+                        <button className={`class-schedule-toggle-button ${viewMode === 'table' ? 'active' : ''}`} onClick={() => setViewMode('table')}><FontAwesomeIcon icon={faTableCells} style={{ marginRight: '4px', fontSize: '14px' }} />時間表形式</button>
+                        <button className={`class-schedule-toggle-button ${viewMode === 'card' ? 'active' : ''}`} onClick={() => setViewMode('card')}><FontAwesomeIcon icon={faTableCellsLarge} style={{ marginRight: '4px', fontSize: '14px' }} />卡片形式</button>
                     </div>
                 )}
 
                 {/* 顯示內容或訊息 */}
                 {message ? (
-                    <div style={styles.message}>{message}</div>
+                    <div className="class-schedule-message">{message}</div>
                 ) : (
                     <>
                         {courses && viewMode === 'table' && <TimeTableView courses={courses} />}

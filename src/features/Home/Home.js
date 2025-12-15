@@ -212,18 +212,8 @@ const Home = ({ currentSemester }) => {
     };
 
     const CourseCard = ({ c }) => {
-        const [isHovered, setIsHovered] = useState(false);
         return (
-            <div
-                className="card"
-                style={{
-                    cursor: isHovered ? 'pointer' : '',
-                    transform: isHovered ? 'translateY(-2px)' : 'none',
-                    boxShadow: isHovered ? '0 12px 20px -8px rgba(0, 0, 0, 0.15)' : undefined
-                }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
+            <div className="card">
                 <div className="card-header">
                     <div className="card-title">{c.name.zh}</div>
                     <div className="card-id">{c.id}</div>
@@ -260,14 +250,14 @@ const Home = ({ currentSemester }) => {
     return (
         <div>
             <div className="home-title">
-                <h2 style={{ margin: '0', fontSize: '40px' }}>歡迎回到北科課程系統</h2>
+                <h2 className="home-welcome-title">歡迎回到北科課程系統</h2>
                 <div>當前學期為 {formatSemester(currentSemester)}</div>
             </div>
 
             <div className="home-container">
                 {/* 課程搜尋欄位 */}
                 <div className="search-container">
-                    <h3 style={{ color: '#464646', fontSize: '1.5rem', margin: '0 0 20px' }}>搜尋課程</h3>
+                    <h3 className="home-search-title">搜尋課程</h3>
                     <div className="mode-buttons">
                         <button
                             type="button"
@@ -312,7 +302,7 @@ const Home = ({ currentSemester }) => {
                 </div>
 
                 {/* 搜尋結果 */}
-                <div style={{ margin: '0 0 30px', padding: '10px' }}>
+                <div className="home-results-container">
                     {loadingCourses ? (
                         <div>載入課程中…</div>
                     ) : (
@@ -320,8 +310,8 @@ const Home = ({ currentSemester }) => {
                             {isQueryEmpty ? (
                                 // 建議課程顯示（未輸入搜尋時）
                                 <div>
-                                    <div style={{ marginBottom: '20px' }}>
-                                        <div style={{ margin: '12px 2px 8px', color: '#464646' }}>建議課程</div>
+                                    <div className="home-suggestion-header">
+                                        <div className="home-section-label">建議課程</div>
                                     </div>
                                     {allCourses && allCourses.length > 0 ? (
                                         <div className="cards-container">
@@ -330,17 +320,17 @@ const Home = ({ currentSemester }) => {
                                             ))}
                                         </div>
                                     ) : (
-                                        <div style={{ margin: '12px 2px 8px', color: '#464646' }}>尚無可顯示的建議課程（請稍候或切換學期）。</div>
+                                        <div className="home-section-label">尚無可顯示的建議課程（請稍候或切換學期）。</div>
                                     )}
                                 </div>
                             ) : (
                                 // 搜尋結果顯示（輸入搜尋時）
                                 <div>
                                     {results.length === 0 ? (
-                                        <div style={{ margin: '12px 2px 8px', color: '#464646' }}>尚無搜尋結果。請嘗試其他關鍵字。</div>
+                                        <div className="home-section-label">尚無搜尋結果。請嘗試其他關鍵字。</div>
                                     ) : (
                                         <div>
-                                            <div style={{ margin: '12px 2px 8px', color: '#464646' }}>共 {results.length} 筆結果，第 {currentPage} / {totalPages} 頁</div>
+                                            <div className="home-section-label">共 {results.length} 筆結果，第 {currentPage} / {totalPages} 頁</div>
                                             <div className="cards-container">
                                                 {displayed.map((c) => (
                                                     <CourseCard key={c.id} c={c} />
@@ -348,18 +338,11 @@ const Home = ({ currentSemester }) => {
                                             </div>
                                             {/* 分頁控制（僅搜尋結果時顯示） */}
                                             {totalPages > 1 && (
-                                                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center' }}>
+                                                <div className="home-pagination">
                                                     <button
                                                         onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                                                         disabled={currentPage === 1}
-                                                        style={{
-                                                            padding: '8px 12px',
-                                                            borderRadius: '6px',
-                                                            border: '1px solid #ccc',
-                                                            backgroundColor: currentPage === 1 ? '#f0f0f0' : '#fff',
-                                                            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-                                                            color: currentPage === 1 ? '#999' : '#333'
-                                                        }}
+                                                        className="home-pagination-button"
                                                     >
                                                         上一頁
                                                     </button>
@@ -367,15 +350,7 @@ const Home = ({ currentSemester }) => {
                                                         <button
                                                             key={page}
                                                             onClick={() => setCurrentPage(page)}
-                                                            style={{
-                                                                padding: '8px 12px',
-                                                                borderRadius: '6px',
-                                                                border: '1px solid #ccc',
-                                                                backgroundColor: currentPage === page ? '#96C6DB' : '#fff',
-                                                                color: currentPage === page ? '#fff' : '#333',
-                                                                cursor: 'pointer',
-                                                                fontWeight: currentPage === page ? '600' : 'normal'
-                                                            }}
+                                                            className={`home-pagination-button ${currentPage === page ? 'active' : ''}`}
                                                         >
                                                             {page}
                                                         </button>
@@ -383,14 +358,7 @@ const Home = ({ currentSemester }) => {
                                                     <button
                                                         onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                                                         disabled={currentPage === totalPages}
-                                                        style={{
-                                                            padding: '8px 12px',
-                                                            borderRadius: '6px',
-                                                            border: '1px solid #ccc',
-                                                            backgroundColor: currentPage === totalPages ? '#f0f0f0' : '#fff',
-                                                            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-                                                            color: currentPage === totalPages ? '#999' : '#333'
-                                                        }}
+                                                        className="home-pagination-button"
                                                     >
                                                         下一頁
                                                     </button>

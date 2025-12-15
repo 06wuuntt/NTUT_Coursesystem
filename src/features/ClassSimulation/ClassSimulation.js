@@ -2,175 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import TimeTable from './TimeTable';
 import CourseSearchPanel from './CourseSearchPanel';
 import { PERIODS } from '../../constants/periods';
-
-const styles = {
-    containers: {
-        margin: '0 auto',
-        maxWidth: '1100px', // Allow full width for resizing
-        padding: '0 20px',
-        boxSizing: 'border-box',
-    },
-    container: {
-        display: 'flex',
-        height: 'calc(100vh - 80px)',
-        marginTop: '20px',
-        position: 'relative', // For absolute positioning if needed
-    },
-    leftPanel: (width) => ({
-        width: `${width}px`,
-        minWidth: '250px',
-        maxWidth: '600px',
-        flexShrink: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        // transition: 'width 0.05s ease-out', // REMOVED: Transition causes lag during drag
-    }),
-    resizer: {
-        width: '8px',
-        cursor: 'col-resize',
-        backgroundColor: 'transparent',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexShrink: 0,
-        zIndex: 10,
-        margin: '0 4px',
-        transition: 'background-color 0.2s',
-    },
-    resizerLine: {
-        width: '2px',
-        height: '40px',
-        backgroundColor: '#CBD5E1',
-        borderRadius: '1px',
-    },
-    rightPanel: {
-        flexGrow: 1,
-        backgroundColor: '#FFFFFF',
-        borderRadius: '16px',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-        border: '1px solid #F1F5F9',
-        overflow: 'hidden', // 讓內部 TimeTable 處理滾動
-        display: 'flex',
-        flexDirection: 'column',
-        minWidth: '400px', // Prevent right panel from becoming too small
-    },
-    headerBar: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '20px',
-        maxWidth: '1200px', // Keep header centered/constrained
-        margin: '0 auto 20px auto',
-    },
-    title: {
-        fontSize: '40px',
-        fontWeight: 'Bold'
-    },
-    subtitle: {
-        fontSize: '14px',
-        color: '#888888',
-        marginBottom: '20px'
-    },
-    creditDisplay: {
-        fontSize: '1.25rem',
-        fontWeight: '600',
-        color: '#0369A1',
-        backgroundColor: '#E0F2FE',
-        padding: '8px 16px',
-        borderRadius: '9999px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-    },
-    dragOverlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(241, 245, 249, 0.8)',
-        backdropFilter: 'blur(4px)',
-        border: '3px dashed #94A3B8',
-        borderRadius: '16px',
-        zIndex: 999,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        pointerEvents: 'none',
-    },
-    dragText: {
-        fontSize: '1.5rem',
-        fontWeight: '600',
-        color: '#475569',
-    },
-    listContainer: {
-        marginTop: 'auto',
-        borderTop: '1px solid #F1F5F9',
-        backgroundColor: '#FAFAFA',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '250px', // Fixed height for the list area
-    },
-    listHeader: {
-        padding: '12px 20px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderBottom: '1px solid #F1F5F9',
-        backgroundColor: '#FFFFFF',
-    },
-    clearButton: {
-        padding: '6px 12px',
-        fontSize: '0.85rem',
-        color: '#EF4444',
-        backgroundColor: '#FEF2F2',
-        border: '1px solid #FECACA',
-        borderRadius: '6px',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-    },
-    courseList: {
-        overflowY: 'auto',
-        padding: '10px 20px',
-        flexGrow: 1,
-    },
-    courseItem: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '10px 12px',
-        marginBottom: '8px',
-        backgroundColor: '#FFFFFF',
-        border: '1px solid #E2E8F0',
-        borderRadius: '8px',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-    },
-    removeButton: {
-        width: '24px',
-        height: '24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        border: 'none',
-        backgroundColor: '#F1F5F9',
-        color: '#64748B',
-        borderRadius: '50%',
-        cursor: 'pointer',
-        fontSize: '14px',
-        marginLeft: '10px',
-        transition: 'background-color 0.2s',
-    },
-    emptyState: {
-        textAlign: 'center',
-        color: '#94A3B8',
-        padding: '30px',
-        fontSize: '0.9rem',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '8px',
-    }
-};
+import './ClassSimulation.css';
 
 /**
  * 將課程加入課表後，更新網格佔用情況
@@ -423,59 +255,60 @@ const Scheduler = ({ currentSemester }) => {
     }, [resize, stopResizing]);
 
     return (
-        <div style={styles.containers}>
-            <div style={styles.headerBar}>
+        <div className="simulation-containers">
+            <div className="simulation-header-bar">
                 <div>
-                    <div style={styles.title}>排課模擬器</div>
-                    <div style={styles.subtitle}>拖曳左側課程至右側課表以進行模擬排課</div>
+                    <div className="simulation-title">排課模擬器</div>
+                    <div className="simulation-subtitle">拖曳左側課程至右側課表以進行模擬排課</div>
                 </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                    <div style={{ ...styles.creditDisplay, backgroundColor: '#F8FAFC', color: '#64748B', padding: '6px 14px', border: '1px solid #E2E8F0' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>必修</span>
-                        <span style={{ fontSize: '1.1rem', fontWeight: '700', color: '#334155' }}>{credits.required}</span>
+            <div className="simulation-credits-container">
+                <div className="simulation-credits-wrapper">
+                    <div className="simulation-credit-display required">
+                        <span className="simulation-credit-label">必修</span>
+                        <span className="simulation-credit-value">{credits.required}</span>
                     </div>
-                    <div style={{ ...styles.creditDisplay, backgroundColor: '#F8FAFC', color: '#64748B', padding: '6px 14px', border: '1px solid #E2E8F0' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>選修</span>
-                        <span style={{ fontSize: '1.1rem', fontWeight: '700', color: '#334155' }}>{credits.elective}</span>
+                    <div className="simulation-credit-display elective">
+                        <span className="simulation-credit-label">選修</span>
+                        <span className="simulation-credit-value">{credits.elective}</span>
                     </div>
-                    <div style={styles.creditDisplay}>
+                    <div className="simulation-credit-display">
                         <span>總學分</span>
-                        <span style={{ fontSize: '1.5rem', fontWeight: '700' }}>{credits.total}</span>
+                        <span className="simulation-credit-total-value">{credits.total}</span>
                     </div>
                 </div>
             </div>
 
-            <div style={styles.container} ref={containerRef}>
+            <div className="simulation-container" ref={containerRef}>
                 {/* 左欄：課程搜尋與拖曳源 */}
-                <div style={styles.leftPanel(leftWidth)} ref={leftPanelRef}>
+                <div
+                    className="simulation-left-panel"
+                    style={{ width: `${leftWidth}px` }}
+                    ref={leftPanelRef}
+                >
                     <CourseSearchPanel addedCourseIds={selectedCourseIds} currentSemester={currentSemester} />
                 </div>
 
                 {/* Resizer Handle */}
                 <div
-                    style={{
-                        ...styles.resizer,
-                        backgroundColor: isResizing ? '#E2E8F0' : 'transparent'
-                    }}
+                    className={`simulation-resizer ${isResizing ? 'resizing' : ''}`}
                     onMouseDown={startResizing}
                     title="拖曳調整寬度"
                 >
-                    <div style={styles.resizerLine} />
+                    <div className="simulation-resizer-line" />
                 </div>
 
                 {/* 右欄：課表與放置目標 */}
                 <div
-                    style={styles.rightPanel}
+                    className="simulation-right-panel"
                     onDragOver={(e) => e.preventDefault()} // 允許拖曳到課表區域
                     onDrop={handleDropOnTable}
                 >
                     {/* 拖曳時的視覺回饋 */}
                     {isDragging && (
-                        <div style={styles.dragOverlay}>
-                            <span style={styles.dragText}>放開以加入課程</span>
+                        <div className="simulation-drag-overlay">
+                            <span className="simulation-drag-text">放開以加入課程</span>
                         </div>
                     )}
 
@@ -487,35 +320,35 @@ const Scheduler = ({ currentSemester }) => {
                     />
 
                     {/* 下方：已選課程列表 */}
-                    <div style={styles.listContainer}>
-                        <div style={styles.listHeader}>
-                            <h4 style={{ margin: 0 }}>已選課程清單 ({selectedCourseIds.length})</h4>
+                    <div className="simulation-list-container">
+                        <div className="simulation-list-header">
+                            <h4>已選課程清單 ({selectedCourseIds.length})</h4>
                             {selectedCourseIds.length > 0 && (
                                 <button
                                     onClick={handleClearAll}
-                                    style={styles.clearButton}
+                                    className="simulation-clear-button"
                                 >
                                     全部刪除
                                 </button>
                             )}
                         </div>
-                        <div style={styles.courseList}>
+                        <div className="simulation-course-list">
                             {selectedCourseIds.length === 0 ? (
-                                <div style={styles.emptyState}>尚未選擇任何課程</div>
+                                <div className="simulation-empty-state">尚未選擇任何課程</div>
                             ) : (
                                 selectedCourseIds.map(id => {
                                     const course = courseData[id];
                                     return (
-                                        <div key={id} style={styles.courseItem}>
-                                            <div style={{ flex: 1 }}>
-                                                <div style={{ fontWeight: 'bold' }}>{course.name}</div>
-                                                <div style={{ fontSize: '0.85rem', color: '#666' }}>
+                                        <div key={id} className="simulation-course-item">
+                                            <div className="simulation-course-info">
+                                                <div className="simulation-course-name">{course.name}</div>
+                                                <div className="simulation-course-details">
                                                     {course.id} / {course.credit ?? course.credits}學分 / {course.teacher}
                                                 </div>
                                             </div>
                                             <button
                                                 onClick={() => handleRemoveCourse(id)}
-                                                style={styles.removeButton}
+                                                className="simulation-remove-button"
                                                 title="移除此課程"
                                             >
                                                 ✕

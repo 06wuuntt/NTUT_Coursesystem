@@ -1,0 +1,123 @@
+.course-detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.course-detail-header {
+    margin-bottom: 32px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 24px;
+}
+
+.course-detail-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+}
+
+.course-detail-subtitle {
+    font-size: 1.1rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.course-detail-badge {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.course-detail-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+}
+
+.course-detail-section {
+    padding: 24px;
+}
+
+.course-detail-section+.course-detail-section {
+    border-top: 1px solid #f1f5f9;
+}
+
+.course-detail-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #334155;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.course-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+}
+
+.course-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.course-detail-label {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.course-detail-value {
+    font-size: 1rem;
+    color: #0f172a;
+    font-weight: 500;
+}
+
+.course-detail-tag {
+    display: inline-block;
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    margin-right: 8px;
+    margin-bottom: 4px;
+}
+
+.course-detail-back-btn {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 8px 0;
+    transition: color 0.2s;
+}
+
+.course-detail-back-btn:hover {
+    color: #334155;
+}
+
+.course-detail-not-found {
+    text-align: center;
+    padding: 40px;
+}
+
+.course-detail-time-value {
+    margin-top: 4px;
+}

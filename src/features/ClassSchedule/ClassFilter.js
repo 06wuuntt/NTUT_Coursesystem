@@ -1,19 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import SelectInput from '../../components/forms/SelectInput';
 import { fetchDepartmentClasses } from '../../api/CourseService';
-
-const styles = {
-    container: {
-        display: 'flex',
-        gap: '20px',
-        alignItems: 'flex-end',
-        
-    },
-    filterBlock: {
-        flex: 1,
-        minWidth: '150px',
-    },
-};
+import './ClassFilter.css';
 
 /**
  * 班級篩選器：處理系所和班級的兩層連動選擇
@@ -21,7 +9,7 @@ const styles = {
  * @param {function} onFilterChange - 當班級選定時回傳班級唯一 ID
  */
 
-const ClassFilter = ({ onFilterChange, currentSemester }) => {
+const ClassFilter = ({ onFilterChange, currentSemester, initialClassId }) => {
     // *** 新增狀態：追蹤三層選擇 ***
     const [selectedCategory, setSelectedCategory] = useState(''); // 新增類別
     const [selectedDeptName, setSelectedDeptName] = useState('');
@@ -43,11 +31,35 @@ const ClassFilter = ({ onFilterChange, currentSemester }) => {
                 const data = await fetchDepartmentClasses(currentSemester);
                 setDepartmentsData(data);
 
-                // 重設所有選擇
-                setSelectedCategory('');
-                setSelectedDeptName('');
-                setSelectedClassId('');
-                onFilterChange(null);
+                // 如果有初始值，嘗試還原狀態
+                if (initialClassId) {
+                    let found = false;
+                    // 遍歷所有系所尋找該班級
+                    for (const dept of data) {
+                        const targetClass = dept.classes.find(c => c.id === initialClassId);
+                        if (targetClass) {
+                            setSelectedCategory(dept.category);
+                            setSelectedDeptName(dept.name);
+                            setSelectedClassId(initialClassId);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    // 如果找不到初始班級 (可能換學期了)，則重置
+                    if (!found) {
+                        setSelectedCategory('');
+                        setSelectedDeptName('');
+                        setSelectedClassId('');
+                        onFilterChange(null);
+                    }
+                } else {
+                    // 沒有初始值，重設所有選擇
+                    setSelectedCategory('');
+                    setSelectedDeptName('');
+                    setSelectedClassId('');
+                    onFilterChange(null);
+                }
             } catch (err) {
                 setError(`載入篩選器選項失敗: ${err.message}`);
                 setDepartmentsData([]);
@@ -59,7 +71,7 @@ const ClassFilter = ({ onFilterChange, currentSemester }) => {
         // Note: do NOT include `onFilterChange` in deps — its identity may change and
         // cause this effect to re-run and clear user selection unexpectedly.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentSemester]);
+    }, [currentSemester]); // Remove initialClassId from deps to prevent re-run when parent updates it back
 
     // --- 篩選邏輯 ---
 
@@ -131,14 +143,14 @@ const ClassFilter = ({ onFilterChange, currentSemester }) => {
     }, [selectedCategory, selectedDeptName, selectedClassId, filteredDepartments, classes, onFilterChange]);
 
 
-    if (loading) return <div style={{ ...styles.container, justifyContent: 'center' }}>正在載入系所班級清單...</div>;
-    if (error) return <div style={{ ...styles.container, color: 'red', justifyContent: 'center' }}>⚠️ {error}</div>;
+    if (loading) return <div className="class-filter-loading">正在載入系所班級清單...</div>;
+    if (error) return <div className="class-filter-error">⚠️ {error}</div>;
 
 
     return (
-        <div style={styles.container}>
+        <div className="class-filter-container">
             {/* 1. 類別篩選 */}
-            <div style={styles.filterBlock}>
+            <div className="class-filter-block">
                 <SelectInput
                     label="學院"
                     name="category"
@@ -149,7 +161,7 @@ const ClassFilter = ({ onFilterChange, currentSemester }) => {
             </div>
 
             {/* 2. 系所篩選 */}
-            <div style={styles.filterBlock}>
+            <div className="class-filter-block">
                 <SelectInput
                     label="系所"
                     name="department"
@@ -161,7 +173,7 @@ const ClassFilter = ({ onFilterChange, currentSemester }) => {
             </div>
 
             {/* 3. 班級篩選 */}
-            <div style={styles.filterBlock}>
+            <div className="class-filter-block">
                 <SelectInput
                     label="班級"
                     name="class"

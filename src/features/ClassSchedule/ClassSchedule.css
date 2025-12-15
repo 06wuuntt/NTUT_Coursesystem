@@ -1,0 +1,62 @@
+.class-schedule-container {
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: 1100px;
+}
+
+.class-schedule-title {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.class-schedule-subtitle {
+    font-size: 14px;
+    color: #888888;
+    margin-bottom: 70px;
+}
+
+.class-schedule-filter-card {
+    padding: 30px 50px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.class-schedule-filter-title {
+    color: #464646;
+    font-size: 1.5rem;
+    margin: 0 0 20px;
+}
+
+.class-schedule-view-toggle {
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.class-schedule-toggle-button {
+    padding: 8px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+    border: 1px solid #fff;
+    background-color: #fff;
+    color: #333;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.class-schedule-toggle-button.active {
+    border: 1px solid #D7EFFA;
+    background-color: #D7EFFA;
+    color: #336F8B;
+}
+
+.class-schedule-message {
+    text-align: center;
+    padding: 60px 40px;
+    font-size: 1.1em;
+    color: #888888;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}

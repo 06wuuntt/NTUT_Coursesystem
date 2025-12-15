@@ -6,6 +6,11 @@
     margin-bottom: 70px;
 }
 
+.home-welcome-title {
+    margin: 0;
+    font-size: 40px;
+}
+
 .home-container {
     background-color: #f2f2f2;
     margin: 70px auto;
@@ -17,6 +22,12 @@
 .search-container {
     border-radius: 10px;
     margin-bottom: 40px;
+}
+
+.home-search-title {
+    color: #464646;
+    font-size: 1.5rem;
+    margin: 0 0 20px;
 }
 
 .search-part {
@@ -114,6 +125,20 @@
     text-decoration: none;
 }
 
+.home-results-container {
+    margin: 0 0 30px;
+    padding: 10px;
+}
+
+.home-suggestion-header {
+    margin-bottom: 20px;
+}
+
+.home-section-label {
+    margin: 12px 2px 8px;
+    color: #464646;
+}
+
 .cards-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -130,6 +155,12 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
@@ -181,4 +212,33 @@
     margin-right: 8px;
     color: #94A3B8;
     flex-shrink: 0;
+}
+
+.home-pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+}
+
+.home-pagination-button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    color: #333;
+}
+
+.home-pagination-button:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+    color: #999;
+}
+
+.home-pagination-button.active {
+    background-color: #96C6DB;
+    color: #fff;
+    font-weight: 600;
 }

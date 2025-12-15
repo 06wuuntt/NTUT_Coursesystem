@@ -1,158 +1,85 @@
-/* ------------------------------------ */
-/* --- 基礎容器與響應式 --- */
-/* ------------------------------------ */
-.select-box-container {
-    margin-bottom: 15px;
+.select-input-container {
+    position: relative;
+    display: inline-block;
     width: 100%;
 }
 
-.select-box {
-    position: relative;
-    display: block;
+.select-input-button {
+    background-color: #EDEEF1;
+    color: #464646;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    margin: 0 auto;
-    font-family: 'Open Sans', 'Helvetica Neue', 'Segoe UI', 'Calibri', 'Arial', sans-serif;
-    font-size: 16px;
-    color: #60666d;
-}
-
-@media (min-width: 768px) {
-    .select-box {
-        width: 70%;
-    }
-}
-@media (min-width: 992px) {
-    .select-box {
-        width: 50%;
-    }
-}
-@media (min-width: 1200px) {
-    .select-box {
-        width: 30%;
-    }
-}
-
-/* ------------------------------------ */
-/* --- 當前選定值 (Current Value) --- */
-/* ------------------------------------ */
-
-.select-box__current {
-    position: relative;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 調整陰影強度 */
     cursor: pointer;
-    outline: none;
-    border-radius: 8px; /* 添加圓角 */
-    overflow: hidden; /* 防止內容溢出 */
-}
-
-/* 當前選定值文字 */
-.select-box__input-text {
-    display: block;
-    width: 100%;
-    margin: 0;
-    padding: 15px;
-    background-color: #fff;
     transition: background-color 0.2s;
 }
 
-/* 點擊時的視覺回饋 */
-.select-box__current:hover .select-box__input-text {
-    background-color: #f8f8f8;
-}
-
-/* 禁用狀態 */
-.select-box--disabled .select-box__current {
+.select-input-button:disabled {
     cursor: not-allowed;
-    background-color: #f4f4f4;
-    opacity: 0.7;
+    opacity: 0.6;
 }
 
-/* 箭頭圖標 */
-.select-box__icon {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    width: 20px;
-    opacity: 0.5; /* 略微調暗 */
-    transition: 0.2s ease;
+.select-input-button:hover:not(:disabled) {
+    background-color: #d2d2d2ff;
 }
 
-/* ------------------------------------ */
-/* --- 下拉列表 (List) --- */
-/* ------------------------------------ */
-
-.select-box__list {
+.select-input-dropdown {
     position: absolute;
-    width: 100%;
+    background-color: white;
+    min-width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     padding: 0;
-    list-style: none;
-    opacity: 0;
-    /* 初始狀態隱藏，並準備動畫 */
-    transform-origin: top;
-    transform: scaleY(0);
-    z-index: 100; /* 確保在其他元素之上 */
-
-    /* 應用隱藏動畫 */
-    animation-name: HideList;
-    animation-duration: 0.5s;
-    animation-delay: 0.5s;
-    animation-fill-mode: forwards;
-    animation-timing-function: step-start;
-    
-    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1); /* 列表陰影 */
-    border-radius: 0 0 8px 8px; /* 底部圓角 */
-    overflow: hidden; /* 確保圓角效果 */
-}
-
-/* 選項 */
-.select-box__option {
-    display: block;
-    padding: 15px;
-    background-color: #fff;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.select-box__option:hover,
-.select-box__option:focus {
-    color: #546c84;
-    background-color: #f0f0f0; /* 淺灰色懸停 */
-    outline: none;
-}
-
-/* ------------------------------------ */
-/* --- 開啟狀態 (.select-box--open) --- */
-/* ------------------------------------ */
-
-/* 當列表開啟時，重置動畫並顯示列表 */
-.select-box--open .select-box__list {
-    opacity: 1;
-    transform: scaleY(1);
-    animation-name: none; /* 取消隱藏動畫，立即顯示 */
-    transition: transform 0.2s ease-out;
-}
-
-/* 當列表開啟時，箭頭旋轉 */
-.select-box--open .select-box__icon {
-    transform: translateY(-50%) rotate(180deg);
-}
-
-/* ------------------------------------ */
-/* --- 輔助樣式與動畫 --- */
-/* ------------------------------------ */
-
-/* 確保只有選定的值被顯示 (用於 radio 模擬的結構) */
-.select-box__value, 
-.select-box__input {
+    margin: 4px 0 0 0;
+    z-index: 1000;
     display: none;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    border-radius: 4px;
 }
-.select-box__value:first-child {
+
+.select-input-dropdown.expanded {
     display: block;
 }
 
-/* 隱藏動畫 (當列表關閉時，防止立即響應) */
-@keyframes HideList {
-    from { transform: scaleY(1); }
-    to { transform: scaleY(0); }
+.select-input-item {
+    background-color: #EDEEF1;
+    color: #464646;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.select-input-item:last-child {
+    border-bottom: none;
+}
+
+.select-input-item:hover {
+    background-color: #d2d2d2ff;
+}
+
+.select-input-item.active {
+    background-color: #d3d3d3ff;
+    font-weight: 600;
+}
+
+.select-input-icon {
+    fill: currentColor;
+    height: 16px;
+    width: 16px;
+    transition: transform 0.2s;
+}
+
+.select-input-icon.expanded {
+    transform: rotate(180deg);
 }

@@ -1,90 +1,6 @@
 import React from 'react';
 import { PERIODS } from '../../constants/periods';
-
-const styles = {
-    container: {
-        backgroundColor: '#FFFFFF',
-        borderRadius: '8px',
-        padding: '20px',
-        boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
-        flexGrow: 1,
-        overflowY: 'auto',
-        boxSizing: 'border-box',
-        minHeight: 0, // Important for flex child scrolling
-    },
-    gridContainer: {
-        display: 'grid',
-        gridTemplateColumns: '60px repeat(6, 1fr)', // 6 days
-        gap: '2px',
-        backgroundColor: '#EDEEF1',
-        padding: '2px',
-        borderRadius: '4px',
-        overflow: 'hidden',
-        position: 'relative',
-    },
-    headerCell: {
-        backgroundColor: '#F8F9FA',
-        padding: '12px 8px',
-        fontWeight: '600',
-        fontSize: '0.9em',
-        color: '#464646',
-        textAlign: 'center',
-        minHeight: '40px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    timeCell: {
-        backgroundColor: '#F8F9FA',
-        padding: '8px',
-        fontWeight: '600',
-        fontSize: '0.85em',
-        color: '#464646',
-        textAlign: 'center',
-        minHeight: '50px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '4px',
-    },
-    courseCell: {
-        backgroundColor: '#FFFFFF',
-        padding: '4px',
-        minHeight: '50px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-    },
-    courseCard: {
-        backgroundColor: 'rgba(199, 196, 196, 0.6)',
-        border: 'None',
-        borderRadius: '6px',
-        padding: '8px',
-        cursor: 'pointer',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        transition: 'all 0.2s',
-        fontSize: '0.875em',
-        color: '#464646',
-        fontWeight: '500',
-        lineHeight: '1.2',
-        backdropFilter: 'blur(2px)',
-        WebkitBackdropFilter: 'blur(2px)',
-        boxSizing: 'border-box',
-    },
-    courseCardHover: {
-        backgroundColor: 'rgba(209, 209, 209, 0.6)',
-        transform: 'scale(1.03)',
-        zIndex: 10,
-    },
-};
+import './TimeTable.css';
 
 const DayNames = ['一', '二', '三', '四', '五', '六'];
 
@@ -148,12 +64,12 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse }) => {
     };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.gridContainer} onDragOver={handleDragOver} onDrop={handleDrop}>
+        <div className="simulation-timetable-container">
+            <div className="simulation-timetable-grid-container" onDragOver={handleDragOver} onDrop={handleDrop}>
                 {/* 1. Headers */}
-                <div style={{ gridColumn: 1, gridRow: 1, ...styles.headerCell }}></div>
+                <div className="simulation-timetable-header-cell" style={{ gridColumn: 1, gridRow: 1 }}></div>
                 {DayNames.map((day, index) => (
-                    <div key={day} style={{ gridColumn: index + 2, gridRow: 1, ...styles.headerCell }}>{day}</div>
+                    <div key={day} className="simulation-timetable-header-cell" style={{ gridColumn: index + 2, gridRow: 1 }}>{day}</div>
                 ))}
 
                 {/* 2. Background Grid (Time Cells + Empty White Cells) */}
@@ -162,15 +78,14 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse }) => {
                     return (
                         <React.Fragment key={`bg-${period.id}`}>
                             {/* Time Cell */}
-                            <div style={{ gridColumn: 1, gridRow: row, ...styles.timeCell }}>
+                            <div className="simulation-timetable-time-cell" style={{ gridColumn: 1, gridRow: row }}>
                                 <div>{period.id}</div>
                             </div>
                             {/* White Background Cells (Always Rendered) */}
                             {[1, 2, 3, 4, 5, 6].map(dayIndex => (
-                                <div key={`cell-${dayIndex}-${period.id}`} style={{
+                                <div key={`cell-${dayIndex}-${period.id}`} className="simulation-timetable-course-cell" style={{
                                     gridColumn: dayIndex + 1,
                                     gridRow: row,
-                                    ...styles.courseCell,
                                     zIndex: 0
                                 }} />
                             ))}
@@ -207,9 +122,8 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse }) => {
                                 }}
                             >
                                 <div
+                                    className={`simulation-timetable-course-card ${isHovered ? 'hover' : ''}`}
                                     style={{
-                                        ...styles.courseCard,
-                                        ...(isHovered ? styles.courseCardHover : {}),
                                         pointerEvents: 'auto', // Re-enable pointer events
                                     }}
                                     onMouseEnter={() => setHoveredCell(key)}
@@ -217,9 +131,9 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse }) => {
                                     onClick={() => handleCourseClick(courseId, course?.name)}
                                     title="點擊以移除課程"
                                 >
-                                    <div>{course?.name}</div>
+                                    <div className="simulation-timetable-course-name">{course?.name}</div>
                                     {location && (
-                                        <div style={{ fontSize: '0.8em', marginTop: '4px', opacity: 0.8 }}>
+                                        <div className="simulation-timetable-course-location">
                                             {location}
                                         </div>
                                     )}

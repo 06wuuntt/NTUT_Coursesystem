@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'; // 引入 useState
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
 
 // 引入佈局和頁面組件
 import MainLayout from './components/layouts/MainLayout';
-// ... [保留其他頁面引入] ...
 import Home from './features/Home/Home';
 import ClassSchedule from './features/ClassSchedule/ClassSchedule';
 import ClassSimulation from './features/ClassSimulation/ClassSimulation';
 import Calendar from './features/Calendar/Calendar';
 import CourseStandards from './features/CourseStandards/CourseStandards';
+import CourseDetail from './features/CourseDetail/CourseDetail';
 
 import { ROUTES } from './constants/routes';
 import { fetchSemesters } from './api/CourseService'
@@ -42,7 +43,7 @@ function App() {
   // 如果學期資料正在載入，顯示載入畫面
   if (loadingSemesters || !currentSemester) {
     return (
-      <div style={{ textAlign: 'center', padding: '50px', fontSize: '20px' }}>
+      <div className="app-loading-container">
         <h1>課程系統載入中...</h1>
         <p>正在從 API 獲取學期資料，請稍候。</p>
       </div>
@@ -78,6 +79,7 @@ function App() {
         <Route path={ROUTES.find(r => r.id === 'class-simulation').path} element={<PageWrapper element={<ClassSimulation />} />} />
         <Route path={ROUTES.find(r => r.id === 'calendar').path} element={<PageWrapper element={<Calendar />} />} />
         <Route path={ROUTES.find(r => r.id === 'standards').path} element={<PageWrapper element={<CourseStandards />} />} />
+        <Route path={ROUTES.find(r => r.id === 'course-detail').path} element={<PageWrapper element={<CourseDetail />} />} />
         <Route path="*" element={<PageWrapper element={<h2>404 找不到頁面</h2>} />} />
       </Routes>
     </Router>

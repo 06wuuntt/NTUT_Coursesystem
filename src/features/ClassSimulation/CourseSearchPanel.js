@@ -1,140 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAllSemesterCourses } from '../../api/CourseService';
-
-const styles = {
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-        height: '100%',
-    },
-    searchContainer: {
-        position: 'relative',
-    },
-    searchIcon: {
-        position: 'absolute',
-        left: '12px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        color: '#94A3B8',
-        width: '20px',
-        height: '20px',
-    },
-    searchInput: {
-        width: '100%',
-        padding: '12px 16px 12px 40px',
-        fontSize: '0.95rem',
-        borderRadius: '12px',
-        border: '1px solid #E2E8F0',
-        backgroundColor: '#FFFFFF',
-        outline: 'none',
-        boxSizing: 'border-box',
-        color: '#1E293B',
-        transition: 'border-color 0.2s',
-    },
-    listContainer: {
-        flexGrow: 1,
-        overflowY: 'auto',
-        paddingRight: '4px',
-    },
-    courseItem: (isAdded) => ({
-        backgroundColor: '#FFFFFF',
-        borderRadius: '12px',
-        border: `1px solid ${isAdded ? '#E2E8F0' : '#F1F5F9'}`,
-        padding: '16px',
-        marginBottom: '12px',
-        boxShadow: isAdded ? 'none' : '0 2px 4px rgba(0,0,0,0.02)',
-        cursor: isAdded ? 'default' : 'grab',
-        opacity: isAdded ? 0.5 : 1,
-        transition: 'all 0.2s',
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-    }),
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    title: {
-        fontSize: '1rem',
-        fontWeight: '600',
-        color: '#1E293B',
-        margin: 0,
-        lineHeight: '1.4',
-    },
-    idBadge: {
-        fontSize: '0.75rem',
-        color: '#64748B',
-        backgroundColor: '#F1F5F9',
-        padding: '2px 6px',
-        borderRadius: '4px',
-        fontFamily: 'monospace',
-        whiteSpace: 'nowrap',
-        marginLeft: '8px',
-    },
-    infoRow: {
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: '0.85rem',
-        color: '#64748B',
-        gap: '6px',
-    },
-    icon: {
-        width: '14px',
-        height: '14px',
-        color: '#94A3B8',
-        flexShrink: 0,
-    },
-    divider: {
-        height: '1px',
-        backgroundColor: '#F1F5F9',
-        margin: '4px 0',
-    },
-    addedBadge: {
-        position: 'absolute',
-        top: '12px',
-        right: '12px',
-        backgroundColor: '#DEF7EC',
-        color: '#03543F',
-        fontSize: '0.75rem',
-        fontWeight: '600',
-        padding: '2px 8px',
-        borderRadius: '9999px',
-    },
-    message: {
-        color: '#94A3B8',
-        textAlign: 'center',
-        marginTop: '40px',
-        fontSize: '0.9rem',
-    }
-};
+import './CourseSearchPanel.css';
 
 const Icons = {
     Search: () => (
-        <svg style={styles.searchIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="simulation-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
     ),
     User: () => (
-        <svg style={styles.icon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="simulation-search-info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
     ),
     Star: () => (
-        <svg style={styles.icon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="simulation-search-info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
         </svg>
     ),
     Location: () => (
-        <svg style={styles.icon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="simulation-search-info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
     ),
     Clock: () => (
-        <svg style={styles.icon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="simulation-search-info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
     )
@@ -266,21 +157,21 @@ const CourseSearchPanel = ({ addedCourseIds, currentSemester }) => {
     };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.searchContainer}>
+        <div className="simulation-search-container">
+            <div className="simulation-search-input-container">
                 <Icons.Search />
                 <input
                     type="text"
                     placeholder="搜尋課程名稱、教師或代碼..."
-                    style={styles.searchInput}
+                    className="simulation-search-input"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </div>
 
-            <div style={styles.listContainer}>
+            <div className="simulation-search-list-container">
                 {filteredCourses.length === 0 ? (
-                    <p style={styles.message}>找不到符合的課程</p>
+                    <p className="simulation-search-empty">找不到符合的課程</p>
                 ) : (
                     filteredCourses.map(course => {
                         const courseId = course.id ?? course.courseId ?? course.course_id;
@@ -313,38 +204,38 @@ const CourseSearchPanel = ({ addedCourseIds, currentSemester }) => {
                         return (
                             <div
                                 key={String(courseId)}
-                                style={styles.courseItem(isAdded)}
+                                className={`simulation-search-course-item ${isAdded ? 'added' : ''}`}
                                 draggable={!isAdded}
                                 onDragStart={!isAdded ? (e) => handleDragStart(e, courseId, course) : null}
                                 title={isAdded ? "已加入課表" : "拖曳加入課表"}
                             >
-                                <div style={styles.header}>
-                                    <div style={styles.title}>{title}</div>
-                                    <span style={styles.idBadge}>{courseId}</span>
+                                <div className="simulation-search-course-header">
+                                    <div className="simulation-search-course-title">{title}</div>
+                                    <span className="simulation-search-id-badge">{courseId}</span>
                                 </div>
 
-                                <div style={styles.divider} />
+                                <div className="simulation-search-divider" />
 
-                                <div style={styles.infoRow}>
+                                <div className="simulation-search-info-row">
                                     <Icons.User />
                                     <span>{teacher}</span>
                                 </div>
-                                <div style={styles.infoRow}>
+                                <div className="simulation-search-info-row">
                                     <Icons.Star />
                                     <span>{credits} 學分</span>
                                 </div>
-                                <div style={styles.infoRow}>
+                                <div className="simulation-search-info-row">
                                     <Icons.Clock />
                                     <span>{timeDisplay}</span>
                                 </div>
                                 {location && (
-                                    <div style={styles.infoRow}>
+                                    <div className="simulation-search-info-row">
                                         <Icons.Location />
                                         <span>{location}</span>
                                     </div>
                                 )}
 
-                                {isAdded && <div style={styles.addedBadge}>已加入</div>}
+                                {isAdded && <div className="simulation-search-added-badge">已加入</div>}
                             </div>
                         );
                     })

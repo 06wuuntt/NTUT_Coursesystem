@@ -24,4 +24,9 @@ export const ROUTES = [
         name: "課程標準",
         id: "standards",
     },
+    {
+        path: "/course/:id",
+        name: "課程詳細資訊",
+        id: "course-detail",
+    },
 ];

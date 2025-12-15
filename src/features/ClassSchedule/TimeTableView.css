@@ -1,0 +1,107 @@
+.time-table-container {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.time-table-grid {
+    display: grid;
+    grid-template-columns: 60px 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 2px;
+    background-color: #EDEEF1;
+    padding: 2px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.time-table-header-cell {
+    background-color: #F8F9FA;
+    padding: 12px 8px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #464646;
+    text-align: center;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-table-time-cell {
+    background-color: #F8F9FA;
+    padding: 8px;
+    font-weight: 600;
+    font-size: 0.85em;
+    color: #464646;
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.time-table-period-label {
+    font-size: 0.75em;
+    color: #888888;
+}
+
+.time-table-course-cell {
+    background-color: #FFFFFF;
+    padding: 4px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-table-course-card {
+    background-color: rgba(199, 196, 196, 0.6);
+    border: none;
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: all 0.2s;
+    font-size: 0.875em;
+    color: #464646;
+    font-weight: 500;
+    line-height: 1.2;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.time-table-course-card:hover {
+    background-color: rgba(209, 209, 209, 0.6);
+    transform: scale(1.03);
+}
+
+.time-table-conflict-card {
+    background-color: rgba(157, 198, 219, 0.4);
+    color: #648392;
+}
+
+.time-table-conflict-title {
+    font-size: 0.75em;
+    font-weight: 600;
+}
+
+.time-table-conflict-subtitle {
+    font-size: 0.65em;
+    margin-top: 2px;
+}
+
+.time-table-course-location {
+    font-size: 0.7em;
+    margin-top: 4px;
+    color: #7e7e7e;
+}

@@ -2,23 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { fetchCourseStandards, fetchStandardsDepartments } from '../../api/CourseService';
 import StandardSearchForm from './StandardSearchForm';
 import StandardResults from './StandardResults';
-
-const styles = {
-  container: {
-    margin: '0 auto',
-    padding: '0 20px',
-    maxWidth: '1100px',
-  },
-  error: {
-    padding: '16px',
-    backgroundColor: '#FEF2F2',
-    color: '#EF4444',
-    borderRadius: '8px',
-    textAlign: 'center',
-    marginTop: '20px',
-    border: '1px solid #FECACA',
-  }
-};
+import './CourseStandards.css';
 
 const CourseStandards = ({ currentSemester, semesterOptions = [] }) => {
   const yearOptions = useMemo(() => {
@@ -120,9 +104,9 @@ const CourseStandards = ({ currentSemester, semesterOptions = [] }) => {
   const currentYearLabel = yearOptions.find(y => y.value === selectedYear)?.label || selectedYear;
 
   return (
-    <div style={styles.container}>
-      <div style={{ fontSize: '40px', fontWeight: 'Bold' }}>課程標準</div>
-      <div style={{ fontSize: '14px', color: '#888888', marginBottom: '70px' }}>查看各系所的課程規劃與學分要求</div>
+    <div className="course-standards-container">
+      <div className="course-standards-title">課程標準</div>
+      <div className="course-standards-subtitle">查看各系所的課程規劃與學分要求</div>
 
       <StandardSearchForm
         selectedYear={selectedYear}
@@ -135,7 +119,7 @@ const CourseStandards = ({ currentSemester, semesterOptions = [] }) => {
         onChange={handleChange}
       />
 
-      {error && <div style={styles.error}>{error}</div>}
+      {error && <div className="course-standards-error">{error}</div>}
 
       <StandardResults
         standards={standards}

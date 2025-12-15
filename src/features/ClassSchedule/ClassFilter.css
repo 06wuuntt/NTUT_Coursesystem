@@ -1,0 +1,25 @@
+.class-filter-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.class-filter-block {
+    flex: 1;
+    min-width: 150px;
+}
+
+.class-filter-loading {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.class-filter-error {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: flex-end;
+    color: red;
+}
