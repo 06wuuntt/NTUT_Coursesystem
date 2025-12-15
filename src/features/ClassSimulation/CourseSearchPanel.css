@@ -49,7 +49,7 @@
     border: 1px solid #F1F5F9;
     padding: 16px;
     margin-bottom: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     cursor: grab;
     transition: all 0.2s;
     position: relative;

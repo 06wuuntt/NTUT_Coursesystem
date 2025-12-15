@@ -34,7 +34,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .calendar-button:hover {
@@ -117,7 +117,7 @@
 
 .calendar-upcoming-event:hover {
     border-color: #CBD5E1;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transform: translateY(-1px);
 }
 

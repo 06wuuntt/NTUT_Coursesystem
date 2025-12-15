@@ -142,9 +142,9 @@ const ClassSchedule = ({ currentSemester }) => {
                 {/* 班級篩選器傳遞學期值 */}
                 <div className="class-schedule-filter-card">
                     <h3 className="class-schedule-filter-title">選擇班級</h3>
-                    <ClassFilter 
-                        onFilterChange={handleFilterChange} 
-                        currentSemester={currentSemester} 
+                    <ClassFilter
+                        onFilterChange={handleFilterChange}
+                        currentSemester={currentSemester}
                         initialClassId={selectedClassCode}
                     />
                 </div>
