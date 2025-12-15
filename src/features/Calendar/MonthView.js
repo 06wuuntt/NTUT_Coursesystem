@@ -1,140 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-
-const styles = {
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', // Force equal width
-    backgroundColor: '#FFFFFF',
-    border: '1px solid #E2E8F0',
-    borderRadius: '12px',
-    overflow: 'hidden',
-  },
-  dayHeader: {
-    backgroundColor: '#F8FAFC',
-    padding: '16px 8px',
-    borderBottom: '1px solid #E2E8F0',
-    borderRight: '1px solid #E2E8F0', // Add vertical dividers
-    color: '#64748B',
-    fontWeight: '600',
-    fontSize: '0.9rem',
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-  },
-  dayCell: {
-    minHeight: '120px',
-    padding: '8px',
-    borderBottom: '1px solid #E2E8F0',
-    borderRight: '1px solid #E2E8F0', // Add vertical dividers
-    backgroundColor: '#FFFFFF',
-    position: 'relative',
-    transition: 'background-color 0.2s',
-  },
-  dateNum: {
-    fontSize: '0.95rem',
-    fontWeight: '600',
-    color: '#334155',
-    marginBottom: '8px',
-    width: '28px',
-    height: '28px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '50%',
-  },
-  event: {
-    fontSize: '0.8rem',
-    backgroundColor: '#EFF6FF',
-    color: '#1D4ED8',
-    padding: '4px 8px',
-    borderRadius: '4px',
-    marginBottom: '4px',
-    borderLeft: '3px solid #3B82F6',
-    cursor: 'pointer',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    fontWeight: '500',
-    transition: 'all 0.2s',
-  },
-  weekend: {
-    backgroundColor: '#FAFAFA',
-  },
-  today: {
-    backgroundColor: '#3B82F6',
-    color: '#FFFFFF',
-  },
-  otherMonth: {
-    backgroundColor: '#F8FAFC',
-    color: '#CBD5E1',
-  },
-  modal: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-  },
-  modalContent: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: '12px',
-    padding: '24px',
-    maxWidth: '500px',
-    width: '90%',
-    maxHeight: '80vh',
-    overflow: 'auto',
-    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-  },
-  modalHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: '20px',
-    paddingBottom: '16px',
-    borderBottom: '2px solid #E2E8F0',
-  },
-  modalTitle: {
-    fontSize: '1.2rem',
-    fontWeight: '700',
-    color: '#1E293B',
-    margin: 0,
-    flex: 1,
-  },
-  closeButton: {
-    background: 'none',
-    border: 'none',
-    fontSize: '1.5rem',
-    cursor: 'pointer',
-    color: '#64748B',
-    padding: '0 4px',
-    marginLeft: '12px',
-    transition: 'color 0.2s',
-  },
-  modalBody: {
-    color: '#475569',
-  },
-  infoRow: {
-    marginBottom: '16px',
-  },
-  infoLabel: {
-    fontWeight: '600',
-    color: '#334155',
-    marginBottom: '4px',
-    fontSize: '0.9rem',
-  },
-  infoValue: {
-    color: '#64748B',
-    fontSize: '0.95rem',
-    lineHeight: '1.6',
-  },
-};
+import './MonthView.css';
 
 const DayNames = ['日', '一', '二', '三', '四', '五', '六'];
 
@@ -202,7 +69,7 @@ const MonthView = ({ year, month, allEvents }) => {
 
   // 1. 填補前置空白天數
   for (let i = 0; i < firstDayOfMonth; i++) {
-    days.push(<div key={`prev-${i}`} style={{ ...styles.dayCell, ...styles.otherMonth }}></div>);
+    days.push(<div key={`prev-${i}`} className="month-view-day-cell month-view-other-month"></div>);
   }
 
   // 2. 填入本月日期
@@ -243,21 +110,16 @@ const MonthView = ({ year, month, allEvents }) => {
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
     // 組合樣式
-    let cellStyle = { ...styles.dayCell };
-    if (isWeekend) cellStyle = { ...cellStyle, ...styles.weekend };
+    let cellClass = 'month-view-day-cell';
+    if (isWeekend) cellClass += ' month-view-weekend';
     // 注意：我們不再改變整個單元格的背景色來標示今天，而是改變數字的樣式
 
     days.push(
       <div
         key={fullDateStr}
-        style={cellStyle}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8FAFC'}
-        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = isWeekend ? '#FAFAFA' : '#FFFFFF'}
+        className={cellClass}
       >
-        <div style={{
-          ...styles.dateNum,
-          ...(isToday ? styles.today : {})
-        }}>
+        <div className={`month-view-date-num ${isToday ? 'month-view-today' : ''}`}>
           {date}
         </div>
         {dailyEvents.map((event, index) => {
@@ -266,11 +128,9 @@ const MonthView = ({ year, month, allEvents }) => {
             return (
               <div
                 key={index}
-                style={styles.event}
+                className="month-view-event"
                 title={title}
                 onClick={() => handleEventClick(event)}
-                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(2px)'}
-                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
               >
                 {event.description}
               </div>
@@ -281,11 +141,9 @@ const MonthView = ({ year, month, allEvents }) => {
             return (
               <div
                 key={index}
-                style={{ ...styles.event, backgroundColor: '#DCFCE7', color: '#166534', borderLeftColor: '#22C55E' }}
+                className="month-view-event month-view-event-start"
                 title={title}
                 onClick={() => handleEventClick(event)}
-                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(2px)'}
-                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
               >
                 {event.description} (開始)
               </div>
@@ -296,11 +154,9 @@ const MonthView = ({ year, month, allEvents }) => {
             return (
               <div
                 key={index}
-                style={{ ...styles.event, backgroundColor: '#FEE2E2', color: '#991B1B', borderLeftColor: '#EF4444' }}
+                className="month-view-event month-view-event-end"
                 title={title}
                 onClick={() => handleEventClick(event)}
-                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(2px)'}
-                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
               >
                 {event.description} (結束)
               </div>
@@ -313,11 +169,18 @@ const MonthView = ({ year, month, allEvents }) => {
     );
   }
 
+  // 3. 填補後置空白天數，補滿最後一週
+  const totalCells = firstDayOfMonth + daysInMonth;
+  const remainingCells = (7 - (totalCells % 7)) % 7;
+  for (let i = 0; i < remainingCells; i++) {
+    days.push(<div key={`next-${i}`} className="month-view-day-cell month-view-other-month"></div>);
+  }
+
   return (
     <div>
-      <div style={styles.grid}>
+      <div className="month-view-grid">
         {DayNames.map(day => (
-          <div key={day} style={styles.dayHeader}>
+          <div key={day} className="month-view-day-header">
             {day}
           </div>
         ))}
@@ -326,23 +189,21 @@ const MonthView = ({ year, month, allEvents }) => {
 
       {/* 事件詳情模態視窗 */}
       {selectedEvent && (
-        <div style={styles.modal} onClick={closeModal}>
-          <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div style={styles.modalHeader}>
-              <h3 style={styles.modalTitle}>{selectedEvent.description}</h3>
+        <div className="month-view-modal" onClick={closeModal}>
+          <div className="month-view-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="month-view-modal-header">
+              <h3 className="month-view-modal-title">{selectedEvent.description}</h3>
               <button
-                style={styles.closeButton}
+                className="month-view-close-button"
                 onClick={closeModal}
-                onMouseEnter={(e) => e.currentTarget.style.color = '#1E293B'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#64748B'}
               >
                 ✕
               </button>
             </div>
 
-            <div style={styles.modalBody}>
-              <div style={styles.infoRow}>
-                <div style={styles.infoLabel}>
+            <div className="month-view-modal-body">
+              <div className="month-view-info-row">
+                <div className="month-view-info-label">
                   <FontAwesomeIcon icon={faCalendarDays} style={{ marginRight: '6px' }} />
                   時間：
                   {(() => {

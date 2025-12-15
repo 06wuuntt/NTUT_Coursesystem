@@ -4,7 +4,6 @@ import CardView from './CardView';
 import TimeTableView from './TimeTableView';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTableCells, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons';
-// import { MOCK_SCHEDULE_DATA } from '../../constants/mockData';
 import { fetchAllSemesterCourses, filterAndConvertSchedule } from '../../api/CourseService';
 
 // 將學期代碼格式化為中文顯示

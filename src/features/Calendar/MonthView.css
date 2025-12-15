@@ -1,0 +1,178 @@
+.month-view-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    background-color: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.month-view-day-header {
+    background-color: #F8FAFC;
+    padding: 16px 8px;
+    border-bottom: 1px solid #E2E8F0;
+    border-right: 1px solid #E2E8F0;
+    color: #64748B;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.month-view-day-cell {
+    min-height: 120px;
+    padding: 8px;
+    border-bottom: 1px solid #E2E8F0;
+    border-right: 1px solid #E2E8F0;
+    background-color: #FFFFFF;
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+/* Remove right border for the last column (every 7th item) */
+.month-view-grid> :nth-child(7n) {
+    border-right: none;
+}
+
+/* Remove bottom border for the last row (last 7 items) */
+.month-view-grid> :nth-last-child(-n+7) {
+    border-bottom: none;
+}
+
+.month-view-date-num {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.month-view-event {
+    font-size: 0.8rem;
+    background-color: #EFF6FF;
+    color: #1D4ED8;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    border-left: 3px solid #3B82F6;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.month-view-event:hover {
+    transform: translateX(2px);
+}
+
+.month-view-weekend {
+    background-color: #FAFAFA;
+}
+
+.month-view-today {
+    background-color: #3B82F6;
+    color: #FFFFFF;
+}
+
+.month-view-other-month {
+    background-color: #F8FAFC;
+    color: #CBD5E1;
+}
+
+.month-view-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.month-view-modal-content {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: auto;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.month-view-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #E2E8F0;
+}
+
+.month-view-modal-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1E293B;
+    margin: 0;
+    flex: 1;
+}
+
+.month-view-close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #64748B;
+    padding: 0 4px;
+    margin-left: 12px;
+    transition: color 0.2s;
+}
+
+.month-view-close-button:hover {
+    color: #1E293B;
+}
+
+.month-view-modal-body {
+    color: #475569;
+}
+
+.month-view-info-row {
+    margin-bottom: 16px;
+}
+
+.month-view-info-label {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+}
+
+.month-view-info-value {
+    color: #64748B;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Event variants */
+.month-view-event-start {
+    background-color: #DCFCE7;
+    color: #166534;
+    border-left-color: #22C55E;
+}
+
+.month-view-event-end {
+    background-color: #FEE2E2;
+    color: #991B1B;
+    border-left-color: #EF4444;
+}

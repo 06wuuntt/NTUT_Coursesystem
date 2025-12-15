@@ -1,5 +1,5 @@
 const BASE_URL = "https://gnehs.github.io/ntut-course-crawler-node/";
-const FAKE_DELAY = 500;
+
 const convertSemesterId = (semesterId) => {
     const [year, sem] = semesterId.split('-');
     return { year, sem };
@@ -73,38 +73,42 @@ export async function fetchStandardsDepartments(year) {
  * @param {object} fullData - fetchStandardsDepartments 返回的原始數據
  */
 export async function fetchCourseStandards(selectedYear, departmentUniqueId, fullData) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (!fullData) {
-                reject(new Error("找不到課程標準總數據"));
-                return;
-            }
+    if (!fullData) {
+        throw new Error("找不到課程標準總數據");
+    }
 
-            const [academicSystem, departmentName] = departmentUniqueId.split('-');
+    const [academicSystem, departmentName] = departmentUniqueId.split('-');
 
-            const deptData = fullData[academicSystem]?.[departmentName];
+    const deptData = fullData[academicSystem]?.[departmentName];
 
-            if (deptData) {
-                // 數據結構符合：{ credits: {...}, courses: [...], rules: [...] }
-                // 將學分數從字串轉為數字 (並將最低畢業學分數設為必修+選修總和)
-                const credits = deptData.credits;
-                const required = parseFloat(credits["校訂專業必修學分"] || 0) + parseFloat(credits["部訂專業必修學分"] || 0) + parseFloat(credits["校訂共同必修學分"] || 0) + parseFloat(credits["部訂共同必修學分"] || 0);
-                const elective = parseFloat(credits["專業選修學分"] || 0) + parseFloat(credits["共同選修學分"] || 0);
+    if (deptData) {
+        // 數據結構符合：{ credits: {...}, courses: [...], rules: [...] }
+        const credits = deptData.credits;
 
-                const result = {
-                    requiredCredits: required,
-                    electiveCredits: elective,
-                    // 使用 API 提供的最低畢業學分數
-                    graduationTotal: parseFloat(credits["最低畢業學分數"] || 0),
-                    courses: deptData.courses,
-                    rules: deptData.rules
-                };
-                resolve(result);
-            } else {
-                reject(new Error("查無此系所的課程標準詳細資料"));
-            }
-        }, FAKE_DELAY);
-    });
+        // 計算各類學分
+        const generalRequired = parseFloat(credits["校訂共同必修學分"] || 0) + parseFloat(credits["部訂共同必修學分"] || 0);
+        const professionalRequired = parseFloat(credits["校訂專業必修學分"] || 0) + parseFloat(credits["部訂專業必修學分"] || 0);
+        const professionalElective = parseFloat(credits["專業選修學分"] || 0);
+        const graduationTotal = parseFloat(credits["最低畢業學分數"] || 0);
+
+        // 計算跨域及自由選修 (總學分 - 其他三項)
+        // 注意：有時候 API 資料中的總學分可能不等於各項之和，這裡以剩餘學分作為自由選修
+        let freeElective = graduationTotal - generalRequired - professionalRequired - professionalElective;
+        if (freeElective < 0) freeElective = 0; // 避免負數
+
+        const result = {
+            generalRequired,
+            professionalRequired,
+            professionalElective,
+            freeElective,
+            graduationTotal,
+            courses: deptData.courses,
+            rules: deptData.rules
+        };
+        return result;
+    } else {
+        throw new Error("查無此系所的課程標準詳細資料");
+    }
 }
 
 /**

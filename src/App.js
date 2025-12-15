@@ -11,7 +11,6 @@ import Calendar from './features/Calendar/Calendar';
 import CourseStandards from './features/CourseStandards/CourseStandards';
 
 import { ROUTES } from './constants/routes';
-// import { MOCK_SEMESTERS } from './constants/mockData'; // 使用模擬學期清單作為預設來源
 import { fetchSemesters } from './api/CourseService'
 
 function App() {

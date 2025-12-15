@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
 import { ROUTES } from '../../constants/routes';
 import SelectInput from '../forms/SelectInput'; // 引入 SelectInput
-// import { MOCK_SEMESTERS } from '../../constants/mockData'; // 引入學期資料
 
 // 簡單的 CSS 樣式
 const styles = {

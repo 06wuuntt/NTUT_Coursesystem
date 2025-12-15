@@ -1,197 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { fetchCalendarEvents, fetchAllSemesterCourses } from '../../api/CourseService';
-
-// 假設的近期行事曆事件 (作為 fetch 失敗時的 fallback)
-const MOCK_RECENT_EVENTS = [
-    { date: '11/25', description: '期中考試週開始', link: '/calendar' },
-    { date: '12/05', description: '課程加退選截止', link: '/calendar' },
-    { date: '12/25', description: '聖誕節/全校放假', link: '/calendar' },
-];
-
-const styles = {
-    title: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '5px',
-        textAlign: 'center',
-        marginBottom: '70px',
-    },
-    container: {
-        backgroundColor: '#f2f2f2',
-        margin: '70px auto',
-        borderRadius: '30px',
-        padding: '30px 50px',
-        // boxShadow: '8px 8px 30px #e9e9e9ff',
-        maxWidth: '1200px'
-    },
-    searchContainer: {
-        borderRadius: '10px',
-        marginBototm: '40px',
-    },
-    searchPart: {
-        display: 'grid',
-        gridTemplateColumns: '1fr 10%',
-        margin: '0 10px',
-    },
-    searchInput: {
-        padding: '12px 15px',
-        fontSize: '18px',
-        borderRadius: '15px',
-        border: 'solid 0.5px #B4B4B4',
-        marginRight: '10px',
-    },
-    modeButtons: {
-        margin: '0 10px 20px 10px',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        gap: '6px',
-        padding: '6px',
-        backgroundColor: '#E0E0E0',
-        borderRadius: '16px',
-        boxShadow: 'inset 0px 0px 8px #d1d1d1ff',
-    },
-    modeButton: {
-        padding: '10px',
-        borderRadius: '10px',
-        border: 'none',
-        backgroundColor: 'transparent',
-        cursor: 'pointer',
-        fontSize: '15px',
-        color: '#464646',
-        transition: 'all 0.2s ease',
-        fontWeight: '500',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    modeButtonActive: {
-        backgroundColor: '#F6F7F8',
-        color: '#464646',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-        fontWeight: '600',
-    },
-    searchButton: {
-        padding: '12px 25px',
-        fontSize: '18px',
-        borderRadius: '15px',
-        border: 'none',
-        backgroundColor: '#96C6DB',
-        color: 'white',
-        cursor: 'pointer',
-    },
-    calendarContainer: {
-        maxWidth: '800px',
-        margin: '0 auto',
-        padding: '20px',
-        border: '1px solid #ddd',
-        borderRadius: '8px',
-    },
-    eventList: {
-        listStyleType: 'none',
-        padding: 0,
-    },
-    eventItem: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        padding: '10px 0',
-        borderBottom: '1px dotted #ccc',
-    },
-    eventDate: {
-        fontWeight: 'bold',
-        color: '#d9534f',
-        minWidth: '60px',
-        textAlign: 'left',
-    },
-    eventDescription: {
-        flexGrow: 1,
-        textAlign: 'left',
-        marginLeft: '20px',
-    },
-    eventLink: {
-        color: '#007bff',
-        textDecoration: 'none',
-    }
-};
-
-// 卡片樣式（放在同一檔案以維持簡潔）
-styles.cardsContainer = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-    gap: '20px',
-};
-styles.card = {
-    backgroundColor: '#FFFFFF',
-    borderRadius: '16px',
-    border: '1px solid #F1F5F9',
-    padding: '20px',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-    transition: 'transform 0.2s, box-shadow 0.2s',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-};
-styles.cardHeader = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-};
-styles.cardTitle = {
-    fontSize: '1.1rem',
-    fontWeight: '700',
-    color: '#1E293B',
-    margin: 0,
-    lineHeight: '1.4',
-};
-styles.cardId = {
-    fontSize: '0.8rem',
-    color: '#64748B',
-    backgroundColor: '#D7EFFA',
-    padding: '2px 8px',
-    borderRadius: '6px',
-    fontFamily: 'monospace',
-};
-styles.cardBody = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-};
-styles.information = {
-    display: 'flex',
-    fontSize: '0.9rem',
-    color: '#475569',
-    alignItems: 'center',
-    lineHeight: '1.5',
-};
-styles.divider = {
-    height: '1px',
-    backgroundColor: '#aaaaaaff',
-    margin: '4px 0',
-};
+import './Home.css';
 
 const Icons = {
     Clock: () => (
-        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
     ),
     User: () => (
-        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
     ),
     Location: () => (
-        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
     ),
     Star: () => (
-        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
         </svg>
     ),
     Landmark: () => (
-        <svg style={{ width: '16px', height: '16px', marginRight: '8px', color: '#94A3B8', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
         </svg>
     )
@@ -219,7 +53,7 @@ const Home = ({ currentSemester }) => {
         return str;
     };
     const [searchText, setSearchText] = useState('');
-    const [recentEvents, setRecentEvents] = useState(MOCK_RECENT_EVENTS);
+    const [recentEvents, setRecentEvents] = useState([]);
     const [allCourses, setAllCourses] = useState(null);
     const [loadingCourses, setLoadingCourses] = useState(false);
     const [results, setResults] = useState([]);
@@ -260,8 +94,7 @@ const Home = ({ currentSemester }) => {
 
                 if (mounted && top3.length > 0) setRecentEvents(top3);
             } catch (err) {
-                // 若有錯誤，保留 mock
-                console.warn('載入行事曆活動失敗，使用 mock：', err.message);
+                console.warn('載入行事曆活動失敗：', err.message);
             }
         }
 
@@ -382,94 +215,96 @@ const Home = ({ currentSemester }) => {
         const [isHovered, setIsHovered] = useState(false);
         return (
             <div
+                className="card"
                 style={{
-                    ...styles.card,
                     cursor: isHovered ? 'pointer' : '',
                     transform: isHovered ? 'translateY(-2px)' : 'none',
-                    boxShadow: isHovered ? '0 12px 20px -8px rgba(0, 0, 0, 0.15)' : styles.card.boxShadow
+                    boxShadow: isHovered ? '0 12px 20px -8px rgba(0, 0, 0, 0.15)' : undefined
                 }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                <div style={styles.cardHeader}>
-                    <div style={styles.cardTitle}>{c.name.zh}</div>
-                    <div style={styles.cardId}>{c.id}</div>
+                <div className="card-header">
+                    <div className="card-title">{c.name.zh}</div>
+                    <div className="card-id">{c.id}</div>
                 </div>
 
-                <div style={styles.divider} />
+                <div className="divider" />
 
-                <div style={styles.cardBody}>
-                    <div style={styles.information}>
+                <div className="card-body">
+                    <div className="information">
                         <Icons.User />
                         <span>{Array.isArray(c.teacher) && c.teacher.length > 0 ? c.teacher.map(t => t.name).join('、') : '無教師資訊'}</span>
                     </div>
-                    <div style={styles.information}>
+                    <div className="information">
                         <Icons.Clock />
                         <span>{formatCourseTime(c.time)}</span>
                     </div>
-                    <div style={styles.information}>
+                    <div className="information">
                         <Icons.Location />
                         <span>{Array.isArray(c.classroom) && c.classroom.length > 0 ? c.classroom.map(t => t.name).join('、') : '無教室資訊'}</span>
                     </div>
-                    <div style={styles.information}>
+                    <div className="information">
                         <Icons.Star />
                         <span>{c.credit} 學分</span>
                     </div>
-                    <div style={styles.information}>
+                    <div className="information">
                         <Icons.Landmark />
                         <span>{Array.isArray(c.class) && c.class.length > 0 ? c.class.map(t => t.name).join('、') : '無班級'}</span>
                     </div>
                 </div>
             </div>
         );
-    }; return (
+    };
+
+    return (
         <div>
-            <div style={styles.title}>
+            <div className="home-title">
                 <h2 style={{ margin: '0', fontSize: '40px' }}>歡迎回到北科課程系統</h2>
                 <div>當前學期為 {formatSemester(currentSemester)}</div>
             </div>
 
-            <div style={styles.container}>
+            <div className="home-container">
                 {/* 課程搜尋欄位 */}
-                <div style={styles.searchContainer}>
+                <div className="search-container">
                     <h3 style={{ color: '#464646', fontSize: '1.5rem', margin: '0 0 20px' }}>搜尋課程</h3>
-                    <div style={styles.modeButtons}>
+                    <div className="mode-buttons">
                         <button
                             type="button"
-                            style={{ ...styles.modeButton, ...(searchMode === 'name' ? styles.modeButtonActive : {}) }}
+                            className={`mode-button ${searchMode === 'name' ? 'mode-button-active' : ''}`}
                             onClick={() => setSearchMode('name')}
                         >
                             以名稱搜尋
                         </button>
                         <button
                             type="button"
-                            style={{ ...styles.modeButton, ...(searchMode === 'teacher' ? styles.modeButtonActive : {}) }}
+                            className={`mode-button ${searchMode === 'teacher' ? 'mode-button-active' : ''}`}
                             onClick={() => setSearchMode('teacher')}
                         >
                             以教師搜尋
                         </button>
                         <button
                             type="button"
-                            style={{ ...styles.modeButton, ...(searchMode === 'code' ? styles.modeButtonActive : {}) }}
+                            className={`mode-button ${searchMode === 'code' ? 'mode-button-active' : ''}`}
                             onClick={() => setSearchMode('code')}
                         >
                             以課號搜尋
                         </button>
                     </div>
-                    <div style={styles.searchPart}>
+                    <div className="search-part">
                         <input
                             id="course-search-input"
                             name="course-search"
                             type="text"
                             placeholder={searchMode === 'name' ? '輸入課程名稱...' : searchMode === 'teacher' ? '輸入教師名稱...' : '輸入課程代碼...'}
-                            style={styles.searchInput}
+                            className="search-input"
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
                             onKeyPress={(e) => {
                                 if (e.key === 'Enter') handleSearch();
                             }}
                         />
-                        <button style={styles.searchButton} onClick={handleSearch}>
+                        <button className="search-button" onClick={handleSearch}>
                             搜尋
                         </button>
                     </div>
@@ -489,7 +324,7 @@ const Home = ({ currentSemester }) => {
                                         <div style={{ margin: '12px 2px 8px', color: '#464646' }}>建議課程</div>
                                     </div>
                                     {allCourses && allCourses.length > 0 ? (
-                                        <div style={styles.cardsContainer}>
+                                        <div className="cards-container">
                                             {allCourses.slice(0, 6).map((c) => (
                                                 <CourseCard key={c.id} c={c} />
                                             ))}
@@ -506,7 +341,7 @@ const Home = ({ currentSemester }) => {
                                     ) : (
                                         <div>
                                             <div style={{ margin: '12px 2px 8px', color: '#464646' }}>共 {results.length} 筆結果，第 {currentPage} / {totalPages} 頁</div>
-                                            <div style={styles.cardsContainer}>
+                                            <div className="cards-container">
                                                 {displayed.map((c) => (
                                                     <CourseCard key={c.id} c={c} />
                                                 ))}

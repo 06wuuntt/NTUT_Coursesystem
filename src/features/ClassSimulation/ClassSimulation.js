@@ -245,7 +245,7 @@ const Scheduler = ({ currentSemester }) => {
             // ignore parse errors
         }
 
-        // 若沒有 JSON，回退到單純的 ID lookup（舊有 mock 行為）
+        // 若沒有 JSON，回退到單純的 ID lookup
         const draggedCourseId = Number(e.dataTransfer.getData("courseId")) || (newCourse && Number(newCourse.id));
 
         if (!draggedCourseId || selectedCourseIds.includes(draggedCourseId)) {
@@ -253,7 +253,7 @@ const Scheduler = ({ currentSemester }) => {
         }
 
         if (!newCourse) {
-            // 如果沒有 JSON 且沒有 mock data，則無法還原課程資訊
+            // 如果沒有 JSON，則無法還原課程資訊
             // 這裡假設拖曳來源一定會提供 JSON
             return;
         }
