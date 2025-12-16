@@ -112,13 +112,6 @@
     margin-bottom: 12px;
     border: 1px solid #E2E8F0;
     transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.calendar-upcoming-event:hover {
-    border-color: #CBD5E1;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transform: translateY(-1px);
 }
 
 .calendar-event-date {

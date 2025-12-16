@@ -45,7 +45,7 @@ const CourseTable = ({ courses }) => {
                                     {getTypeName(course.type)}
                                 </span>
                             </td>
-                            <td className="course-td course-td-left">{course.name}</td>
+                            <td className="course-td">{course.name}</td>
                             <td className="course-td">{course.credit}</td>
                             <td className="course-td">{course.hours}</td>
                         </tr>
@@ -118,8 +118,8 @@ const CourseGroup = ({ type, courses, typeLabel }) => {
                         {courses.length}
                     </span>
                 </h5>
-                <span className="course-group-arrow" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                    ▼
+                <span className="course-group-arrow" style={{ transform: isOpen ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
+                    ◀
                 </span>
             </div>
 
@@ -181,7 +181,7 @@ const StandardResults = ({ standards, currentYearLabel, currentDeptLabel }) => {
                 <ul className="rules-list">
                     {standards.rules.map((rule, index) => (
                         <li key={index} className="rule-item">
-                            <span className="rule-bullet">．</span>
+                            <span className="rule-bullet">•</span>
                             <div dangerouslySetInnerHTML={{ __html: rule }} />
                         </li>
                     ))}

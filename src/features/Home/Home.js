@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fetchCalendarEvents, fetchAllSemesterCourses } from '../../api/CourseService';
 import './Home.css';
 
@@ -32,6 +33,7 @@ const Icons = {
 };
 
 const Home = ({ currentSemester }) => {
+    const navigate = useNavigate();
     // 將學期代碼（例如 "114-1"）格式化為中文顯示（例如 "114 上學期"）
     const formatSemester = (s) => {
         if (!s) return '未選定學期';
@@ -213,7 +215,11 @@ const Home = ({ currentSemester }) => {
 
     const CourseCard = ({ c }) => {
         return (
-            <div className="card">
+            <div
+                className="card"
+                onClick={() => navigate(`/course/${c.id}`, { state: { course: c, semesterId: currentSemester } })}
+                style={{ cursor: 'pointer' }}
+            >
                 <div className="card-header">
                     <div className="card-title">{c.name.zh}</div>
                     <div className="card-id">{c.id}</div>

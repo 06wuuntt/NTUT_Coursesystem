@@ -29,6 +29,28 @@ export async function fetchSemesters() {
     return semesterOptions;
 }
 
+export async function fetchTeacherWithdrawalRates() {
+    const response = await fetch(`${BASE_URL}analytics/withdrawal-recent-3-years.json`);
+    if (!response.ok) {
+        throw new Error(`無法載入教師退選率資料`);
+    }
+    const json = await response.json();
+    return json.data;
+}
+
+export async function fetchCourseSyllabus(courseId, semesterId) {
+    const { year, sem } = convertSemesterId(semesterId);
+    const url = `${BASE_URL}${year}/${sem}/course/${courseId}.json`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) return null;
+        return await response.json();
+    } catch (e) {
+        console.error('Failed to fetch syllabus:', e);
+        return null;
+    }
+}
+
 // --- 2. 課程標準相關 API (模擬) ---
 /**
  * 實際獲取課程標準總表，並提取所有學院/系所名稱作為篩選選項
@@ -306,7 +328,15 @@ export function filterAndConvertSchedule(allCourses, selectedClassKey) {
             }
 
             // 3. 獲取教室名稱
-            const location = course.classroom?.[0]?.name || course.notes || '無教室資訊';
+            const location = course.classroom?.[0]?.name || '無教室資訊';
+
+            // 處理教師名稱
+            let teacherName = '無教師資訊';
+            if (Array.isArray(course.teacher) && course.teacher.length > 0) {
+                teacherName = course.teacher.map(t => t.name).join('、');
+            } else if (course.teacher) {
+                teacherName = course.teacher.name || String(course.teacher);
+            }
 
             const typeMap = {
                 '○': '共同必修',
@@ -317,16 +347,26 @@ export function filterAndConvertSchedule(allCourses, selectedClassKey) {
                 '★': '專業選修'
             };
             const typeSymbol = course.courseType || '';
-            const typeName = typeMap[typeSymbol] || typeSymbol || '選修';
+            const typeName = typeMap[typeSymbol] || typeSymbol;
+
 
             schedule.push({
                 id: course.id,
-                name: course.name?.zh || course.name?.en || '未知課程',
+                name: course.name?.zh || course.name?.en,
                 credits: course.credit || '0',
+                hours: course.hours || '0',
                 type: typeName,
-                teacher: course.teacher?.[0]?.name || '未知教師',
+                teacher: teacherName,
+                teachers: course.teacher,
                 location: location.split('/')[0].trim(),
                 time: times,
+                notes: course.notes,
+                people: course.people,
+                peopleWithdraw: course.peopleWithdraw,
+                class: course.class,
+                description: course.description?.zh + '\n' + course.description?.en,
+                courseDescriptionLink: course.courseDescriptionLink,
+                syllabusLinks: course.syllabusLinks
             });
         }
     });

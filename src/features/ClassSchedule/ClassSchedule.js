@@ -162,8 +162,8 @@ const ClassSchedule = ({ currentSemester }) => {
                     <div className="class-schedule-message">{message}</div>
                 ) : (
                     <>
-                        {courses && viewMode === 'table' && <TimeTableView courses={courses} />}
-                        {courses && viewMode === 'card' && <CardView courses={courses} />}
+                        {courses && viewMode === 'table' && <TimeTableView courses={courses} currentSemester={currentSemester} />}
+                        {courses && viewMode === 'card' && <CardView courses={courses} currentSemester={currentSemester} />}
                     </>
                 )}
             </div>

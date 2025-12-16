@@ -28,5 +28,6 @@ export const ROUTES = [
         path: "/course/:id",
         name: "課程詳細資訊",
         id: "course-detail",
+        hideInNav: true,
     },
 ];

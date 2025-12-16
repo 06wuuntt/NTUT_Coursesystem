@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { PERIODS } from '../../constants/periods';
 import './TimeTableView.css';
 
-const TimeTableView = ({ courses }) => {
+const TimeTableView = ({ courses, currentSemester }) => {
     const navigate = useNavigate();
 
     // 星期一到星期六的標籤
@@ -145,7 +145,7 @@ const TimeTableView = ({ courses }) => {
                                     <div
                                         className={`time-table-course-card ${hoveredCell === key ? 'hover' : ''}`}
                                         title={`${coursesInCell[0].name} (${coursesInCell[0].location})`}
-                                        onClick={() => navigate(`/course/${coursesInCell[0].id}`, { state: { course: coursesInCell[0] } })}
+                                        onClick={() => navigate(`/course/${coursesInCell[0].id}`, { state: { course: coursesInCell[0], semesterId: currentSemester } })}
                                     >
                                         <div>{coursesInCell[0].name}</div>
                                         <div className="time-table-course-location">

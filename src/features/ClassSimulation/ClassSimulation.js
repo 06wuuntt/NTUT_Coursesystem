@@ -50,9 +50,45 @@ const updateGrid = (grid, course) => {
  * 排課模擬器主頁面
  */
 const Scheduler = ({ currentSemester }) => {
-    const [selectedCourseIds, setSelectedCourseIds] = useState([]);
-    const [courseData, setCourseData] = useState({}); // { 202: {name: '資料結構', ...} }
+    const [selectedCourseIds, setSelectedCourseIds] = useState(() => {
+        try {
+            const saved = localStorage.getItem('simulation_selectedIds');
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            return [];
+        }
+    });
+    const [courseData, setCourseData] = useState(() => {
+        try {
+            const saved = localStorage.getItem('simulation_courseData');
+            return saved ? JSON.parse(saved) : {};
+        } catch (e) {
+            return {};
+        }
+    }); // { 202: {name: '資料結構', ...} }
     const [grid, setGrid] = useState({}); // { '1_3': 202, '3_1': 202, ... }
+
+    // Save to localStorage
+    useEffect(() => {
+        localStorage.setItem('simulation_selectedIds', JSON.stringify(selectedCourseIds));
+    }, [selectedCourseIds]);
+
+    useEffect(() => {
+        localStorage.setItem('simulation_courseData', JSON.stringify(courseData));
+    }, [courseData]);
+
+    // Rebuild grid when data changes
+    useEffect(() => {
+        let newGrid = {};
+        selectedCourseIds.forEach(id => {
+            const course = courseData[id];
+            if (course) {
+                newGrid = updateGrid(newGrid, course);
+            }
+        });
+        setGrid(newGrid);
+    }, [selectedCourseIds, courseData]);
+
     const [isDragging, setIsDragging] = useState(false); // 追蹤是否正在拖曳
 
     // Resizable Panel State
@@ -137,7 +173,6 @@ const Scheduler = ({ currentSemester }) => {
         // 更新狀態（使用正規化後的 newCourse）
         setSelectedCourseIds(prev => [...prev, draggedCourseId]);
         setCourseData(prev => ({ ...prev, [draggedCourseId]: newCourse }));
-        setGrid(prev => updateGrid(prev, newCourse));
     };
 
     // 2. 移除課程處理 (從課表點擊或下方列表移除)
@@ -149,14 +184,6 @@ const Scheduler = ({ currentSemester }) => {
         setCourseData(prev => {
             const newCourses = { ...prev };
             delete newCourses[courseIdToRemove];
-
-            // 重新計算 grid：基於剩餘的 newCourses
-            const newGrid = {};
-            Object.values(newCourses).forEach(c => {
-                if (c && Array.isArray(c.time)) Object.assign(newGrid, updateGrid({}, c));
-            });
-            setGrid(newGrid);
-
             return newCourses;
         });
     };
@@ -166,7 +193,6 @@ const Scheduler = ({ currentSemester }) => {
         if (window.confirm('確定要清空所有已選課程嗎？')) {
             setSelectedCourseIds([]);
             setCourseData({});
-            setGrid({});
         }
     };
 

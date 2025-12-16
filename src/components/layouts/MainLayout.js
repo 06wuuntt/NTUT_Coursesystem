@@ -19,7 +19,7 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
             <FontAwesomeIcon icon={faGraduationCap} style={{ marginRight: '10px' }} />北科課程系統
           </Link>
           <nav className="main-layout-nav-links">
-            {ROUTES.map(route => (
+            {ROUTES.filter(route => !route.hideInNav).map(route => (
               <Link
                 key={route.id}
                 to={route.path}

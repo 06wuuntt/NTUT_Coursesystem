@@ -102,11 +102,6 @@
     text-align: center;
 }
 
-.course-td-left {
-    text-align: left;
-    font-weight: 500;
-}
-
 .course-row-even {
     background-color: #FFFFFF;
 }
@@ -184,7 +179,6 @@
 }
 
 .course-group-content {
-    padding: 16px;
     animation: fadeIn 0.2s ease-in-out;
 }
 
