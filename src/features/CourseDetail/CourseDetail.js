@@ -189,7 +189,8 @@ const CourseDetail = () => {
         return {
             ...rawCourse,
             name,
-            time
+            time,
+            credits: rawCourse.credits || rawCourse.credit
         };
     }, [rawCourse]);
     const [withdrawalRate, setWithdrawalRate] = useState(null);

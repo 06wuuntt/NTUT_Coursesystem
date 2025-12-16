@@ -216,3 +216,14 @@
     background-color: #d6d6d6ff;
     color: #807e7eff;
 }
+@media (max-width: 768px) {
+    .standard-results {
+        padding: 16px;
+    }
+
+    .summary-card {
+        grid-template-columns: 1fr 1fr;
+        padding: 16px;
+    }
+}
+

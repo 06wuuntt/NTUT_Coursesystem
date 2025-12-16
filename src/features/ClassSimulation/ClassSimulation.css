@@ -254,6 +254,7 @@
     font-size: 1.5rem;
     font-weight: 700;
 }
+
 .simulation-export-button {
     padding: 10px 20px;
     font-size: 1rem;
@@ -271,3 +272,51 @@
     background-color: #2563EB;
 }
 
+
+@media (max-width: 768px) {
+    .simulation-containers {
+        padding: 0 5px;
+    }
+
+    .simulation-container {
+        flex-direction: column;
+        height: auto;
+        margin-top: 10px;
+    }
+
+    .simulation-left-panel {
+        width: 100% !important;
+        /* Override inline style from resizer */
+        max-width: 100%;
+        min-width: 0;
+        margin-bottom: 10px;
+        height: 400px;
+        /* Give it a fixed height or let it grow */
+    }
+
+    .simulation-resizer {
+        display: none;
+    }
+
+    .simulation-right-panel {
+        width: 100%;
+        min-width: 0;
+        overflow-x: auto;
+        /* Allow horizontal scroll for timetable */
+    }
+
+    .simulation-header-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .simulation-export-button {
+        width: 100%;
+    }
+
+    .simulation-credits-wrapper {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

@@ -23,3 +23,16 @@
     align-items: flex-end;
     color: red;
 }
+@media (max-width: 768px) {
+    .class-filter-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .class-filter-block {
+        width: 100%;
+        min-width: 0;
+    }
+}
+

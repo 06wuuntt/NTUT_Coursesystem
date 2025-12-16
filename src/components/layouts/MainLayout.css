@@ -8,15 +8,33 @@
 
 .main-layout-nav {
     background-color: #FFFFFF;
-    max-width: 0.7fr;
+    /* max-width: 0.7fr; Removed invalid property */
     padding: 20px 40px;
-    margin: 10px 50px 70px;
+    margin: 10px 50px 0;
+    /* Removed bottom margin as it doesn't affect flow when fixed */
     display: flex;
     justify-content: space-between;
     gap: 18px;
     align-items: center;
     border-radius: 20px;
     box-shadow: 8px 8px 30px #e9e9e9ff;
+    flex-wrap: wrap;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    width: auto;
+    /* Let margins control width */
+}
+
+.main-layout-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #464646;
+    cursor: pointer;
 }
 
 .main-layout-title {
@@ -25,6 +43,7 @@
     color: #464646;
     cursor: pointer;
     text-decoration: none;
+    order: 1;
 }
 
 .main-layout-nav-links {
@@ -32,6 +51,12 @@
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    order: 2;
+}
+
+.main-layout-semester-select {
+    width: 150px;
+    order: 3;
 }
 
 .main-layout-link {
@@ -50,12 +75,9 @@
     color: #336F8B;
 }
 
-.main-layout-semester-select {
-    width: 180px;
-}
-
 .main-layout-content {
-    padding: 0 20px;
+    padding: 160px 20px 0;
+    /* Added top padding to clear fixed nav */
     flex: 1;
 }
 
@@ -89,4 +111,97 @@
 
 .main-layout-footer-link:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+    .main-layout-container {
+        padding: 5px;
+    }
+
+    .main-layout-content {
+        padding: 80px 2px 0;
+        /* Adjusted top padding for mobile fixed nav */
+    }
+
+    .main-layout-nav {
+        padding: 8px 10px;
+        margin: 10px 5px;
+        gap: 0 8px;
+        /* Remove row-gap to prevent space when menu is closed */
+        /* Inherits fixed position, top, left, right, z-index from desktop */
+    }
+
+    .main-layout-title {
+        padding-left: 6px;
+        font-size: 16px;
+        order: 1;
+    }
+
+    .main-layout-semester-select {
+        width: auto;
+        flex-grow: 1;
+        max-width: 110px;
+        order: 2;
+    }
+
+    .main-layout-hamburger {
+        display: block;
+        order: 3;
+    }
+
+    .main-layout-nav-links {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 5px;
+        order: 4;
+
+        /* Animation properties */
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        margin-top: 0;
+        transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, margin-top 0.3s ease;
+    }
+
+    .main-layout-nav-links.open {
+        max-height: 300px;
+        /* Adjust based on content height */
+        opacity: 1;
+        margin-top: 10px;
+    }
+
+    .main-layout-link {
+        font-size: 12px;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 6px 10px;
+    }
+
+    .main-layout-footer {
+        padding: 5px;
+        margin-top: 10px;
+        font-size: 12px;
+    }
+
+    .main-layout-footer-links {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin: 5px 0 10px;
+        width: 100%;
+    }
+
+    .main-layout-footer-link {
+        width: auto;
+        text-align: center;
+        max-width: none;
+        padding: 6px 4px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
+    }
 }

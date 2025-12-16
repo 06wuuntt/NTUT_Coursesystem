@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
+import { faExternalLinkAlt, faGraduationCap, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ROUTES } from '../../constants/routes';
 import SelectInput from '../forms/SelectInput';
 import './MainLayout.css';
 
 const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptions }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const handleSemesterChange = (e) => {
     onSemesterChange(e.target.value);
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -16,19 +22,8 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
       <div className="main-layout-container">
         <div className="main-layout-nav">
           <Link to="/" className="main-layout-title">
-            <FontAwesomeIcon icon={faGraduationCap} style={{ marginRight: '10px' }} />北科課程系統
+            <FontAwesomeIcon icon={faGraduationCap} style={{ marginRight: '5px' }} />北科課程系統
           </Link>
-          <nav className="main-layout-nav-links">
-            {ROUTES.filter(route => !route.hideInNav).map(route => (
-              <Link
-                key={route.id}
-                to={route.path}
-                className="main-layout-link"
-              >
-                {route.name}
-              </Link>
-            ))}
-          </nav>
 
           <div className="main-layout-semester-select">
             <SelectInput
@@ -40,6 +35,23 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
               style={{ width: '100%', marginBottom: '0' }}
             />
           </div>
+
+          <button className="main-layout-hamburger" onClick={toggleMenu}>
+            <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
+          </button>
+
+          <nav className={`main-layout-nav-links ${isMenuOpen ? 'open' : ''}`}>
+            {ROUTES.filter(route => !route.hideInNav).map(route => (
+              <Link
+                key={route.id}
+                to={route.path}
+                className="main-layout-link"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {route.name}
+              </Link>
+            ))}
+          </nav>
         </div>
 
         <div className="main-layout-content">

@@ -24,3 +24,17 @@
     margin-top: 20px;
     border: 1px solid #FECACA;
 }
+
+@media (max-width: 768px) {
+    .course-standards-container {
+        padding: 0 5px;
+    }
+
+    .course-standards-title {
+        font-size: 24px;
+    }
+
+    .course-standards-subtitle {
+        margin-bottom: 15px;
+    }
+}

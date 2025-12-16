@@ -23,3 +23,13 @@
     color: #3B82F6;
     padding: 20px;
 }
+@media (max-width: 768px) {
+    .standard-search-form-container {
+        padding: 20px;
+    }
+
+    .standard-search-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

@@ -106,3 +106,14 @@
     font-size: 0.75em;
     opacity: 0.8;
 }
+@media (max-width: 768px) {
+    .simulation-timetable-container {
+        padding: 10px;
+        overflow: auto;
+    }
+
+    .simulation-timetable-grid-container {
+        min-width: 800px;
+    }
+}
+

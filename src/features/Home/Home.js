@@ -345,7 +345,10 @@ const Home = ({ currentSemester }) => {
                                         <div className="home-section-label">尚無搜尋結果。請嘗試其他關鍵字。</div>
                                     ) : (
                                         <div>
-                                            <div className="home-section-label">共 {results.length} 筆結果，第 {currentPage} / {totalPages} 頁</div>
+                                            <div className="home-section-label home-pagination-info">
+                                                <span>共 {results.length} 筆結果</span>
+                                                <span className="home-pagination-page-info">，第 {currentPage} / {totalPages} 頁</span>
+                                            </div>
                                             <div className="cards-container">
                                                 {displayed.map((c) => (
                                                     <CourseCard key={c.id} c={c} />

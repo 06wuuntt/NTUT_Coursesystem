@@ -100,3 +100,9 @@
     color: #94A3B8;
     flex-shrink: 0;
 }
+@media (max-width: 768px) {
+    .card-view-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

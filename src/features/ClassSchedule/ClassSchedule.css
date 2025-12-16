@@ -60,3 +60,17 @@
     margin: 20px 0;
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
+
+@media (max-width: 768px) {
+    .class-schedule-title {
+        font-size: 24px;
+    }
+
+    .class-schedule-subtitle {
+        margin-bottom: 15px;
+    }
+
+    .class-schedule-filter-card {
+        padding: 10px;
+    }
+}

@@ -105,3 +105,14 @@
     margin-top: 4px;
     color: #7e7e7e;
 }
+@media (max-width: 768px) {
+    .time-table-container {
+        padding: 10px;
+        overflow-x: auto;
+    }
+
+    .time-table-grid {
+        min-width: 800px; /* Ensure it doesn't squash too much */
+    }
+}
+

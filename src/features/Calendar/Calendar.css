@@ -133,3 +133,25 @@
     padding: 20px 0;
     font-size: 0.9rem;
 }
+
+@media (max-width: 768px) {
+    .calendar-container {
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .calendar-header {
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+    }
+
+    .calendar-button-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .calendar-title {
+        font-size: 1.2rem;
+    }
+}

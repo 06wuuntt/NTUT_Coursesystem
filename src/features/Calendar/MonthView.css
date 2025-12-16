@@ -176,3 +176,21 @@
     color: #991B1B;
     border-left-color: #EF4444;
 }
+@media (max-width: 768px) {
+    .month-view-day-cell {
+        min-height: 80px;
+        padding: 4px;
+    }
+
+    .month-view-day-header {
+        padding: 8px 2px;
+        font-size: 0.7rem;
+    }
+
+    .month-view-date-num {
+        width: 20px;
+        height: 20px;
+        font-size: 0.8rem;
+    }
+}
+
