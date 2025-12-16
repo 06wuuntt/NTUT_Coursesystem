@@ -40,7 +40,6 @@ const Calendar = () => {
   const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
   const formattedTitle = `${year} 年 ${monthNames[month]}`;
 
-
   // 處理切換到上一個月
   const goToPrevMonth = () => {
     setCurrentDate(prevDate => {
@@ -84,21 +83,21 @@ const Calendar = () => {
       {!isLoading && !error && (
         <>
           <div className="calendar-header">
+            <button
+              className="calendar-nav-button"
+              onClick={goToPrevMonth}
+              aria-label="上個月"
+            >
+              &lt;
+            </button>
             <h3 className="calendar-title">{formattedTitle}</h3>
-            <div className="calendar-button-group">
-              <button
-                className="calendar-button"
-                onClick={goToPrevMonth}
-              >
-                ← 上個月
-              </button>
-              <button
-                className="calendar-button"
-                onClick={goToNextMonth}
-              >
-                下個月 →
-              </button>
-            </div>
+            <button
+              className="calendar-nav-button"
+              onClick={goToNextMonth}
+              aria-label="下個月"
+            >
+              &gt;
+            </button>
           </div>
 
           <div className="calendar-main-content">

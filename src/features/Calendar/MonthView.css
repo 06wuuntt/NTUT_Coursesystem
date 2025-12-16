@@ -176,21 +176,44 @@
     color: #991B1B;
     border-left-color: #EF4444;
 }
+
 @media (max-width: 768px) {
     .month-view-day-cell {
-        min-height: 80px;
-        padding: 4px;
+        min-height: 50px;
+        /* Reduced from 80px */
+        height: 8vh;
+        /* Use viewport height to try to fit */
+        padding: 2px;
     }
 
     .month-view-day-header {
-        padding: 8px 2px;
+        padding: 4px 2px;
         font-size: 0.7rem;
     }
 
     .month-view-date-num {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
+        font-size: 0.75rem;
+        margin-bottom: 2px;
+    }
+
+    .month-view-event {
+        font-size: 0.55rem;
+        padding: 1px 2px;
+        margin-bottom: 1px;
+        border-left-width: 2px;
+        line-height: 1.1;
+    }
+    .month-view-modal-title {
+        font-size: 1rem;
+    }
+
+    .month-view-info-label {
+        font-size: 0.8rem;
+    }
+
+    .month-view-info-value {
         font-size: 0.8rem;
     }
 }
-

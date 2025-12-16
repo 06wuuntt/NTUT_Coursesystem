@@ -100,6 +100,7 @@
     color: #94A3B8;
     flex-shrink: 0;
 }
+
 @media (max-width: 768px) {
     .card-view-grid {
         grid-template-columns: 1fr;
@@ -108,27 +109,26 @@
 
 
 @media (max-width: 768px) {
- .card-view-grid {
- grid-template-columns: 1fr;
- gap: 10px;
- padding: 0;
- }
+    .card-view-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 0;
+    }
 
- .card-view-card {
- padding: 12px;
- border-radius: 12px;
- }
+    .card-view-card {
+        padding: 12px;
+        border-radius: 12px;
+    }
 
- .card-view-title {
- font-size: 1rem;
- }
+    .card-view-title {
+        font-size: 1rem;
+    }
 
- .card-view-id {
- font-size: 0.75rem;
- }
+    .card-view-id {
+        font-size: 0.75rem;
+    }
 
- .card-view-info {
- font-size: 0.85rem;
- }
+    .card-view-info {
+        font-size: 0.85rem;
+    }
 }
-
