@@ -6,6 +6,20 @@
     border-radius: 8px;
 }
 
+.standard-results-header {
+    margin-bottom: 24px;
+}
+
+.standard-results-title {
+    font-size: 1.25rem;
+    color: #1E293B;
+    margin-bottom: 8px;
+}
+
+.standard-results-subtitle {
+    color: #64748B;
+}
+
 .summary-card {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -216,14 +230,164 @@
     background-color: #d6d6d6ff;
     color: #807e7eff;
 }
+
 @media (max-width: 768px) {
     .standard-results {
-        padding: 16px;
+        padding: 0 5px;
+        background-color: #F6F7F8;
+    }
+
+    .standard-results-header {
+        margin-bottom: 10px;
+    }
+
+    .standard-results-title {
+        font-size: 1rem;
+    }
+
+    .standard-results-subtitle {
+        font-size: 0.8rem;
+        margin: 0;
     }
 
     .summary-card {
-        grid-template-columns: 1fr 1fr;
-        padding: 16px;
+        display: flex;
+        padding: 8px 4px;
+        gap: 4px;
+        overflow-x: auto;
+        margin-bottom: 20px;
+    }
+
+    .summary-item {
+        min-width: 0;
+        flex: 1;
+        padding: 8px 2px;
+    }
+
+    .summary-label {
+        font-size: 0.65rem;
+        margin-bottom: 2px;
+        line-height: 1.1;
+        height: 2.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: normal;
+    }
+
+    .summary-value {
+        font-size: 1rem;
+    }
+
+    .section-title {
+        font-size: 1rem;
+    }
+
+    .course-group-title {
+        font-size: 0.9rem;
+    }
+
+    /* Compact List View for Mobile */
+    .course-table thead {
+        display: block;
+    }
+
+    .course-table thead tr {
+        display: flex;
+        flex-wrap: nowrap;
+        padding: 8px 4px;
+        border-bottom: 2px solid #E2E8F0;
+        align-items: center;
+        gap: 6px;
+        background-color: #F8FAFC;
+    }
+
+    .course-th {
+        padding: 0;
+        border: none;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        display: block;
+        text-align: center;
+        color: #64748B;
+    }
+
+    .course-table tbody tr {
+        display: flex;
+        flex-wrap: nowrap;
+        padding: 8px 4px;
+        border-bottom: 1px solid #E2E8F0;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .course-table td {
+        padding: 0;
+        border: none;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+
+    /* Column 1: Year */
+    .course-table td:nth-child(1), .course-th:nth-child(1) {
+        width: 24px;
+        flex-shrink: 0;
+        color: #64748B;
+    }
+    .course-table td:nth-child(1)::after {
+        content: "";
+    }
+
+    /* Column 2: Sem */
+    .course-table td:nth-child(2), .course-th:nth-child(2) {
+        width: 24px;
+        flex-shrink: 0;
+        color: #64748B;
+    }
+    .course-table td:nth-child(2)::after {
+        content: "";
+    }
+
+    /* Column 3: Type */
+    .course-table td:nth-child(3), .course-th:nth-child(3) {
+        width: 70px;
+        flex-shrink: 0;
+    }
+    .course-table td:nth-child(3) .course-type-badge {
+        padding: 1px 4px;
+        font-size: 0.65rem;
+    }
+
+    /* Column 4: Name */
+    .course-table td:nth-child(4), .course-th:nth-child(4) {
+        flex: 1;
+        font-weight: 600;
+        color: #1E293B;
+        font-size: 0.8rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        min-width: 0;
+        text-align: center;
+        justify-content: flex-start;
+    }
+
+    /* Column 5: Credit */
+    .course-table td:nth-child(5), .course-th:nth-child(5) {
+        width: 32px;
+        flex-shrink: 0;
+        font-weight: 700;
+        color: #334155;
+    }
+    .course-table td:nth-child(5)::after {
+        content: "";
+    }
+
+    /* Column 6: Hours - Remove */
+    .course-table td:nth-child(6), .course-th:nth-child(6) {
+        display: none;
     }
 }
-

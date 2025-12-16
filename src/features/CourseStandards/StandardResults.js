@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import './StandardResults.css';
 
 const CourseTable = ({ courses }) => {
@@ -38,16 +40,16 @@ const CourseTable = ({ courses }) => {
                 <tbody>
                     {courses.map((course, index) => (
                         <tr key={index} className={index % 2 === 0 ? 'course-row-even' : 'course-row-odd'}>
-                            <td className="course-td">{course.year}</td>
-                            <td className="course-td">{course.sem}</td>
-                            <td className="course-td">
+                            <td className="course-td" data-label="年級">{course.year}</td>
+                            <td className="course-td" data-label="學期">{course.sem}</td>
+                            <td className="course-td" data-label="類別">
                                 <span className={getTypeClass(course.type)}>
                                     {getTypeName(course.type)}
                                 </span>
                             </td>
-                            <td className="course-td">{course.name}</td>
-                            <td className="course-td">{course.credit}</td>
-                            <td className="course-td">{course.hours}</td>
+                            <td className="course-td" data-label="課程名稱">{course.name}</td>
+                            <td className="course-td" data-label="學分">{course.credit}</td>
+                            <td className="course-td" data-label="時數">{course.hours}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -119,7 +121,7 @@ const CourseGroup = ({ type, courses, typeLabel }) => {
                     </span>
                 </h5>
                 <span className="course-group-arrow" style={{ transform: isOpen ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
-                    ◀
+                    <FontAwesomeIcon icon={faChevronLeft} />
                 </span>
             </div>
 
@@ -137,11 +139,11 @@ const StandardResults = ({ standards, currentYearLabel, currentDeptLabel }) => {
 
     return (
         <div className="standard-results">
-            <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '1.25rem', color: '#1E293B', marginBottom: '8px' }}>
+            <div className="standard-results-header">
+                <h3 className="standard-results-title">
                     {currentYearLabel} {currentDeptLabel}
                 </h3>
-                <p style={{ color: '#64748B' }}>畢業標準與課程規劃</p>
+                <p className="standard-results-subtitle">畢業標準與課程規劃</p>
             </div>
 
             <div className="summary-card">

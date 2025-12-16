@@ -27,14 +27,17 @@
 
 @media (max-width: 768px) {
     .course-standards-container {
-        padding: 0 5px;
+        padding: 0;
     }
 
     .course-standards-title {
         font-size: 24px;
+        margin-top: 10px;
+        margin-left: 15px;
     }
 
     .course-standards-subtitle {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+        margin-left: 15px;
     }
 }
