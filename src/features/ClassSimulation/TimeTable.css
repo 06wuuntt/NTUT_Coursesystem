@@ -116,33 +116,34 @@
 
     .simulation-timetable-grid-container {
         min-width: auto;
-        width: 100%;
-        grid-template-columns: 20px repeat(6, 1fr);
+        width: 120%;
+        grid-template-columns: 25px repeat(6, 1fr);
         gap: 1px;
         overflow: visible;
+        border-radius: 5px;
     }
 
     .simulation-timetable-header-cell {
-        padding: 2px 0;
-        font-size: 11px;
-        min-height: 25px;
+        padding: 4px 0;
+        font-size: 12px;
+        min-height: 30px;
     }
 
     .simulation-timetable-time-cell {
         padding: 0;
-        font-size: 9px;
-        min-height: 35px;
+        font-size: 10px;
+        min-height: 40px;
     }
 
     .simulation-timetable-course-cell {
         padding: 1px;
-        min-height: 35px;
+        min-height: 40px;
     }
 
     .simulation-timetable-course-card {
         padding: 2px;
-        font-size: 10px;
-        border-radius: 3px;
-        line-height: 1.1;
+        font-size: 11px;
+        border-radius: 4px;
+        line-height: 1.2;
     }
 }

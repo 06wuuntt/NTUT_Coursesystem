@@ -14,7 +14,6 @@
     /* Removed bottom margin as it doesn't affect flow when fixed */
     display: flex;
     justify-content: space-between;
-    gap: 18px;
     align-items: center;
     border-radius: 20px;
     box-shadow: 8px 8px 30px #e9e9e9ff;
@@ -50,8 +49,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
     order: 2;
+    max-width: 700px;
+    gap: 15px;
 }
 
 .main-layout-semester-select {
@@ -62,7 +62,6 @@
 .main-layout-link {
     color: #797979ff;
     font-weight: 500;
-    margin: 0 6px;
     text-decoration: none;
     font-size: 18px;
     padding: 8px 12px;
@@ -111,6 +110,60 @@
 
 .main-layout-footer-link:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 1080px) {
+    .main-layout-nav {
+        gap: 0 8px;
+        /* Remove row-gap to prevent space when menu is closed */
+        /* Inherits fixed position, top, left, right, z-index from desktop */
+    }
+
+    .main-layout-title {
+        order: 1;
+    }
+
+    .main-layout-semester-select {
+        width: auto;
+        flex-grow: 1;
+        max-width: 110px;
+        order: 2;
+    }
+
+    .main-layout-hamburger {
+        display: block;
+        order: 3;
+    }
+
+    .main-layout-nav-links {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 5px;
+        order: 4;
+
+        /* Animation properties */
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        margin-top: 0;
+        transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, margin-top 0.3s ease;
+    }
+
+    .main-layout-nav-links.open {
+        max-height: 300px;
+        /* Adjust based on content height */
+        opacity: 1;
+        margin-top: 10px;
+    }
+
+    .main-layout-link {
+        font-size: 12px;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 6px 10px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -162,6 +215,7 @@
         overflow: hidden;
         margin-top: 0;
         transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, margin-top 0.3s ease;
+        justify-content: center;
     }
 
     .main-layout-nav-links.open {
@@ -172,11 +226,11 @@
     }
 
     .main-layout-link {
-        font-size: 12px;
         width: 100%;
         text-align: center;
         box-sizing: border-box;
         padding: 6px 10px;
+        justify-content: center;
     }
 
     .main-layout-footer {

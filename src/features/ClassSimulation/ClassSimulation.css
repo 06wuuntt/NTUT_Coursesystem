@@ -352,9 +352,11 @@
     .simulation-right-panel.mobile-active {
         display: flex !important;
         width: 100% !important;
+        min-width: 0 !important;
         height: auto;
         min-height: calc(100vh - 220px);
         overflow-x: hidden;
+        border-radius: 5px;
     }
 
     .simulation-resizer {
