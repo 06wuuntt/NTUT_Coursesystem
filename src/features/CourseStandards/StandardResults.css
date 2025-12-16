@@ -332,37 +332,44 @@
     }
 
     /* Column 1: Year */
-    .course-table td:nth-child(1), .course-th:nth-child(1) {
+    .course-table td:nth-child(1),
+    .course-th:nth-child(1) {
         width: 24px;
         flex-shrink: 0;
         color: #64748B;
     }
+
     .course-table td:nth-child(1)::after {
         content: "";
     }
 
     /* Column 2: Sem */
-    .course-table td:nth-child(2), .course-th:nth-child(2) {
+    .course-table td:nth-child(2),
+    .course-th:nth-child(2) {
         width: 24px;
         flex-shrink: 0;
         color: #64748B;
     }
+
     .course-table td:nth-child(2)::after {
         content: "";
     }
 
     /* Column 3: Type */
-    .course-table td:nth-child(3), .course-th:nth-child(3) {
+    .course-table td:nth-child(3),
+    .course-th:nth-child(3) {
         width: 70px;
         flex-shrink: 0;
     }
+
     .course-table td:nth-child(3) .course-type-badge {
         padding: 1px 4px;
         font-size: 0.65rem;
     }
 
     /* Column 4: Name */
-    .course-table td:nth-child(4), .course-th:nth-child(4) {
+    .course-table td:nth-child(4),
+    .course-th:nth-child(4) {
         flex: 1;
         font-weight: 600;
         color: #1E293B;
@@ -376,18 +383,21 @@
     }
 
     /* Column 5: Credit */
-    .course-table td:nth-child(5), .course-th:nth-child(5) {
+    .course-table td:nth-child(5),
+    .course-th:nth-child(5) {
         width: 32px;
         flex-shrink: 0;
         font-weight: 700;
         color: #334155;
     }
+
     .course-table td:nth-child(5)::after {
         content: "";
     }
 
     /* Column 6: Hours - Remove */
-    .course-table td:nth-child(6), .course-th:nth-child(6) {
+    .course-table td:nth-child(6),
+    .course-th:nth-child(6) {
         display: none;
     }
 }

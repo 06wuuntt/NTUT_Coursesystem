@@ -55,7 +55,7 @@ const formatTime = (timeArray) => {
     return parts.join('；');
 };
 
-const CourseSearchPanel = ({ addedCourseIds, currentSemester }) => {
+const CourseSearchPanel = ({ addedCourseIds, currentSemester, onAddCourse }) => {
     const { addToast } = useToast();
     const [searchTerm, setSearchTerm] = useState('');
     const [allCourses, setAllCourses] = useState(null);
@@ -218,7 +218,7 @@ const CourseSearchPanel = ({ addedCourseIds, currentSemester }) => {
                             >
                                 <div className="simulation-search-course-header">
                                     <div className="simulation-search-course-title">{title}</div>
-                                    <span className="simulation-search-id-badge">{courseId}</span>
+                                    {!isAdded && <span className="simulation-search-id-badge">{courseId}</span>}
                                 </div>
 
                                 <div className="simulation-search-divider" />
@@ -243,6 +243,15 @@ const CourseSearchPanel = ({ addedCourseIds, currentSemester }) => {
                                 )}
 
                                 {isAdded && <div className="simulation-search-added-badge">已加入</div>}
+
+                                {!isAdded && (
+                                    <button
+                                        className="simulation-search-add-button"
+                                        onClick={() => onAddCourse && onAddCourse(course)}
+                                    >
+                                        加入
+                                    </button>
+                                )}
                             </div>
                         );
                     })

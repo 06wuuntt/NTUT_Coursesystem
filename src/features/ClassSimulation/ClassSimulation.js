@@ -25,13 +25,31 @@ const normalizeCourse = (c) => {
     }
 
     // 3. 處理時間 (確保為陣列且 period 為字串)
-    if (!Array.isArray(copy.time)) {
+    if (Array.isArray(copy.time)) {
+        copy.time = copy.time.map(t => ({
+            day: Number(t.day),
+            period: String(t.period)
+        }));
+    } else if (copy.time && typeof copy.time === 'object') {
+        // 處理物件格式的時間 { 1: ['1', '2'], 2: ['3'] } 或 { mon: ['1'] }
+        const newTime = [];
+        const dayMap = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 };
+
+        for (const k in copy.time) {
+            const dayIdx = (dayMap[k] !== undefined ? dayMap[k] : (Number(k) || null));
+            if (!dayIdx) continue;
+
+            const periods = copy.time[k];
+            if (Array.isArray(periods)) {
+                periods.forEach(p => {
+                    newTime.push({ day: dayIdx, period: String(p) });
+                });
+            }
+        }
+        copy.time = newTime;
+    } else {
         copy.time = [];
     }
-    copy.time = copy.time.map(t => ({
-        day: Number(t.day),
-        period: String(t.period) // 強制轉為字串，避免 split 錯誤
-    }));
 
     // 4. 處理教師 (可能為陣列或物件)
     if (Array.isArray(copy.teacher)) {
@@ -132,6 +150,7 @@ const updateGrid = (grid, course) => {
 
 const Scheduler = ({ currentSemester }) => {
     const { addToast } = useToast();
+    const [activeTab, setActiveTab] = useState('timetable');
 
     // State Initialization
     const [selectedCourseIds, setSelectedCourseIds] = useState(() => {
@@ -232,6 +251,38 @@ const Scheduler = ({ currentSemester }) => {
         addToast(`已加入課程：${normalizedCourse.name}`, 'success');
     }, [selectedCourseIds, grid, courseData, addToast]);
 
+    // 新增：直接加入課程 (給手機版按鈕使用)
+    const handleAddCourse = useCallback((course) => {
+        const courseId = Number(course.id);
+        if (selectedCourseIds.includes(courseId)) {
+            addToast('此課程已在課表中', 'warning');
+            return;
+        }
+
+        const normalizedCourse = normalizeCourse(course);
+        if (normalizedCourse.time.length === 0) {
+            addToast('此課程無固定上課時間，無法排入課表！', 'warning');
+            return;
+        }
+
+        const conflictIds = checkConflicts(grid, normalizedCourse);
+        if (conflictIds.size > 0) {
+            const names = Array.from(conflictIds).map(id => {
+                const c = courseData[id];
+                if (!c) return `ID:${id}`;
+                if (typeof c.name === 'string') return c.name;
+                if (typeof c.name === 'object') return c.name.zh || c.name.en || `ID:${id}`;
+                return `ID:${id}`;
+            });
+            addToast(`衝堂：與已排課程衝突 (${names.join('、')})`, 'error');
+            return;
+        }
+
+        setSelectedCourseIds(prev => [...prev, courseId]);
+        setCourseData(prev => ({ ...prev, [courseId]: normalizedCourse }));
+        addToast(`已加入課程：${normalizedCourse.name}`, 'success');
+    }, [selectedCourseIds, grid, courseData, addToast]);
+
     const handleRemoveCourse = useCallback((courseIdToRemove) => {
         setSelectedCourseIds(prev => prev.filter(id => id !== courseIdToRemove));
         setCourseData(prev => {
@@ -320,8 +371,26 @@ const Scheduler = ({ currentSemester }) => {
             <div className="simulation-header-bar">
                 <div>
                     <div className="simulation-title">排課模擬器</div>
-                    <div className="simulation-subtitle">拖曳左側課程至右側課表以進行模擬排課</div>
+                    <div className="simulation-subtitle">
+                        <span className="simulation-subtitle-desktop">拖曳左側課程至右側課表以進行模擬排課</span>
+                        <span className="simulation-subtitle-mobile">加入課程來模擬課表</span>
+                    </div>
                 </div>
+            </div>
+
+            <div className="simulation-mobile-tabs">
+                <button
+                    className={`simulation-mobile-tab ${activeTab === 'search' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('search')}
+                >
+                    課程搜尋
+                </button>
+                <button
+                    className={`simulation-mobile-tab ${activeTab === 'timetable' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('timetable')}
+                >
+                    模擬課表
+                </button>
             </div>
 
             <div className="simulation-credits-container">
@@ -344,11 +413,15 @@ const Scheduler = ({ currentSemester }) => {
             <div className="simulation-container" ref={containerRef}>
                 {/* Left Panel */}
                 <div
-                    className="simulation-left-panel"
+                    className={`simulation-left-panel ${activeTab === 'search' ? 'mobile-active' : 'mobile-hidden'}`}
                     style={{ width: `${leftWidth}px` }}
                     ref={leftPanelRef}
                 >
-                    <CourseSearchPanel addedCourseIds={selectedCourseIds} currentSemester={currentSemester} />
+                    <CourseSearchPanel
+                        addedCourseIds={selectedCourseIds}
+                        currentSemester={currentSemester}
+                        onAddCourse={handleAddCourse}
+                    />
                 </div>
 
                 {/* Resizer */}
@@ -362,7 +435,7 @@ const Scheduler = ({ currentSemester }) => {
 
                 {/* Right Panel */}
                 <div
-                    className="simulation-right-panel"
+                    className={`simulation-right-panel ${activeTab === 'timetable' ? 'mobile-active' : 'mobile-hidden'}`}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDropOnTable}
                 >

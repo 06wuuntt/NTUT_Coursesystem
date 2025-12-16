@@ -64,12 +64,42 @@
     transform: translateY(-1px);
 }
 
-.simulation-search-course-item.added {
-    border-color: #E2E8F0;
-    box-shadow: none;
-    cursor: default;
-    opacity: 0.5;
-    transform: none;
+.simulation-search-added-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #E2E8F0;
+    color: #64748B;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.simulation-search-add-button {
+    display: none;
+    /* Hidden by default on desktop if drag is preferred, or show it */
+    margin-top: 8px;
+    padding: 8px;
+    background-color: #E0F2FE;
+    color: #0369A1;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.simulation-search-add-button:hover {
+    background-color: #cee7f8;
+}
+
+@media (max-width: 768px) {
+    .simulation-search-add-button {
+        display: block;
+        /* Show on mobile */
+    }
 }
 
 .simulation-search-course-header {
