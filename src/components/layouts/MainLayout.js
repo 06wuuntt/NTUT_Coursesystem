@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt, faGraduationCap, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faExternalLinkAlt, faGraduationCap, faBars, faTimes, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { ROUTES } from '../../constants/routes';
 import SelectInput from '../forms/SelectInput';
 import './MainLayout.css';
 
 const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptions }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleSemesterChange = (e) => {
     onSemesterChange(e.target.value);
@@ -17,6 +18,18 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => {
+      const next = !prev;
+      if (next) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+      return next;
+    });
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', margin: '0' }}>
       <div className="main-layout-container">
@@ -24,21 +37,25 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
           <Link to="/" className="main-layout-title">
             <FontAwesomeIcon icon={faGraduationCap} style={{ marginRight: '5px' }} />北科課程系統
           </Link>
+          <div style={{display: 'flex', flexDirection: 'row', order: 3}}>
+            <div className="main-layout-semester-select">
+              <SelectInput
+                label="學期"
+                name="semester"
+                value={currentSemester}
+                onChange={handleSemesterChange}
+                options={semesterOptions}
+                style={{ width: '100%', marginBottom: '0' }}
+              />
+            </div>
+            {/* <button className="main-layout-darkmode-btn" onClick={toggleDarkMode} title="切換深色模式" style={{marginLeft: 12}}>
+              <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
+              </button> */}
 
-          <div className="main-layout-semester-select">
-            <SelectInput
-              label="學期"
-              name="semester"
-              value={currentSemester}
-              onChange={handleSemesterChange}
-              options={semesterOptions}
-              style={{ width: '100%', marginBottom: '0' }}
-            />
+            <button className="main-layout-hamburger" onClick={toggleMenu}>
+              <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
+            </button>
           </div>
-
-          <button className="main-layout-hamburger" onClick={toggleMenu}>
-            <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
-          </button>
 
           <nav className={`main-layout-nav-links ${isMenuOpen ? 'open' : ''}`}>
             {ROUTES.filter(route => !route.hideInNav).map(route => (

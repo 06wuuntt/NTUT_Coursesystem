@@ -72,7 +72,8 @@ const normalizeCourse = (c) => {
  * @param {object} course - 欲加入的課程 (已正規化)
  * @returns {Set} 衝突的課程 ID 集合
  */
-const checkConflicts = (grid, course) => {
+const checkConflicts = (
+    grid, course) => {
     const conflictIds = new Set();
 
     course.time.forEach(t => {

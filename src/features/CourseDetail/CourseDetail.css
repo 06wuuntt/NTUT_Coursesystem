@@ -55,17 +55,7 @@
 .course-detail-section+.course-detail-section {
     border-top: none;
     border-left: 1px solid #f1f5f9;
-}
-
-@media (max-width: 900px) {
-    .course-detail-card {
-        flex-direction: column;
-    }
-
-    .course-detail-section+.course-detail-section {
-        border-left: none;
-        border-top: 1px solid #f1f5f9;
-    }
+    border-top: 1px solid #f1f5f9;
 }
 
 .course-detail-section-title {
@@ -83,6 +73,7 @@
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 24px;
 }
+
 
 .course-detail-item {
     display: flex;
@@ -137,4 +128,89 @@
 
 .course-detail-time-value {
     margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+    .course-detail-card {
+        flex-direction: column;
+    }
+
+    .course-detail-section+.course-detail-section {
+        border-left: none;
+        border-top: 1px solid #f1f5f9;
+    }
+}
+
+@media (max-width: 768px) {
+    .course-detail-container {
+        padding: 0;
+    }
+
+    .course-detail-back-btn {
+        margin-left: 15px;
+        font-size: 0.9rem;
+    }
+
+    .course-detail-header button {
+        margin-right: 15px;
+    }
+
+    .course-detail-title {
+        font-size: 24px;
+        margin-left: 15px;
+    }
+
+    .course-detail-subtitle {
+        margin-left: 15px;
+    }
+
+    .course-detail-card {
+        flex-direction: row;
+    }
+
+    .course-detail-section {
+        padding: 8px;
+    }
+
+    .course-detail-section-title {
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+
+    .course-detail-grid {
+        gap: 10px;
+    }
+
+    .course-detail-value {
+        font-size: 0.8rem;
+    }
+}
+
+body.dark-mode .course-detail-container,
+body.dark-mode .course-detail-header,
+body.dark-mode .course-detail-card,
+body.dark-mode .course-detail-section {
+  background: #464646 !important;
+  color: #e0e0e0 !important;
+  border-color: #e9e9e9;
+}
+
+body.dark-mode .course-detail-title,
+body.dark-mode .course-detail-label,
+body.dark-mode .course-detail-value,
+body.dark-mode .course-detail-section-title {
+  color: #e0e0e0 !important;
+}
+
+body.dark-mode .course-detail-badge {
+  background: #2d3236 !important;
+  color: #ffe066 !important;
+}
+
+body.dark-mode .course-detail-card {
+  box-shadow: none !important;
+}
+
+body.dark-mode .course-detail-back-btn {
+  color: #ffe066 !important;
 }
