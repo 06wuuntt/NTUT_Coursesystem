@@ -20,16 +20,6 @@ const MonthView = ({ year, month, allEvents }) => {
   // 模態視窗狀態
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  // 調試：顯示當前月份的事件數量
-  console.log(`MonthView rendering ${year}-${month + 1}, total events: ${allEvents?.length || 0}`);
-
-  // 篩選當前月份的事件用於調試
-  const currentMonthEvents = allEvents?.filter(event => {
-    const eventDate = new Date(event.date);
-    return eventDate.getFullYear() === year && eventDate.getMonth() === month;
-  }) || [];
-  console.log(`Events in ${year}-${month + 1}:`, currentMonthEvents);
-
   // 格式化 Date 為 YYYY-MM-DD
   const fmt = (d) => {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;

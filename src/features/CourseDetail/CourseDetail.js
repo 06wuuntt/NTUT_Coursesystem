@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faClock, faUser, faBook, faInfoCircle, faHashtag, faStar, faListUl, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { fetchTeacherWithdrawalRates, fetchCourseSyllabus } from '../../api/CourseService';
 import { PERIODS } from '../../constants/periods';
+import { useToast } from '../../components/ui/Toast';
 import './CourseDetail.css';
 
 // --- Helper Functions ---
@@ -22,6 +23,9 @@ const getTeacherName = (c) => {
 const getClassName = (c) => {
     if (Array.isArray(c.class)) {
         return c.class.map(cl => cl.name).join('、');
+    }
+    if (c.class && typeof c.class === 'object') {
+        return c.class.name || '未指定';
     }
     return c.class || '未指定';
 };
@@ -155,13 +159,45 @@ const DetailedSyllabusSection = ({ syllabus }) => {
 const CourseDetail = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const course = location.state?.course;
+    const { addToast } = useToast();
+    const rawCourse = location.state?.course;
+
+    const course = useMemo(() => {
+        if (!rawCourse) return null;
+
+        // Normalize name
+        const name = (typeof rawCourse.name === 'object' && rawCourse.name !== null)
+            ? (rawCourse.name.zh || rawCourse.name.en || 'Unknown')
+            : rawCourse.name;
+
+        // Normalize time to array format if it's an object
+        let time = rawCourse.time;
+        if (time && typeof time === 'object' && !Array.isArray(time)) {
+            const times = [];
+            const dayMap = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 };
+            for (const [dayStr, periods] of Object.entries(time)) {
+                const dayIndex = dayMap[dayStr.toLowerCase()] || dayStr;
+                if (Array.isArray(periods)) {
+                    periods.forEach(period => {
+                        times.push({ day: Number(dayIndex), period: String(period) });
+                    });
+                }
+            }
+            time = times;
+        }
+
+        return {
+            ...rawCourse,
+            name,
+            time
+        };
+    }, [rawCourse]);
     const [withdrawalRate, setWithdrawalRate] = useState(null);
     const [syllabus, setSyllabus] = useState(null);
 
     const addToSimulation = () => {
         if (!course.time || course.time.length === 0) {
-            alert('此課程無固定時間，無法加入排課模擬器');
+            addToast('此課程無固定時間，無法加入排課模擬器', 'warning');
             return;
         }
 
@@ -170,7 +206,7 @@ const CourseDetail = () => {
             const savedData = JSON.parse(localStorage.getItem('simulation_courseData') || '{}');
 
             if (savedIds.includes(course.id)) {
-                alert('此課程已在排課模擬器中');
+                addToast('此課程已在排課模擬器中', 'info');
                 return;
             }
 
@@ -217,7 +253,7 @@ const CourseDetail = () => {
             });
 
             if (conflicts.size > 0) {
-                alert(`衝堂：與以下課程時間衝突，無法加入：\n${Array.from(conflicts).join('、')}`);
+                addToast(`衝堂：與以下課程時間衝突，無法加入：\n${Array.from(conflicts).join('、')}`, 'error');
                 return;
             }
 
@@ -253,10 +289,9 @@ const CourseDetail = () => {
                 return acc;
             }, { required: 0, elective: 0, total: 0 });
 
-            alert(`已加入排課模擬器\n目前總學分: ${stats.total} (必修: ${stats.required}, 選修: ${stats.elective})`);
+            addToast(`已加入排課模擬器 - 目前總學分: ${stats.total} (必修: ${stats.required}, 選修: ${stats.elective})`, 'success');
         } catch (e) {
-            console.error('Failed to add to simulation:', e);
-            alert('加入失敗，請稍後再試');
+            addToast('加入失敗，請稍後再試', 'error');
         }
     };
 
@@ -288,7 +323,6 @@ const CourseDetail = () => {
 
                 setWithdrawalRate(matchedTeacher ? matchedTeacher.rate_percent : '無資料');
             } catch (error) {
-                console.error('Failed to fetch withdrawal rates:', error);
                 setWithdrawalRate('載入失敗');
             }
         };
@@ -317,7 +351,7 @@ const CourseDetail = () => {
             </button>
 
             <div className="course-detail-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', justifyContent: 'space-between' }}>
                     <h1 className="course-detail-title" style={{ marginBottom: 0 }}>{course.name}</h1>
                     {course.time && course.time.length > 0 && (
                         <button

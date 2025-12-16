@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAllSemesterCourses } from '../../api/CourseService';
+import { useToast } from '../../components/ui/Toast';
+import Loader from '../../components/ui/Loader';
 import './CourseSearchPanel.css';
 
 const Icons = {
@@ -54,6 +56,7 @@ const formatTime = (timeArray) => {
 };
 
 const CourseSearchPanel = ({ addedCourseIds, currentSemester }) => {
+    const { addToast } = useToast();
     const [searchTerm, setSearchTerm] = useState('');
     const [allCourses, setAllCourses] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -67,8 +70,10 @@ const CourseSearchPanel = ({ addedCourseIds, currentSemester }) => {
                 const courses = await fetchAllSemesterCourses(currentSemester);
                 if (mounted) setAllCourses(courses || []);
             } catch (err) {
-                console.warn('載入課程清單失敗：', err.message);
-                if (mounted) setAllCourses([]);
+                if (mounted) {
+                    addToast('載入課程清單失敗，請稍後再試', 'error');
+                    setAllCourses([]);
+                }
             } finally {
                 if (mounted) setLoading(false);
             }
@@ -170,7 +175,9 @@ const CourseSearchPanel = ({ addedCourseIds, currentSemester }) => {
             </div>
 
             <div className="simulation-search-list-container">
-                {filteredCourses.length === 0 ? (
+                {loading ? (
+                    <Loader />
+                ) : filteredCourses.length === 0 ? (
                     <p className="simulation-search-empty">找不到符合的課程</p>
                 ) : (
                     filteredCourses.map(course => {

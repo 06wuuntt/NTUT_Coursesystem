@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ClassFilter from './ClassFilter';
 import CardView from './CardView';
 import TimeTableView from './TimeTableView';
+import Loader from '../../components/ui/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTableCells, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons';
 import { fetchAllSemesterCourses, filterAndConvertSchedule } from '../../api/CourseService';
+import { useToast } from '../../components/ui/Toast';
 import './ClassSchedule.css';
 
 // 將學期代碼格式化為中文顯示
@@ -33,6 +35,7 @@ const formatSemester = (s) => {
  * @param {string} currentSemester - 從 App.js 傳遞過來的全域學期
  */
 const ClassSchedule = ({ currentSemester }) => {
+    const { addToast } = useToast();
     // Initialize state from sessionStorage if available
     const [selectedClassCode, setSelectedClassCode] = useState(() => {
         return sessionStorage.getItem('schedule_selectedClassCode') || null;
@@ -72,7 +75,7 @@ const ClassSchedule = ({ currentSemester }) => {
                 // setSelectedClassCode(null);
                 setCourses(null);
             } catch (err) {
-                console.error("載入課程總表失敗:", err);
+                addToast(`載入 ${currentSemester} 課程總表失敗: ${err.message}。`, 'error');
                 setError(`載入 ${currentSemester} 課程總表失敗: ${err.message}。`);
             } finally {
                 setIsLoadingTotal(false);
@@ -122,7 +125,7 @@ const ClassSchedule = ({ currentSemester }) => {
     // 狀態訊息
     let message = '';
     if (isLoadingTotal) {
-        message = `正在載入 ${currentSemester} 學期所有課程總表，請稍候...`;
+        return <Loader />;
     } else if (error) {
         message = `${error}`;
     } else if (!selectedClassCode) {

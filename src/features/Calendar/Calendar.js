@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import MonthView from './MonthView';
+import Loader from '../../components/ui/Loader';
 import { fetchCalendarEvents } from '../../api/CourseService';
+import { useToast } from '../../components/ui/Toast';
 import './Calendar.css';
 
 const Calendar = () => {
+  const { addToast } = useToast();
   const [currentDate, setCurrentDate] = useState(new Date());
   // 新增狀態：儲存所有行事曆事件，載入中狀態和錯誤狀態
   const [allEvents, setAllEvents] = useState([]);
@@ -21,7 +24,7 @@ const Calendar = () => {
         // ****************************
         setAllEvents(data);
       } catch (err) {
-        console.error("載入行事曆事件失敗:", err);
+        addToast('載入校園行事曆失敗，請檢查 API 服務。', 'error');
         setError('載入校園行事曆失敗，請檢查 API 服務。');
       } finally {
         setIsLoading(false);
@@ -74,7 +77,7 @@ const Calendar = () => {
     <div className="calendar-container">
       {/* 移除原本的 h2 標題，整合到 header 中 */}
 
-      {isLoading && <div className="calendar-loading">正在載入行事曆資料...</div>}
+      {isLoading && <Loader />}
       {error && <div className="calendar-error">{error}</div>}
 
       {/* 只有在非載入中且無錯誤時才顯示日曆控制項和月曆 */}

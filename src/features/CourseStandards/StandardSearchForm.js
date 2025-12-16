@@ -1,5 +1,6 @@
 import React from 'react';
 import SelectInput from '../../components/forms/SelectInput';
+import Loader from '../../components/ui/Loader';
 import './StandardSearchForm.css';
 
 const StandardSearchForm = ({
@@ -25,9 +26,7 @@ const StandardSearchForm = ({
                 />
 
                 {loadingOptions ? (
-                    <div className="standard-search-loading">
-                        正在載入系所選項...
-                    </div>
+                    <Loader />
                 ) : (
                     <>
                         <SelectInput

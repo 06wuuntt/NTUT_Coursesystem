@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { fetchCourseStandards, fetchStandardsDepartments } from '../../api/CourseService';
 import StandardSearchForm from './StandardSearchForm';
 import StandardResults from './StandardResults';
+import Loader from '../../components/ui/Loader';
 import './CourseStandards.css';
 
 const CourseStandards = ({ currentSemester, semesterOptions = [] }) => {
@@ -119,6 +120,7 @@ const CourseStandards = ({ currentSemester, semesterOptions = [] }) => {
         onChange={handleChange}
       />
 
+      {isLoading && <Loader />}
       {error && <div className="course-standards-error">{error}</div>}
 
       <StandardResults

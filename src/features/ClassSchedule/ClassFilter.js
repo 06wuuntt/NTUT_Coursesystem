@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import SelectInput from '../../components/forms/SelectInput';
+import Loader from '../../components/ui/Loader';
 import { fetchDepartmentClasses } from '../../api/CourseService';
 import './ClassFilter.css';
 
@@ -124,7 +125,6 @@ const ClassFilter = ({ onFilterChange, currentSemester, initialClassId }) => {
         // 傳回 class.id（數字代碼）給父元件，供後端以代碼精確比對
         const valueToReturn = String(selectedId);
         onFilterChange(valueToReturn);
-        console.log('Selected Class ID (sent to parent):', valueToReturn);
     };
 
     // 確保當上層篩選變動時，下層選單的值是清空的
@@ -143,7 +143,7 @@ const ClassFilter = ({ onFilterChange, currentSemester, initialClassId }) => {
     }, [selectedCategory, selectedDeptName, selectedClassId, filteredDepartments, classes, onFilterChange]);
 
 
-    if (loading) return <div className="class-filter-loading">正在載入系所班級清單...</div>;
+    if (loading) return <Loader />;
     if (error) return <div className="class-filter-error">⚠️ {error}</div>;
 
 

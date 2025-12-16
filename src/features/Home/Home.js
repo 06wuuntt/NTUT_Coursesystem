@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchCalendarEvents, fetchAllSemesterCourses } from '../../api/CourseService';
+import { useToast } from '../../components/ui/Toast';
+import Loader from '../../components/ui/Loader';
 import './Home.css';
 
 const Icons = {
@@ -34,6 +36,7 @@ const Icons = {
 
 const Home = ({ currentSemester }) => {
     const navigate = useNavigate();
+    const { addToast } = useToast();
     // 將學期代碼（例如 "114-1"）格式化為中文顯示（例如 "114 上學期"）
     const formatSemester = (s) => {
         if (!s) return '未選定學期';
@@ -96,7 +99,7 @@ const Home = ({ currentSemester }) => {
 
                 if (mounted && top3.length > 0) setRecentEvents(top3);
             } catch (err) {
-                console.warn('載入行事曆活動失敗：', err.message);
+                // Silent failure for calendar events
             }
         }
 
@@ -114,15 +117,17 @@ const Home = ({ currentSemester }) => {
                 const courses = await fetchAllSemesterCourses(currentSemester);
                 if (mounted) setAllCourses(courses || []);
             } catch (err) {
-                console.warn('載入課程總表失敗：', err.message);
-                if (mounted) setAllCourses([]);
+                if (mounted) {
+                    addToast('載入課程總表失敗，請稍後再試', 'error');
+                    setAllCourses([]);
+                }
             } finally {
                 if (mounted) setLoadingCourses(false);
             }
         }
         loadCourses();
         return () => { mounted = false; };
-    }, [currentSemester]);
+    }, [currentSemester, addToast]);
 
     // 正規化文字供比對：移除非中英文數字與空白，轉小寫
     const normalize = (s = '') => String(s).replace(/[^0-9a-zA-Z\u4e00-\u9fff\s]/g, '').toLowerCase();
@@ -179,7 +184,7 @@ const Home = ({ currentSemester }) => {
 
     const handleSearch = () => {
         if (!searchText.trim()) {
-            alert('請輸入搜尋關鍵字！');
+            addToast('請輸入搜尋關鍵字！', 'warning');
             return;
         }
         performSearch(searchText);
@@ -246,7 +251,11 @@ const Home = ({ currentSemester }) => {
                     </div>
                     <div className="information">
                         <Icons.Landmark />
-                        <span>{Array.isArray(c.class) && c.class.length > 0 ? c.class.map(t => t.name).join('、') : '無班級'}</span>
+                        <span>{
+                            Array.isArray(c.class) && c.class.length > 0
+                                ? c.class.map(t => t.name).join('、')
+                                : (c.class && typeof c.class === 'object' ? c.class.name : '無班級')
+                        }</span>
                     </div>
                 </div>
             </div>
@@ -310,7 +319,7 @@ const Home = ({ currentSemester }) => {
                 {/* 搜尋結果 */}
                 <div className="home-results-container">
                     {loadingCourses ? (
-                        <div>載入課程中…</div>
+                        <Loader />
                     ) : (
                         <div>
                             {isQueryEmpty ? (
