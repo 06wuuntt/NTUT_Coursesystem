@@ -138,7 +138,7 @@ const TimeTableView = ({ courses, currentSemester }) => {
                                         title={`共${coursesInCell.length}個課程衝突`}
                                     >
                                         <div className="time-table-conflict-title">多個課程衝突</div>
-                                        <div className="time-table-conflict-subtitle">請查看模擬</div>
+                                        <div className="time-table-conflict-subtitle">請查看卡片形式</div>
                                     </div>
                                 ) : (
                                     // 單個課程正常顯示

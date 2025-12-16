@@ -84,3 +84,10 @@
 .select-input-icon.expanded {
     transform: rotate(180deg);
 }
+
+@media (max-width: 768px) {
+    .select-input-button {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}

@@ -23,12 +23,12 @@
     background-color: #FFFFFF;
     border-radius: 16px;
     border: 1px solid #F1F5F9;
-    padding: 20px;
+    padding: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
     cursor: pointer;
 }
 
@@ -76,13 +76,13 @@
 .card-view-divider {
     height: 1px;
     background-color: #aaaaaa;
-    margin: 4px 0;
+    margin: 2px 0;
 }
 
 .card-view-body {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
 }
 
 .card-view-info {
@@ -104,5 +104,31 @@
     .card-view-grid {
         grid-template-columns: 1fr;
     }
+}
+
+
+@media (max-width: 768px) {
+ .card-view-grid {
+ grid-template-columns: 1fr;
+ gap: 10px;
+ padding: 0;
+ }
+
+ .card-view-card {
+ padding: 12px;
+ border-radius: 12px;
+ }
+
+ .card-view-title {
+ font-size: 1rem;
+ }
+
+ .card-view-id {
+ font-size: 0.75rem;
+ }
+
+ .card-view-info {
+ font-size: 0.85rem;
+ }
 }
 

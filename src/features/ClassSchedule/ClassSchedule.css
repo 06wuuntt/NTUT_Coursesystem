@@ -62,15 +62,29 @@
 }
 
 @media (max-width: 768px) {
+    .class-schedule-container {
+        padding: 0;
+    }
+
     .class-schedule-title {
         font-size: 24px;
+        margin-top: 10px;
+        margin-left: 15px;
     }
 
     .class-schedule-subtitle {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+        margin-left: 15px;
     }
 
     .class-schedule-filter-card {
-        padding: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .class-schedule-filter-title {
+        font-size: 1rem;
+        margin-bottom: 10px;
     }
 }
+

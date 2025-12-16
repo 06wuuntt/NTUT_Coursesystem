@@ -1,0 +1,49 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "append_css_class_schedule",
+			"type": "shell",
+			"command": "Add-Content",
+			"args": [
+				"src/features/ClassSchedule/ClassSchedule.css",
+				"\n@media (max-width: 768px) {\n    .class-schedule-container {\n        padding: 0 10px;\n    }\n\n    .class-schedule-title {\n        font-size: 24px;\n        margin-top: 10px;\n    }\n\n    .class-schedule-subtitle {\n        margin-bottom: 20px;\n    }\n\n    .class-schedule-filter-card {\n        padding: 15px;\n        margin-bottom: 15px;\n    }\n\n    .class-schedule-filter-title {\n        font-size: 1.2rem;\n        margin-bottom: 10px;\n    }\n}\n"
+			],
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "append_css_card_view",
+			"type": "shell",
+			"command": "Add-Content",
+			"args": [
+				"src/features/ClassSchedule/CardView.css",
+				"\n@media (max-width: 768px) {\n    .card-view-grid {\n        grid-template-columns: 1fr;\n        gap: 10px;\n        padding: 0;\n    }\n\n    .card-view-card {\n        padding: 15px;\n        border-radius: 12px;\n    }\n\n    .card-view-title {\n        font-size: 1rem;\n    }\n\n    .card-view-id {\n        font-size: 0.75rem;\n    }\n\n    .card-view-info {\n        font-size: 0.85rem;\n    }\n}\n"
+			],
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "append_css_timetable_view",
+			"type": "shell",
+			"command": "Add-Content",
+			"args": [
+				"src/features/ClassSchedule/TimeTableView.css",
+				"\n@media (max-width: 768px) {\n    .time-table-container {\n        padding: 10px;\n        overflow-x: auto;\n    }\n\n    .time-table-grid {\n        min-width: 600px;\n    }\n}\n"
+			],
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "append_css_select_input",
+			"type": "shell",
+			"command": "Add-Content",
+			"args": [
+				"src/components/forms/SelectInput.css",
+				"\n@media (max-width: 768px) {\n    .select-input-button {\n        font-size: 14px;\n        padding: 8px 12px;\n    }\n}\n"
+			],
+			"problemMatcher": [],
+			"group": "none"
+		}
+	]
+}
