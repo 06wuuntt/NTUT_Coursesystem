@@ -86,7 +86,8 @@ const ClassFilter = ({ onFilterChange, currentSemester, initialClassId }) => {
 
     // 3. 篩選出選定系所下的所有班級
     const selectedDepartment = filteredDepartments.find(d => d.name === selectedDeptName);
-    const classes = selectedDepartment?.classes || [];
+    // 用 useMemo 包裝 classes，避免每次 render 都變動
+    const classes = useMemo(() => selectedDepartment?.classes || [], [selectedDepartment]);
     // 注意: class.id 是我們在 API 層構建的唯一 ID，class.label 是班級名稱
     const classOptions = classes.map(c => ({
         value: c.id, // e.g., '電機系-電機二乙'
@@ -118,10 +119,6 @@ const ClassFilter = ({ onFilterChange, currentSemester, initialClassId }) => {
         const selectedId = e.target.value;
         setSelectedClassId(selectedId);
 
-        // 找出被選定的班級物件
-        const selectedClass = classes.find(c => c.id === selectedId || String(c.classCode ?? '') === selectedId);
-
-
         // 傳回 class.id（數字代碼）給父元件，供後端以代碼精確比對
         const valueToReturn = String(selectedId);
         onFilterChange(valueToReturn);
@@ -144,7 +141,7 @@ const ClassFilter = ({ onFilterChange, currentSemester, initialClassId }) => {
 
 
     if (loading) return <Loader />;
-    if (error) return <div className="class-filter-error">⚠️ {error}</div>;
+    if (error) return <div className="class-filter-error">{error}</div>;
 
 
     return (

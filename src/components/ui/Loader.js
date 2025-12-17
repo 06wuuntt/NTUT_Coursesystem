@@ -13,7 +13,7 @@ const Loader = () => {
                             type="rotate"
                             from="0 25 25"
                             to="360 25 25"
-                            dur="0.6s"
+                            dur="1s"
                             repeatCount="indefinite" />
                     </path>
                 </svg>

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt, faGraduationCap, faBars, faTimes, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faExternalLinkAlt, faGraduationCap, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ROUTES } from '../../constants/routes';
 import SelectInput from '../forms/SelectInput';
 import './MainLayout.css';
 
 const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptions }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const location = useLocation();
 
   const handleSemesterChange = (e) => {
     onSemesterChange(e.target.value);
@@ -18,18 +18,6 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => {
-      const next = !prev;
-      if (next) {
-        document.body.classList.add('dark-mode');
-      } else {
-        document.body.classList.remove('dark-mode');
-      }
-      return next;
-    });
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', margin: '0' }}>
       <div className="main-layout-container">
@@ -37,7 +25,7 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
           <Link to="/" className="main-layout-title">
             <FontAwesomeIcon icon={faGraduationCap} style={{ marginRight: '5px' }} />北科課程系統
           </Link>
-          <div style={{display: 'flex', flexDirection: 'row', order: 3}}>
+          <div style={{ display: 'flex', flexDirection: 'row', order: 3 }}>
             <div className="main-layout-semester-select">
               <SelectInput
                 label="學期"
@@ -71,7 +59,7 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
           </nav>
         </div>
 
-        <div className="main-layout-content">
+        <div className="main-layout-content" key={location.pathname}>
           {children}
         </div>
       </div>

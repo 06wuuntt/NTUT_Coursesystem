@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchCalendarEvents, fetchAllSemesterCourses } from '../../api/CourseService';
+import { fetchAllSemesterCourses } from '../../api/CourseService';
 import { useToast } from '../../components/ui/Toast';
 import Loader from '../../components/ui/Loader';
 import './Home.css';
@@ -40,6 +40,7 @@ const Home = ({ currentSemester }) => {
     // 將學期代碼（例如 "114-1"）格式化為中文顯示（例如 "114 上學期"）
     const formatSemester = (s) => {
         if (!s) return '未選定學期';
+        // trim() 會移除字串起始及結尾處的空白字元
         const str = String(s).trim();
         // 常見格式："114-1"
         if (str.includes('-')) {
@@ -47,7 +48,7 @@ const Home = ({ currentSemester }) => {
             const map = { '1': '上學期', '2': '下學期', '3': '暑期' };
             return `${year} ${map[sem] || sem}`;
         }
-        // 退而求其次：如果最後一個字是學期編號
+
         const m = str.match(/^(\d+)(?:.*?)([123])$/);
         if (m) {
             const year = m[1];
@@ -58,11 +59,9 @@ const Home = ({ currentSemester }) => {
         return str;
     };
     const [searchText, setSearchText] = useState('');
-    const [recentEvents, setRecentEvents] = useState([]);
     const [allCourses, setAllCourses] = useState(null);
     const [loadingCourses, setLoadingCourses] = useState(false);
     const [results, setResults] = useState([]);
-    // 搜尋模式：'name' | 'teacher' | 'code'
     const [searchMode, setSearchMode] = useState('name');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 12; // 增加每頁顯示數量，因為現在是 Grid
@@ -160,7 +159,7 @@ const Home = ({ currentSemester }) => {
     const endIdx = startIdx + itemsPerPage;
     const displayed = allDisplayed.slice(startIdx, endIdx);
 
-    // 格式化課程時間為 "週幾 / 節次, 節次" 格式
+    // 格式化課程時間
     const formatCourseTime = (timeObj) => {
         if (!timeObj || typeof timeObj !== 'object') return '無時間資訊';
 

@@ -51,7 +51,7 @@ const ClassSchedule = ({ currentSemester }) => {
     const [isFiltering, setIsFiltering] = useState(false); // 篩選中狀態
     const [error, setError] = useState(null);
 
-    // --- 副作用 1：載入該學期的課程總表 ---
+    // 1：載入該學期的課程總表 ---
     useEffect(() => {
         if (!currentSemester) return;
 
@@ -59,20 +59,13 @@ const ClassSchedule = ({ currentSemester }) => {
             setIsLoadingTotal(true);
             setError(null);
             setAllSemesterCourses(null);
-            // Don't clear selectedClassCode here, let ClassFilter validate it
-            // setSelectedClassCode(null); 
             setCourses(null);
 
             try {
                 // *** 呼叫 API 獲取大數據總表 ***
                 const data = await fetchAllSemesterCourses(currentSemester);
-                // **********************************
 
                 setAllSemesterCourses(data);
-
-                // 重設課表和篩選器
-                // Don't clear selectedClassCode here either
-                // setSelectedClassCode(null);
                 setCourses(null);
             } catch (err) {
                 addToast(`載入 ${currentSemester} 課程總表失敗: ${err.message}。`, 'error');
@@ -84,9 +77,9 @@ const ClassSchedule = ({ currentSemester }) => {
 
         loadAllCourses();
 
-    }, [currentSemester]); // 依賴於全域學期
+    }, [currentSemester, addToast]); // 依賴於全域學期與 addToast
 
-    // --- 副作用 2：當班級 ID 或總表改變時，進行本地篩選 ---
+    // --- 2：當班級 ID 或總表改變時，進行本地篩選 ---
     useEffect(() => {
         if (!selectedClassCode || !allSemesterCourses) {
             setCourses(null);
@@ -103,9 +96,7 @@ const ClassSchedule = ({ currentSemester }) => {
 
     }, [selectedClassCode, allSemesterCourses]);
 
-    // Log changes to selectedClassCode to see who/when clears it
     useEffect(() => {
-        // selection changed
         if (selectedClassCode) {
             sessionStorage.setItem('schedule_selectedClassCode', selectedClassCode);
         } else {

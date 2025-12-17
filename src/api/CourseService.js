@@ -51,7 +51,7 @@ export async function fetchCourseSyllabus(courseId, semesterId) {
     }
 }
 
-// --- 2. 課程標準相關 API (模擬) ---
+// --- 2. 課程標準相關 API ---
 /**
  * 實際獲取課程標準總表，並提取所有學院/系所名稱作為篩選選項
  */
@@ -83,7 +83,6 @@ export async function fetchStandardsDepartments(year) {
 
     return {
         departmentOptions: departments,
-        // 為了方便查詢，將原始數據一併返回
         fullData: apiData
     };
 }
@@ -133,14 +132,11 @@ export async function fetchCourseStandards(selectedYear, departmentUniqueId, ful
     }
 }
 
-/**
- * 實際從 API 獲取行事曆事件
- */
+// --- 3. 行事曆 API ---
 export async function fetchCalendarEvents() {
-    // 實際的 API URL
+    // API URL
     const CALENDAR_URL = `${BASE_URL}calendar.json`;
 
-    // 由於我們只關心日期和摘要，這裡不需要模擬延遲，直接 fetch
     const response = await fetch(CALENDAR_URL);
     if (!response.ok) {
         throw new Error(`無法載入行事曆資料 (HTTP 狀態碼: ${response.status})`);
@@ -189,6 +185,7 @@ export async function fetchCalendarEvents() {
     return events;
 }
 
+// --- 4. 系所 API ---
 /**
  * 根據學期獲取所有系所和班級清單
  * @param {string} semesterId - 學期 ID (例如: '114-1')
@@ -209,7 +206,7 @@ export async function fetchDepartmentClasses(semesterId) {
         const classes = dept.class || [];
 
         return {
-            category: dept.category || '未分類', // 使用 API 提供的 category
+            category: dept.category || '未分類', // 使用 API 提供的 category (學院)
             name: dept.name,
             // 班級的唯一 ID 儘量保留 API 原有的 numeric id（若有），否則退回到 dept-name
             classes: classes.map(cls => ({
@@ -217,8 +214,7 @@ export async function fetchDepartmentClasses(semesterId) {
                 id: String(cls.id ?? `${dept.name}-${cls.name}`),
                 label: cls.name,
                 deptName: dept.name,
-                // classCode 儘量保留 API 的 code 欄位（若有），否則也將 id 當作 code 備用
-                classCode: String(cls.code ?? cls.id ?? ''),
+                classCode: String(cls.code ?? ''),
             }))
         };
     }).filter(dept => dept.classes.length > 0);
@@ -233,7 +229,7 @@ let courseCache = null;
 
 /**
  * 獲取該學期所有學制的課程，並進行緩存
- * 由於 API 沒有提供學制列表，我們只取最主要的 'main' (日間部)
+ * API 沒有提供學制列表，只取最主要的 'main' (日間部)
  * @param {string} semesterId - 學期 ID (例如: '114-1')
  */
 export async function fetchAllSemesterCourses(semesterId) {
@@ -330,7 +326,7 @@ export function filterAndConvertSchedule(allCourses, selectedClassKey) {
             // 3. 獲取教室名稱
             const location = course.classroom?.[0]?.name || '無教室資訊';
 
-            // 處理教師名稱
+            // 4. 處理教師名稱
             let teacherName = '無教師資訊';
             if (Array.isArray(course.teacher) && course.teacher.length > 0) {
                 teacherName = course.teacher.map(t => t.name).join('、');
@@ -338,6 +334,7 @@ export function filterAndConvertSchedule(allCourses, selectedClassKey) {
                 teacherName = course.teacher.name || String(course.teacher);
             }
 
+            // 5. 處理圖形對應到的選修 / 必修
             const typeMap = {
                 '○': '共同必修',
                 '△': '共同必修',

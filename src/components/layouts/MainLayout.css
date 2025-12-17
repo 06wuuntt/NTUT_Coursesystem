@@ -36,6 +36,15 @@
     cursor: pointer;
 }
 
+/* 控制漢堡選單 icon 大小 */
+.main-layout-hamburger svg {
+    font-size: 20px;
+    /* 你可以改成你想要的大小，例如 28px、32px、40px */
+    width: 1em;
+    height: 1em;
+    padding-left: 5px;
+}
+
 .main-layout-title {
     font-size: 25px;
     font-weight: 700;
@@ -78,6 +87,19 @@
     padding: 160px 20px 0;
     /* Added top padding to clear fixed nav */
     flex: 1;
+    animation: global-fadein 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@keyframes global-fadein {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 .main-layout-footer {
@@ -128,6 +150,7 @@
         gap: 0 8px;
         justify-content: stretch;
         text-align: center;
+        padding: 10px 15px;
         /* Remove row-gap to prevent space when menu is closed */
         /* Inherits fixed position, top, left, right, z-index from desktop */
     }
@@ -188,6 +211,17 @@
 }
 
 @media (max-width: 768px) {
+    .main-layout-content {
+        padding: 80px 2px 0;
+    }
+
+    .main-layout-nav {
+        margin: 15px 10px;
+        gap: 0 8px;
+    }
+}
+
+@media (max-width: 425px) {
     .main-layout-container {
         padding: 5px;
     }
@@ -239,11 +273,11 @@
         transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, margin-top 0.3s ease;
         justify-content: center;
         border-top: 1px #e7e7e7 solid;
-        padding: 2px;
     }
 
     .main-layout-nav-links.open {
         max-height: 300px;
+        padding-top: 2px;
         /* Adjust based on content height */
         opacity: 1;
         margin-top: 10px;

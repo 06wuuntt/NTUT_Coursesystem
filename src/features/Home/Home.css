@@ -83,9 +83,10 @@
     font-size: 18px;
     border-radius: 15px;
     border: none;
-    background-color: #96C6DB;
-    color: white;
+    background-color: #d7effa;
+    color: #336f8b;
     cursor: pointer;
+    font-weight: Bold;
 }
 
 .calendar-container {
