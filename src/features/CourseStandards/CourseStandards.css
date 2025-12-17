@@ -27,7 +27,7 @@
 
 @media (max-width: 768px) {
     .course-standards-container {
-        padding-top: 50px;
+        padding: 50px 10px 0;
     }
 
     .course-standards-title {
