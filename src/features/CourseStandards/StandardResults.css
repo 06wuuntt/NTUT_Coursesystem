@@ -231,6 +231,18 @@
     color: #807e7eff;
 }
 
+@media (max-width: 990px) {
+    .summary-card {
+        grid-template-columns: repeat(5, 1fr);
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .summary-item {
+        padding: 10px;
+    }
+}
+
 @media (max-width: 768px) {
     .standard-results {
         padding: 0 5px;
