@@ -67,46 +67,6 @@ const Home = ({ currentSemester }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 12; // 增加每頁顯示數量，因為現在是 Grid
 
-    useEffect(() => {
-        let mounted = true;
-
-        async function loadRecent() {
-            try {
-                const events = await fetchCalendarEvents();
-                // 轉成 Date，計算實際結束日（API 的 endDate 為獨佔日）
-                const toItem = (e) => {
-                    const start = new Date(e.date);
-                    const end = e.endDate ? new Date(e.endDate) : new Date(e.date);
-                    // 實際結束為 end - 1 day
-                    end.setDate(end.getDate() - 1);
-                    return { ...e, _start: start, _end: end };
-                };
-
-                const items = events.map(toItem);
-
-                const now = new Date();
-                // 找到尚未結束（還在進行或未來）的事件
-                const upcoming = items.filter(i => i._end >= new Date(now.getFullYear(), now.getMonth(), now.getDate()));
-
-                // 以開始日排序，取前三個
-                upcoming.sort((a, b) => a._start - b._start);
-
-                const top3 = upcoming.slice(0, 3).map(ev => ({
-                    date: ev.date.split('-').slice(1).join('/'), // 顯示 MM/DD
-                    description: ev.description,
-                    link: '/calendar'
-                }));
-
-                if (mounted && top3.length > 0) setRecentEvents(top3);
-            } catch (err) {
-                // Silent failure for calendar events
-            }
-        }
-
-        loadRecent();
-        return () => { mounted = false; };
-    }, []);
-
     // 載入學期的所有課程，作為首頁搜尋的資料來源
     useEffect(() => {
         let mounted = true;

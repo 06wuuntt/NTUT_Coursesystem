@@ -126,6 +126,22 @@
     font-size: 0.9rem;
 }
 
+@media (max-width: 890px) {
+    .calendar-sidebar {
+        border-left: 1px solid #e2e8f0;
+        border-top: none;
+        height: auto;
+        margin-top: 20px;
+        max-height: 200px;
+        position: static;
+        width: 100%;
+    }
+
+    .calendar-section {
+        margin-right: 0;
+    }
+}
+
 @media (max-width: 768px) {
     .calendar-container {
         padding: 20px 10px;

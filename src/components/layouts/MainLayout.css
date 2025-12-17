@@ -112,15 +112,31 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1040px) {
+    .main-layout-link {
+        font-size: 14px;
+        padding: 6px 4px;
+    }
+
+    .main-layout-title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 832px) {
     .main-layout-nav {
         gap: 0 8px;
+        justify-content: stretch;
+        text-align: center;
         /* Remove row-gap to prevent space when menu is closed */
         /* Inherits fixed position, top, left, right, z-index from desktop */
     }
 
     .main-layout-title {
         order: 1;
+        margin-right: auto;
+        padding-left: 6px;
+        font-size: 16px;
     }
 
     .main-layout-semester-select {
@@ -141,7 +157,10 @@
         width: 100%;
         gap: 5px;
         order: 4;
-
+        align-items: stretch;
+        /* 強制子元素左右拉伸佔滿 */
+        text-align: center;
+        /* 讓子元素裡的文字保持置中 */
         /* Animation properties */
         max-height: 0;
         opacity: 0;
@@ -155,10 +174,12 @@
         /* Adjust based on content height */
         opacity: 1;
         margin-top: 10px;
+        border-top: 1px #e7e7e7 solid;
+        padding: 2px;
     }
 
     .main-layout-link {
-        font-size: 12px;
+        font-size: 15px;
         width: 100%;
         text-align: center;
         box-sizing: border-box;
@@ -217,6 +238,8 @@
         margin-top: 0;
         transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, margin-top 0.3s ease;
         justify-content: center;
+        border-top: 1px #e7e7e7 solid;
+        padding: 2px;
     }
 
     .main-layout-nav-links.open {
@@ -232,6 +255,7 @@
         box-sizing: border-box;
         padding: 6px 10px;
         justify-content: center;
+        font-size: 12px;
     }
 
     .main-layout-footer {
