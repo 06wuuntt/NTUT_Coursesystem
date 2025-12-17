@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/NTUT_Coursesystem/static/css/main.5669b2e6.css",
-    "main.js": "/NTUT_Coursesystem/static/js/main.9878d468.js",
+    "main.css": "/NTUT_Coursesystem/static/css/main.5b1277cf.css",
+    "main.js": "/NTUT_Coursesystem/static/js/main.02a8132c.js",
     "index.html": "/NTUT_Coursesystem/index.html",
-    "main.5669b2e6.css.map": "/NTUT_Coursesystem/static/css/main.5669b2e6.css.map",
-    "main.9878d468.js.map": "/NTUT_Coursesystem/static/js/main.9878d468.js.map"
+    "main.5b1277cf.css.map": "/NTUT_Coursesystem/static/css/main.5b1277cf.css.map",
+    "main.02a8132c.js.map": "/NTUT_Coursesystem/static/js/main.02a8132c.js.map"
   },
   "entrypoints": [
-    "static/css/main.5669b2e6.css",
-    "static/js/main.9878d468.js"
+    "static/css/main.5b1277cf.css",
+    "static/js/main.02a8132c.js"
   ]
 }
