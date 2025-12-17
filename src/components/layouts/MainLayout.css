@@ -123,7 +123,7 @@
     }
 }
 
-@media (max-width: 840px) {
+@media (max-width: 845px) {
     .main-layout-nav {
         gap: 0 8px;
         justify-content: stretch;
