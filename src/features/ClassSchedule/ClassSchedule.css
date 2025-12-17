@@ -63,7 +63,7 @@
 
 @media (max-width: 768px) {
     .class-schedule-container {
-        padding: 0;
+        padding-top: 50px;
     }
 
     .class-schedule-title {

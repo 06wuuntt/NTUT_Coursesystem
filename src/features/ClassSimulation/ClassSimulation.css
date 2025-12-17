@@ -283,7 +283,7 @@
 
 @media (max-width: 768px) {
     .simulation-containers {
-        padding: 0;
+        padding-top: 50px;
     }
 
     .simulation-title {
