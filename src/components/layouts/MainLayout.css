@@ -177,9 +177,10 @@
     }
 
     .main-layout-nav {
-        padding: 8px 10px;
-        margin: 10px 5px;
+        margin: 0;
+        padding: 15px 10px;
         gap: 0 8px;
+        border-radius: 0;
         /* Remove row-gap to prevent space when menu is closed */
         /* Inherits fixed position, top, left, right, z-index from desktop */
     }

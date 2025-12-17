@@ -128,7 +128,7 @@
 
 @media (max-width: 768px) {
     .calendar-container {
-        padding-top: 50px;
+        padding: 20px 10px;
         margin: 0px;
         background-color: #F6F7F8;
         box-shadow: none;
