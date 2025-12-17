@@ -294,11 +294,9 @@ const Scheduler = ({ currentSemester }) => {
     }, []);
 
     const handleClearAll = useCallback(() => {
-        if (window.confirm('確定要清空所有已選課程嗎？')) {
-            setSelectedCourseIds([]);
-            setCourseData({});
-            addToast('已清空所有課程', 'info');
-        }
+        setSelectedCourseIds([]);
+        setCourseData({});
+        addToast('已清空所有課程', 'info');
     }, [addToast]);
 
     // Credit Calculation
@@ -396,17 +394,17 @@ const Scheduler = ({ currentSemester }) => {
 
             <div className="simulation-credits-container">
                 <div className="simulation-credits-wrapper">
-                    <div className="simulation-credit-display required">
+                    <div className="simulation-credit-display">
                         <span className="simulation-credit-label">必修</span>
                         <span className="simulation-credit-value">{credits.required}</span>
                     </div>
-                    <div className="simulation-credit-display elective">
+                    <div className="simulation-credit-display">
                         <span className="simulation-credit-label">選修</span>
                         <span className="simulation-credit-value">{credits.elective}</span>
                     </div>
                     <div className="simulation-credit-display">
-                        <span>總學分</span>
-                        <span className="simulation-credit-total-value">{credits.total}</span>
+                        <span className="simulation-credit-label">總學分</span>
+                        <span className="simulation-credit-value">{credits.total}</span>
                     </div>
                 </div>
             </div>

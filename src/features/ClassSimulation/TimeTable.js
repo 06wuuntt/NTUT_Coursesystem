@@ -1,10 +1,12 @@
 ﻿import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PERIODS } from '../../constants/periods';
 import './TimeTable.css';
 
 const DayNames = ['一', '二', '三', '四', '五', '六'];
 
-const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse }) => {
+const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemester }) => {
+    const navigate = useNavigate();
     const [hoveredCell, setHoveredCell] = React.useState(null);
 
     // Pre-calculate spans for merging consecutive cells
@@ -46,12 +48,6 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse }) => {
 
     const handleDrop = (e) => {
         e.preventDefault();
-    };
-
-    const handleCourseClick = (courseId, courseName) => {
-        if (window.confirm(`確定要移除課程 ${courseName} 嗎？`)) {
-            onRemoveCourse(courseId);
-        }
     };
 
     const getLocation = (course) => {
@@ -128,8 +124,8 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse }) => {
                                     }}
                                     onMouseEnter={() => setHoveredCell(key)}
                                     onMouseLeave={() => setHoveredCell(null)}
-                                    onClick={() => handleCourseClick(courseId, course?.name)}
-                                    title="點擊以移除課程"
+                                    onClick={() => navigate(`/course/${course.id}`, { state: { course: course, semesterId: currentSemester } })}
+                                    title="點擊以查看課程"
                                 >
                                     <div>{course?.name}</div>
                                     {location && (
