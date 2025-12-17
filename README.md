@@ -66,8 +66,8 @@ src/
 
 ### 1. 複製專案
 ```bash
-git clone [https://github.com/](https://github.com/)<你的帳號>/<你的repo名稱>.git
-cd <你的repo名稱>
+git clone https://github.com/06wuuntt/NTUT_Coursesystem.git
+cd NTUT_Coursesystem
 ```
 
 ### 2. 安裝
