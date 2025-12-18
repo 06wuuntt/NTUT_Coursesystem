@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt, faGraduationCap, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +9,20 @@ import './MainLayout.css';
 const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptions }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navRef = useRef(null);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const handleClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   const handleSemesterChange = (e) => {
     onSemesterChange(e.target.value);
@@ -36,16 +50,16 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
                 style={{ width: '100%', marginBottom: '0' }}
               />
             </div>
-            {/* <button className="main-layout-darkmode-btn" onClick={toggleDarkMode} title="切換深色模式" style={{marginLeft: 12}}>
-              <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
-              </button> */}
 
             <button className="main-layout-hamburger" onClick={toggleMenu}>
               <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
             </button>
           </div>
 
-          <nav className={`main-layout-nav-links ${isMenuOpen ? 'open' : ''}`}>
+          <nav
+            ref={navRef}
+            className={`main-layout-nav-links ${isMenuOpen ? 'open' : ''}`}
+          >
             {ROUTES.filter(route => !route.hideInNav).map(route => (
               <Link
                 key={route.id}
