@@ -31,7 +31,7 @@ const Calendar = () => {
       }
     }
     loadEvents();
-  }, []); // 僅在組件掛載時執行一次
+  }, [addToast]); // 僅在組件掛載時執行一次
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();

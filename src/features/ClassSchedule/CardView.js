@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CardView.css';
 
@@ -54,7 +54,6 @@ const formatTime = (timeArray) => {
 };
 
 const SingleCard = ({ course, currentSemester }) => {
-    const [isHovered, setIsHovered] = useState(false);
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -64,8 +63,6 @@ const SingleCard = ({ course, currentSemester }) => {
     return (
         <div
             className="card-view-card"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
             onClick={handleClick}
         >
             <div className="card-view-header">

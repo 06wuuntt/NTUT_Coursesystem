@@ -41,12 +41,6 @@ const MonthView = ({ year, month, allEvents }) => {
     return diff;
   }
 
-  // 格式化日期為易讀格式
-  const formatDateDisplay = (dateStr) => {
-    const d = new Date(dateStr);
-    return `${d.getFullYear()} 年 ${d.getMonth() + 1} 月 ${d.getDate()} 日`;
-  }
-
   // 處理事件點擊
   const handleEventClick = (event) => {
     setSelectedEvent(event);

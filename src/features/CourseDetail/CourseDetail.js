@@ -5,6 +5,7 @@ import { faArrowLeft, faClock, faUser, faBook, faInfoCircle, faHashtag, faStar, 
 import { fetchTeacherWithdrawalRates, fetchCourseSyllabus } from '../../api/CourseService';
 import { PERIODS } from '../../constants/periods';
 import { useToast } from '../../components/ui/Toast';
+import Loader from '../../components/ui/Loader';
 import './CourseDetail.css';
 
 // --- Helper Functions ---
@@ -409,7 +410,7 @@ const CourseDetail = () => {
                             value={
                                 ((Array.isArray(course.teachers) && course.teachers.length > 1) || (typeof course.teacher === 'string' && course.teacher.includes('、')))
                                     ? '無資料'
-                                    : (withdrawalRate ? (withdrawalRate === '無資料' || withdrawalRate === '載入失敗' ? withdrawalRate : `${withdrawalRate}%`) : '載入中...')
+                                    : (withdrawalRate ? (withdrawalRate === '無資料' || withdrawalRate === '載入失敗' ? withdrawalRate : `${withdrawalRate}%`) : <Loader />)
                             }
                         />
                     </div>

@@ -123,7 +123,6 @@ const TimeTableView = ({ courses, currentSemester }) => {
                                     gridRow: `${row} / span ${config.span}`,
                                     zIndex: 1, // On top of background
                                     padding: '4px', // Match cell padding
-                                    pointerEvents: 'none', // Allow clicks to pass through to cell if needed, but card needs interaction
                                     // Actually, we want the card to be interactive.
                                     // Since it's on top, it will capture events.
                                     pointerEvents: 'auto',

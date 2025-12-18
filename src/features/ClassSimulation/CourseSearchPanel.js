@@ -80,7 +80,7 @@ const CourseSearchPanel = ({ addedCourseIds, currentSemester, onAddCourse }) => 
         }
         load();
         return () => { mounted = false; };
-    }, [currentSemester]);
+    }, [currentSemester, addToast]);
 
     const sourceCourses = allCourses || [];
     const normalize = (s = '') => String(s).replace(/[^0-9a-zA-Z一-鿿\s]/g, '').toLowerCase();
