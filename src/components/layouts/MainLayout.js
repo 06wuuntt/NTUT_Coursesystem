@@ -10,13 +10,19 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navRef = useRef(null);
+  const hamburgerRef = useRef(null);
 
   useEffect(() => {
     if (!isMenuOpen) return;
     const handleClickOutside = (event) => {
-      if (navRef.current && !navRef.current.contains(event.target)) {
-        setIsMenuOpen(false);
+      // 如果點擊在 nav 或 hamburger button 內，不關閉 menu
+      if (
+        (navRef.current && navRef.current.contains(event.target)) ||
+        (hamburgerRef.current && hamburgerRef.current.contains(event.target))
+      ) {
+        return;
       }
+      setIsMenuOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -51,7 +57,11 @@ const MainLayout = ({ children, currentSemester, onSemesterChange, semesterOptio
               />
             </div>
 
-            <button className="main-layout-hamburger" onClick={toggleMenu}>
+            <button
+              className="main-layout-hamburger"
+              onClick={toggleMenu}
+              ref={hamburgerRef}
+            >
               <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
             </button>
           </div>

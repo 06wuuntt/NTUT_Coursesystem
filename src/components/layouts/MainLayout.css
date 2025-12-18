@@ -208,6 +208,10 @@
         box-sizing: border-box;
         padding: 6px 10px;
     }
+
+    .main-layout-footer {
+        padding: 20px 70px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -218,6 +222,10 @@
     .main-layout-nav {
         margin: 15px 10px;
         gap: 0 8px;
+    }
+
+    .main-layout-footer {
+        padding: 10px 40px;
     }
 
     .main-layout-footer-links {
