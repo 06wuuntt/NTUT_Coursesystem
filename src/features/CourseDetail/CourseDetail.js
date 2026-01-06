@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faClock, faUser, faBook, faInfoCircle, faHashtag, faStar, faListUl, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { fetchTeacherWithdrawalRates, fetchCourseSyllabus } from '../../api/CourseService';
-import { PERIODS } from '../../constants/periods';
-import { useToast } from '../../components/ui/Toast';
+import { useSimulation } from '../../context/SimulationContext';
 import Loader from '../../components/ui/Loader';
 import './CourseDetail.css';
 
@@ -160,7 +159,7 @@ const DetailedSyllabusSection = ({ syllabus }) => {
 const CourseDetail = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { addToast } = useToast();
+    const { addCourse } = useSimulation();
     const rawCourse = location.state?.course;
 
     const course = useMemo(() => {
@@ -187,10 +186,23 @@ const CourseDetail = () => {
             time = times;
         }
 
+        // Map courseType symbol to readable text
+        const typeMap = {
+            '○': '共同必修',
+            '△': '共同必修',
+            '☆': '共同選修',
+            '●': '專業必修',
+            '▲': '專業必修',
+            '★': '專業選修'
+        };
+        const typeSymbol = rawCourse.courseType || rawCourse.type || '';
+        const type = typeMap[typeSymbol] || typeSymbol || '未指定';
+
         return {
             ...rawCourse,
             name,
             time,
+            type,
             credits: rawCourse.credits || rawCourse.credit
         };
     }, [rawCourse]);
@@ -198,103 +210,8 @@ const CourseDetail = () => {
     const [syllabus, setSyllabus] = useState(null);
 
     const addToSimulation = () => {
-        if (!course.time || course.time.length === 0) {
-            addToast('此課程無固定時間，無法加入排課模擬器', 'warning');
-            return;
-        }
-
-        try {
-            const savedIds = JSON.parse(localStorage.getItem('simulation_selectedIds') || '[]');
-            const savedData = JSON.parse(localStorage.getItem('simulation_courseData') || '{}');
-
-            if (savedIds.includes(course.id)) {
-                addToast('此課程已在排課模擬器中', 'info');
-                return;
-            }
-
-            // Helper to expand time slots
-            const expandTimeSlots = (timeData) => {
-                const slots = [];
-                if (!Array.isArray(timeData)) return slots;
-
-                timeData.forEach(t => {
-                    const parts = String(t.period).split('-');
-                    const startStr = parts[0];
-                    const endStr = parts[1] || startStr;
-
-                    const startIndex = PERIODS.findIndex(p => String(p.id) === String(startStr));
-                    const endIndex = PERIODS.findIndex(p => String(p.id) === String(endStr));
-
-                    if (startIndex !== -1 && endIndex !== -1 && startIndex <= endIndex) {
-                        for (let i = startIndex; i <= endIndex; i++) {
-                            slots.push(`${t.day}_${PERIODS[i].id}`);
-                        }
-                    } else {
-                        slots.push(`${t.day}_${t.period}`);
-                    }
-                });
-                return slots;
-            };
-
-            // Check for conflicts
-            const occupiedSlots = {}; // key -> courseName
-            Object.values(savedData).forEach(c => {
-                const slots = expandTimeSlots(c.time);
-                slots.forEach(key => {
-                    occupiedSlots[key] = c.name;
-                });
-            });
-
-            const newCourseSlots = expandTimeSlots(course.time);
-            const conflicts = new Set();
-
-            newCourseSlots.forEach(key => {
-                if (occupiedSlots[key]) {
-                    conflicts.add(occupiedSlots[key]);
-                }
-            });
-
-            if (conflicts.size > 0) {
-                addToast(`衝堂：與以下課程時間衝突，無法加入：\n${Array.from(conflicts).join('、')}`, 'error');
-                return;
-            }
-
-            // Normalize course data
-            const newCourse = { ...course };
-            if (!Array.isArray(newCourse.time)) newCourse.time = [];
-            newCourse.credit = Number(newCourse.credit ?? newCourse.credits ?? 0) || 0;
-            newCourse.credits = newCourse.credit;
-            // Ensure courseType is set for ClassSimulation compatibility
-            if (!newCourse.courseType && newCourse.type) {
-                newCourse.courseType = newCourse.type;
-            }
-
-            savedIds.push(newCourse.id);
-            savedData[newCourse.id] = newCourse;
-
-            localStorage.setItem('simulation_selectedIds', JSON.stringify(savedIds));
-            localStorage.setItem('simulation_courseData', JSON.stringify(savedData));
-
-            // Calculate credits
-            const stats = Object.values(savedData).reduce((acc, c) => {
-                const credit = (c.credit ?? c.credits ?? 0);
-                acc.total += credit;
-
-                const type = c.courseType || c.type || '';
-                if (['○', '△', '●', '▲'].some(sym => type.includes(sym)) || type.includes('必修')) {
-                    acc.required += credit;
-                } else if (['☆', '★'].some(sym => type.includes(sym)) || type.includes('選修')) {
-                    acc.elective += credit;
-                } else {
-                    acc.elective += credit;
-                }
-                return acc;
-            }, { required: 0, elective: 0, total: 0 });
-
-            addToast(`已加入排課模擬器 - 目前總學分: ${stats.total} (必修: ${stats.required}, 選修: ${stats.elective})`, 'success');
-        } catch (e) {
-            addToast('加入失敗，請稍後再試', 'error');
-        }
+        if (!course) return;
+        addCourse(course);
     };
 
     useEffect(() => {
@@ -387,7 +304,7 @@ const CourseDetail = () => {
                     </span>
                     <span className="course-detail-badge">
                         <FontAwesomeIcon icon={faStar} style={{ marginRight: '4px' }} />
-                        {course.credits} 學分
+                        {Number(course.credits).toFixed(1)} 學分
                     </span>
                 </div>
             </div>

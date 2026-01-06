@@ -206,7 +206,7 @@ const Home = ({ currentSemester }) => {
                     </div>
                     <div className="information">
                         <Icons.Star />
-                        <span>{c.credit} 學分</span>
+                        <span>{Number(c.credit || c.credits || 0).toFixed(1)} 學分</span>
                     </div>
                     <div className="information">
                         <Icons.Landmark />

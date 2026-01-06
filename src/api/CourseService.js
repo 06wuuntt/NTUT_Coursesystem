@@ -1,5 +1,69 @@
 const BASE_URL = "https://gnehs.github.io/ntut-course-crawler-node/";
 
+/**
+ * Standardize course object structure to ensure consistency across the app.
+ * This should be the single source of truth for course data shape.
+ */
+export const standardizeCourse = (rawCourse) => {
+    if (!rawCourse) return null;
+    const c = { ...rawCourse }; // Keep all original properties
+
+    // 1. ID: Ensure it's a string
+    c.id = String(c.id ?? c.courseId ?? c.code ?? '');
+
+    // 2. Name: Ensure it's a string (zh > en)
+    if (c.name && typeof c.name === 'object') {
+        c.name = c.name.zh || c.name.en || '';
+    }
+
+    // 3. Credits: Ensure it's a number
+    c.credit = Number(c.credit ?? c.credits ?? c.creditsTotal ?? 0);
+    c.credits = c.credit; // Alias
+
+    // 4. Type: Map symbols to readable text if needed, but keep original symbols too
+    const typeMap = { '○': '共同必修', '△': '共同必修', '☆': '共同選修', '●': '專業必修', '▲': '專業必修', '★': '專業選修' };
+    const typeSymbol = c.courseType || c.type || '';
+    c.type = typeMap[typeSymbol] || typeSymbol || '選修'; // Default to string if known, else '選修' or original
+    c.courseType = typeSymbol; // Keep original symbol
+
+    // 5. Teacher: Normalize to string
+    if (Array.isArray(c.teacher)) {
+        c.teacher = c.teacher.map(t => (typeof t === 'object' ? t.name : t)).join('、');
+    } else if (typeof c.teacher === 'object' && c.teacher) {
+        c.teacher = c.teacher.name || '';
+    }
+
+    // 6. Time: Normalize to [{day: 1, period: '1'}, ...]
+    if (c.time && typeof c.time === 'object' && !Array.isArray(c.time)) {
+        const times = [];
+        const dayMap = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 };
+        for (const [k, v] of Object.entries(c.time)) {
+            const dayIdx = dayMap[k.toLowerCase()] || Number(k);
+            const periods = Array.isArray(v) ? v : [v];
+            periods.forEach(p => {
+                if(dayIdx && p) times.push({ day: dayIdx, period: String(p) });
+            });
+        }
+        c.time = times;
+    } else if (!Array.isArray(c.time)) {
+        c.time = [];
+    }
+
+    // 7. Location/Classroom: Normalize to string
+    if (!c.location) {
+        if (Array.isArray(c.classroom)) {
+            c.location = c.classroom.map(r => r.name || r).join('、');
+        } else {
+            c.location = c.classroom?.name || String(c.classroom || '無教室資訊');
+        }
+    }
+        // Default to '無教室資訊' if empty, to ensure it displays on TimeTable
+    if (!c.location || c.location === 'undefined') {
+        c.location = '無教室資訊';
+    }
+        return c;
+};
+
 const convertSemesterId = (semesterId) => {
     const [year, sem] = semesterId.split('-');
     return { year, sem };

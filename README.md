@@ -57,6 +57,8 @@ src/
 │   ├── CourseDetail/ # 課程詳細頁
 │   ├── CourseStandards/# 畢業標準查詢
 │   └── Home/         # 首頁
+├── styles/           # 統一樣式
+│   ├──style.css
 ├── App.js            # 路由設定與主程式入口
 └── index.js          # 專案渲染入口
 ```

@@ -15,6 +15,7 @@ import { ROUTES } from './constants/routes';
 import { fetchSemesters } from './api/CourseService'
 import Loader from './components/ui/Loader';
 import { useToast } from './components/ui/Toast';
+import { SimulationProvider } from './context/SimulationContext';
 
 // 將所有路由包裹在 MainLayout 內
 const PageWrapper = ({ element, currentSemester, setCurrentSemester, semesterOptions }) => {
@@ -70,15 +71,17 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route path={ROUTES.find(r => r.id === 'home').path} element={<PageWrapper element={<Home />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
-        <Route path={ROUTES.find(r => r.id === 'class-schedule').path} element={<PageWrapper element={<ClassSchedule />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
-        <Route path={ROUTES.find(r => r.id === 'class-simulation').path} element={<PageWrapper element={<ClassSimulation />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
-        <Route path={ROUTES.find(r => r.id === 'calendar').path} element={<PageWrapper element={<Calendar />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
-        <Route path={ROUTES.find(r => r.id === 'standards').path} element={<PageWrapper element={<CourseStandards />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
-        <Route path={ROUTES.find(r => r.id === 'course-detail').path} element={<PageWrapper element={<CourseDetail />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
-        <Route path="*" element={<PageWrapper element={<h2>404 找不到頁面</h2>} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
-      </Routes>
+      <SimulationProvider>
+        <Routes>
+          <Route path={ROUTES.find(r => r.id === 'home').path} element={<PageWrapper element={<Home />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
+          <Route path={ROUTES.find(r => r.id === 'class-schedule').path} element={<PageWrapper element={<ClassSchedule />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
+          <Route path={ROUTES.find(r => r.id === 'class-simulation').path} element={<PageWrapper element={<ClassSimulation />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
+          <Route path={ROUTES.find(r => r.id === 'calendar').path} element={<PageWrapper element={<Calendar />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
+          <Route path={ROUTES.find(r => r.id === 'standards').path} element={<PageWrapper element={<CourseStandards />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
+          <Route path={ROUTES.find(r => r.id === 'course-detail').path} element={<PageWrapper element={<CourseDetail />} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
+          <Route path="*" element={<PageWrapper element={<h2>404 找不到頁面</h2>} currentSemester={currentSemester} setCurrentSemester={setCurrentSemester} semesterOptions={semesterOptions} />} />
+        </Routes>
+      </SimulationProvider>
     </Router>
   );
 }

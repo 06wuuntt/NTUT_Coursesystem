@@ -48,10 +48,29 @@
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     border: 1px solid #F1F5F9;
-    overflow-y: auto;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     min-width: 400px;
+}
+
+.simulation-timetable-section {
+    /* flex: 1; was causing it to stretch to fill the container height even if content was small */
+    flex-grow: 1;
+    overflow-y: auto;
+    border-bottom: 4px solid #F1F5F9;
+    position: relative;
+    min-height: 0;
+    /* Removed height: fit-content which conflicts with flex-grow */
+}
+
+.simulation-courselist-section {
+    height: 220px;
+    /* Fixed height for the list */
+    flex-shrink: 0;
+    /* Prevent shrinking */
+    overflow-y: auto;
+    background-color: #FCFCFD;
 }
 
 .simulation-header-bar {

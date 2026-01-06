@@ -28,7 +28,7 @@ const StandardSearchForm = ({
                 {loadingOptions ? (
                     <Loader />
                 ) : (
-                    <>
+                    <div>
                         <SelectInput
                             label="學程"
                             name="program"
@@ -51,7 +51,7 @@ const StandardSearchForm = ({
                                 }))}
                             disabled={!selectedYear}
                         />
-                    </>
+                    </div>
                 )}
             </div>
         </div>
