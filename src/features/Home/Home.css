@@ -7,28 +7,17 @@
     margin-bottom: 70px;
 }
 
-.home-welcome-title {
-    margin: 0;
-    font-size: 40px;
-}
-
 .home-container {
     background-color: #f2f2f2;
-    margin: 70px auto;
+    margin-top: 70px;
+    margin-bottom: 70px;
     border-radius: 30px;
     padding: 30px 50px;
-    max-width: 1200px;
 }
 
 .search-container {
     border-radius: 10px;
     margin-bottom: 20px;
-}
-
-.home-search-title {
-    color: #464646;
-    font-size: 1.5rem;
-    margin: 0 0 20px;
 }
 
 .search-part {
@@ -249,16 +238,11 @@
     .home-container {
         margin: 0;
         padding: 8px;
-        width: auto;
         background-color: #F6F7F8;
     }
 
     .home-title {
         margin-bottom: 30px;
-    }
-
-    .home-welcome-title {
-        font-size: 20px;
     }
 
     .home-title>div {

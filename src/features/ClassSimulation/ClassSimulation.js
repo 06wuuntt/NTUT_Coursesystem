@@ -366,11 +366,11 @@ const Scheduler = ({ currentSemester }) => {
     }, [resize, stopResizing]);
 
     return (
-        <div className="simulation-containers">
+        <div className="page-container simulation-containers">
             <div className="simulation-header-bar">
                 <div>
-                    <div className="simulation-title">排課模擬器</div>
-                    <div className="simulation-subtitle">
+                    <div className="page-title">排課模擬器</div>
+                    <div className="page-subtitle">
                         <span className="simulation-subtitle-desktop">拖曳左側課程至右側課表以進行模擬排課</span>
                         <span className="simulation-subtitle-mobile">加入課程來模擬課表</span>
                     </div>

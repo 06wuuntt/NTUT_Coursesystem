@@ -98,7 +98,7 @@ const SyllabusLinksSection = ({ syllabus }) => {
     if (!syllabus || syllabus.length === 0) return null;
 
     return (
-        <div className="course-detail-card" style={{ marginTop: '24px' }}>
+        <div className="content-card course-detail-card" style={{ marginTop: '24px' }}>
             <Section title="課程大綱" icon={faBook} style={{ width: '100%', borderLeft: 'none' }}>
                 {syllabus.map((item, index) => (
                     <div className="course-detail-value" key={index} style={{ marginBottom: syllabus.length > 1 ? '16px' : '0' }}>
@@ -117,7 +117,7 @@ const DetailedSyllabusSection = ({ syllabus }) => {
     if (!syllabus || syllabus.length === 0) return null;
 
     return (
-        <div className="course-detail-card" style={{ marginTop: '24px' }}>
+        <div className="content-card course-detail-card" style={{ marginTop: '24px' }}>
             <Section title="詳細課程進度與評分" icon={faListUl} style={{ width: '100%', borderLeft: 'none' }}>
                 {syllabus.map((item, index) => (
                     <div key={index} style={{ marginBottom: '24px', borderBottom: index < syllabus.length - 1 ? '1px solid #e2e8f0' : 'none', paddingBottom: index < syllabus.length - 1 ? '24px' : '0' }}>
@@ -334,7 +334,7 @@ const CourseDetail = () => {
 
     if (!course) {
         return (
-            <div className="course-detail-container">
+            <div className="page-container">
                 <div className="course-detail-not-found">
                     <h2>找不到課程資料</h2>
                     <p>請從課表頁面點擊課程卡片進入。</p>
@@ -347,14 +347,14 @@ const CourseDetail = () => {
     }
 
     return (
-        <div className="course-detail-container">
+        <div className="page-container">
             <button className="course-detail-back-btn" onClick={() => navigate(-1)}>
                 <FontAwesomeIcon icon={faArrowLeft} /> 返回列表
             </button>
 
             <div className="course-detail-header">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', justifyContent: 'space-between' }}>
-                    <h1 className="course-detail-title" style={{ marginBottom: 0 }}>{course.name}</h1>
+                    <h1 className="page-title" style={{ marginBottom: 0 }}>{course.name}</h1>
                     {course.time && course.time.length > 0 && (
                         <button
                             onClick={addToSimulation}
@@ -392,7 +392,7 @@ const CourseDetail = () => {
                 </div>
             </div>
 
-            <div className="course-detail-card">
+            <div className="content-card course-detail-card">
                 <Section title="基本資訊" icon={faInfoCircle}>
                     <div className="course-detail-grid">
                         <InfoItem label="開課班級" value={getClassName(course)} />

@@ -224,14 +224,14 @@ const Home = ({ currentSemester }) => {
     return (
         <div>
             <div className="home-title">
-                <h2 className="home-welcome-title">歡迎回到北科課程系統</h2>
+                <h2 className="page-title">歡迎回到北科課程系統</h2>
                 <div>當前學期為 {formatSemester(currentSemester)}</div>
             </div>
 
-            <div className="home-container">
+            <div className="page-container home-container">
                 {/* 課程搜尋欄位 */}
                 <div className="search-container">
-                    <h3 className="home-search-title">搜尋課程</h3>
+                    <h3 className="section-title">搜尋課程</h3>
                     <div className="mode-buttons">
                         <button
                             type="button"

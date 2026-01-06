@@ -130,12 +130,12 @@ const ClassSchedule = ({ currentSemester }) => {
 
     return (
         <div>
-            <div className="class-schedule-container">
-                <div className="class-schedule-title">班級課表</div>
-                <div className="class-schedule-subtitle">瀏覽全校所有班級開課課程，當前學期為 {formatSemester(currentSemester)}</div>
+            <div className="page-container">
+                <div className="page-title">班級課表</div>
+                <div className="page-subtitle">瀏覽全校所有班級開課課程，當前學期為 {formatSemester(currentSemester)}</div>
                 {/* 班級篩選器傳遞學期值 */}
-                <div className="class-schedule-filter-card">
-                    <h3 className="class-schedule-filter-title">選擇班級</h3>
+                <div className="content-card">
+                    <h3 className="section-title">選擇班級</h3>
                     <ClassFilter
                         onFilterChange={handleFilterChange}
                         currentSemester={currentSemester}

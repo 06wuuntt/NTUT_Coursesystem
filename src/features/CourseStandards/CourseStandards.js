@@ -105,9 +105,9 @@ const CourseStandards = ({ currentSemester, semesterOptions = [] }) => {
   const currentYearLabel = yearOptions.find(y => y.value === selectedYear)?.label || selectedYear;
 
   return (
-    <div className="course-standards-container">
-      <div className="course-standards-title">課程標準</div>
-      <div className="course-standards-subtitle">查看各系所的課程規劃與學分要求</div>
+    <div className="page-container course-standards-container">
+      <div className="page-title course-standards-title">課程標準</div>
+      <div className="page-subtitle course-standards-subtitle">查詢各系所課程畢業門檻與學分結構</div>
 
       <StandardSearchForm
         selectedYear={selectedYear}

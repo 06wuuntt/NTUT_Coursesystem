@@ -73,7 +73,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="calendar-container">
+    <div className="page-container calendar-container">
       {/* 移除原本的 h2 標題，整合到 header 中 */}
 
       {isLoading && <Loader />}

@@ -1,21 +1,7 @@
-.course-detail-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 .course-detail-header {
     margin-bottom: 32px;
     border-bottom: 1px solid #e2e8f0;
     padding-bottom: 24px;
-}
-
-.course-detail-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1e293b;
-    margin: 0 0 8px 0;
 }
 
 .course-detail-subtitle {
@@ -142,10 +128,6 @@
 }
 
 @media (max-width: 768px) {
-    .course-detail-container {
-        padding: 20px 10px;
-    }
-
     .course-detail-back-btn {
         margin-left: 15px;
         font-size: 0.9rem;
@@ -155,18 +137,8 @@
         margin-right: 15px;
     }
 
-    .course-detail-title {
-        font-size: 24px;
-        margin-left: 15px;
-    }
-
-    .course-detail-subtitle {
-        margin-left: 15px;
-    }
-
     .course-detail-card {
         flex-direction: row;
-        padding: 5px;
     }
 
     .course-detail-section {
