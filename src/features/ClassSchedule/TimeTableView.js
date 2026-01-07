@@ -144,7 +144,12 @@ const TimeTableView = ({ courses, currentSemester }) => {
                                     <div
                                         className={`time-table-course-card ${hoveredCell === key ? 'hover' : ''}`}
                                         title={`${coursesInCell[0].name} (${coursesInCell[0].location})`}
-                                        onClick={() => navigate(`/course/${coursesInCell[0].id}`, { state: { course: coursesInCell[0], semesterId: currentSemester } })}
+                                        onClick={() => navigate(`/course/${coursesInCell[0].id}`, {
+                                            state: {
+                                                course: coursesInCell[0],
+                                                semesterId: currentSemester
+                                            }
+                                        })}
                                     >
                                         <div>{coursesInCell[0].name}</div>
                                         <div className="time-table-course-location">

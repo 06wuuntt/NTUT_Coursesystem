@@ -133,7 +133,7 @@ const DetailedSyllabusSection = ({ syllabus }) => {
 
                         {item.scorePolicy && (
                             <div>
-                                <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#334155', marginBottom: '8px' }}>評分方式</h5>
+                                <h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '8px' }}>評分方式</h5>
                                 <div className="course-detail-value course-syllabus-box">
                                     {item.scorePolicy}
                                 </div>
@@ -141,7 +141,7 @@ const DetailedSyllabusSection = ({ syllabus }) => {
                         )}
                         {item.materials && (
                             <div>
-                                <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#334155', marginBottom: '8px' }}>使用教材</h5>
+                                <h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '8px' }}>使用教材</h5>
                                 <div className="course-detail-value course-syllabus-box">
                                     {item.materials}
                                 </div>
@@ -211,7 +211,12 @@ const CourseDetail = () => {
 
     const addToSimulation = () => {
         if (!course) return;
-        addCourse(course);
+        // Inject semesterId to ensure correct linkage in simulation
+        const courseWithSemester = {
+            ...course,
+            semesterId: location.state?.semesterId || '113-1'
+        };
+        addCourse(courseWithSemester);
     };
 
     useEffect(() => {

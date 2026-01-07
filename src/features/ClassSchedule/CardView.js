@@ -57,7 +57,12 @@ const SingleCard = ({ course, currentSemester }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/course/${course.id}`, { state: { course, semesterId: currentSemester } });
+        navigate(`/course/${course.id}`, {
+            state: {
+                course,
+                semesterId: currentSemester
+            }
+        });
     };
 
     return (

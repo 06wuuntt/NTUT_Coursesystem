@@ -119,6 +119,12 @@ const CourseSearchPanel = ({ addedCourseIds, currentSemester, onAddCourse }) => 
     const handleDragStart = (e, courseId, rawCourse) => {
         // Use standard ID
         const standardCourse = standardizeCourse(rawCourse);
+
+        // Inject semesterId to track origin
+        if (currentSemester) {
+            standardCourse.semesterId = currentSemester;
+        }
+
         e.dataTransfer.setData("courseId", String(standardCourse.id));
 
         try {

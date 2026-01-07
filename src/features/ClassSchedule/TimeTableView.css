@@ -205,9 +205,13 @@
 [data-theme='dark'] .time-table-course-card {
     background-color: rgba(168, 168, 168, 0.9);
     /* Lighter cards on dark bg */
-    color: #ffffff;
+    color: #464646;
 }
 
 [data-theme='dark'] .time-table-course-location {
-    color: #555;
+    color: #6b6b6ㄕb;
+}
+[data-theme='dark'] .time-table-conflict-card {
+    background-color: rgba(157, 198, 219, 0.4);
+    color: #bebebe;
 }

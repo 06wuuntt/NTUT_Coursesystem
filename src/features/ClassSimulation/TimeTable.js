@@ -205,7 +205,7 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemes
                                     }}
                                     onMouseEnter={() => setHoveredCell(key)}
                                     onMouseLeave={() => setHoveredCell(null)}
-                                    onClick={() => navigate(`/course/${course.id}`, { state: { course: course, semesterId: currentSemester } })}
+                                    onClick={() => navigate(`/course/${course.id}`, { state: { course: course, semesterId: course.semesterId || currentSemester } })}
                                     title="點擊以查看課程"
                                 >
                                     <div
