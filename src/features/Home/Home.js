@@ -225,7 +225,7 @@ const Home = ({ currentSemester }) => {
         <div>
             <div className="home-title">
                 <h2 className="page-title">歡迎回到北科課程系統</h2>
-                <div>當前學期為 {formatSemester(currentSemester)}</div>
+                <div className="page-subtitle">當前學期為 {formatSemester(currentSemester)}</div>
             </div>
 
             <div className="page-container home-container">

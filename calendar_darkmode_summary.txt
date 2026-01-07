@@ -1,0 +1,18 @@
+The calendar Dark Mode has been updated to match the "Gray Theme".
+
+### Changes Made:
+
+1.  **Calendar Container (`Calendar.css`)**:
+    *   **Main Background**: Set to **#767676** (Deep Gray).
+    *   **Title/Controls**: Set to **White** or Light Gray on Dark.
+    *   **Sidebar (Day Details)**: Set to **#ededed** (Light Gray) to match the panels in other pages.
+    *   **Sidebar Cards**: White cards with dark text (`#333`) for readability.
+
+2.  **Month Grid (`MonthView.css`)**:
+    *   **Headers (Mon-Sun)**: Set to **#555555** with White text.
+    *   **Day Cells**: Set to **#464646** (Dark Gray) to match the Timetable view.
+    *   **Grid Lines**: Using `#757575` borders.
+    *   **Other Month Days**: Darker gray (`#383838`) to indicate inactive status.
+    *   **Event Modal**: Popups are styled with **#ededed** background and dark text, consistent with search results and other cards.
+
+This brings the Calendar feature in line with the "Deep Gray Container + Light Gray Panel" aesthetic used in the Class Schedule and Simulation pages.

@@ -348,7 +348,6 @@
     .course-th:nth-child(1) {
         width: 24px;
         flex-shrink: 0;
-        color: #64748B;
     }
 
     .course-table td:nth-child(1)::after {
@@ -360,7 +359,6 @@
     .course-th:nth-child(2) {
         width: 24px;
         flex-shrink: 0;
-        color: #64748B;
     }
 
     .course-table td:nth-child(2)::after {
@@ -384,7 +382,6 @@
     .course-th:nth-child(4) {
         flex: 1;
         font-weight: 600;
-        color: #1E293B;
         font-size: 0.8rem;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -400,7 +397,6 @@
         width: 32px;
         flex-shrink: 0;
         font-weight: 700;
-        color: #334155;
     }
 
     .course-table td:nth-child(5)::after {
@@ -411,5 +407,122 @@
     .course-table td:nth-child(6),
     .course-th:nth-child(6) {
         display: none;
+    }
+}
+
+/* Dark Mode - Gray Theme Overrides */
+[data-theme='dark'] .standard-results {
+    background-color: #767676;
+    /* Deep Gray Container */
+    color: #ffffff;
+}
+
+[data-theme='dark'] .standard-results-title {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .standard-results-subtitle {
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .section-title {
+    color: #ffffff;
+}
+
+/* Summary Cards */
+[data-theme='dark'] .summary-card {
+    background-color: #555555;
+    /* Darker container */
+    border: none;
+}
+
+[data-theme='dark'] .summary-item {
+    background-color: #444444;
+    /* Dark Card */
+    color: #ffffff;
+    border-color: #666;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .summary-label {
+    color: #b0b0b0;
+}
+
+[data-theme='dark'] .summary-value {
+    color: #ffffff;
+}
+
+/* Rule Items */
+[data-theme='dark'] .rule-item {
+    background-color: #4a4a4a;
+    color: #e0e0e0;
+    border-color: #666;
+}
+
+/* Course Group Tables */
+[data-theme='dark'] .course-group-card {
+    border-color: #555;
+    background-color: #4a4a4a;
+    /* Dark Table Container */
+}
+
+[data-theme='dark'] .course-group-header {
+    background-color: #555555;
+    /* Dark Header */
+    color: #ffffff;
+    border-bottom-color: #666;
+}
+
+[data-theme='dark'] .course-group-title {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .course-group-count {
+    background-color: #666;
+    color: #fff;
+}
+
+/* Table Rows */
+[data-theme='dark'] .course-table {
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .course-th {
+    background-color: #555555;
+    color: #ffffff;
+    border-bottom-color: #666;
+}
+
+[data-theme='dark'] .course-td {
+    border-bottom-color: #555;
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .course-row-even {
+    background-color: #444444;
+}
+
+[data-theme='dark'] .course-row-odd {
+    background-color: #4a4a4a;
+}
+
+/* Mobile Specific for Table */
+@media (max-width: 768px) {
+    [data-theme='dark'] .standard-results {
+        background-color: transparent;
+    }
+
+    [data-theme='dark'] .course-table thead tr {
+        background-color: #555555;
+        border-bottom-color: #666;
+    }
+
+    [data-theme='dark'] .course-table tbody tr {
+        border-bottom-color: #666;
+    }
+
+    [data-theme='dark'] .course-table td:nth-child(4),
+    [data-theme='dark'] .course-th:nth-child(4) {
+        color: #ffffff;
     }
 }

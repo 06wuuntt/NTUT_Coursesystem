@@ -173,3 +173,78 @@
     padding: 40px 20px;
     font-size: 0.9rem;
 }
+
+[data-theme='dark'] .simulation-search-input {
+    background-color: #ededed;
+    color: #333333;
+    border: none;
+}
+
+[data-theme='dark'] .simulation-search-course-item {
+    background-color: #c4c4c4;
+    /* Gray card */
+    color: #333333;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .simulation-search-icon {
+    color: #666;
+}
+
+[data-theme='dark'] .simulation-search-course-item:hover {
+    background-color: #e0e0e0;
+}
+
+[data-theme='dark'] .simulation-search-added-badge {
+    background-color: #d1d1d1;
+    color: #555;
+}
+
+[data-theme='dark'] .simulation-search-container {
+    background-color: #767676;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.simulation-section-title {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #1E293B;
+}
+
+.simulation-selected-item-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+    color: #1e293b;
+}
+
+.simulation-selected-item-info {
+    font-size: 0.85rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+[data-theme='dark'] .simulation-section-title {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .simulation-selected-item-title {
+    color: #333333;
+}
+
+[data-theme='dark'] .simulation-selected-item-info {
+    color: #555555;
+}
+
+[data-theme='dark'] .simulation-selected-title {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .simulation-search-add-button {
+    background-color: #767676;
+    color: #ffffff;
+}

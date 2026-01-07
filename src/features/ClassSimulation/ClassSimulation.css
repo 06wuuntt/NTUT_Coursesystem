@@ -375,3 +375,30 @@
         font-size: 1.1rem;
     }
 }
+
+/* Dark Mode - Gray Theme Overrides */
+[data-theme='dark'] .simulation-container {
+    background-color: transparent;
+}
+
+/* Dark Mode - Gray Theme Overrides */
+[data-theme='dark'] .simulation-container {
+    background-color: transparent;
+}
+
+/* Dark Mode - Gray Theme Overrides */
+[data-theme='dark'] .simulation-right-panel {
+    background-color: transparent;
+    /* Remove white bg */
+    border: none;
+    box-shadow: none;
+}
+
+[data-theme='dark'] .simulation-courselist-section {
+    background-color: #767676;
+}
+
+[data-theme='dark'] .simulation-credit-display {
+    background-color: #767676;
+    color: #ffffff;
+}

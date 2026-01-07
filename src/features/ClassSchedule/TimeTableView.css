@@ -161,3 +161,53 @@
         margin-top: 2px;
     }
 }
+
+/* Dark Mode Overrides */
+[data-theme='dark'] .time-table-container {
+    background-color: #1e1e1e;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .time-table-grid {
+    background-color: #333;
+}
+
+[data-theme='dark'] .time-table-header-cell,
+[data-theme='dark'] .time-table-time-cell {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+/* Dark Mode - Gray Theme - Override previous Dark Settings */
+[data-theme='dark'] .time-table-container {
+    background-color: #767676;
+    /* Deep Gray Block - User Request */
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .time-table-grid {
+    background-color: #757575;
+    /* Dark Grid Lines */
+}
+
+[data-theme='dark'] .time-table-header-cell,
+[data-theme='dark'] .time-table-time-cell {
+    background-color: #555555;
+    /* Medium Gray Headers */
+    color: #ffffff;
+}
+
+[data-theme='dark'] .time-table-course-cell {
+    background-color: #464646;
+}
+
+[data-theme='dark'] .time-table-course-card {
+    background-color: rgba(168, 168, 168, 0.9);
+    /* Lighter cards on dark bg */
+    color: #ffffff;
+}
+
+[data-theme='dark'] .time-table-course-location {
+    color: #555;
+}

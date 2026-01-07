@@ -100,11 +100,13 @@ const Scheduler = ({ currentSemester }) => {
                         // 2. Adjust Grid Column Widths for Mobile
                         const grid = clonedDoc.querySelector('.simulation-timetable-grid-container');
                         if (grid) {
-                            // Shrink the time column to 25px by replacing the hardcoded 60px
-                            // Note: We access the inline style directly or computed style if needed.
-                            // Since TimeTable.js writes inline gridTemplateColumns, we can modify it.
+                            // Shrink the time column to 20px (User requested smaller width)
+                            // We set the CSS variable to ensure it overrides any media query defaults
+                            grid.style.setProperty('--time-col-width', '20px');
+
+                            // Also update the fallback in the inline style just in case
                             if (grid.style.gridTemplateColumns) {
-                                grid.style.gridTemplateColumns = grid.style.gridTemplateColumns.replace('60px', '25px');
+                                grid.style.gridTemplateColumns = grid.style.gridTemplateColumns.replace('60px', '20px');
                             }
                             grid.style.gap = '1px';
                             grid.style.padding = '1px';

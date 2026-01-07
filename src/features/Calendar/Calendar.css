@@ -174,3 +174,54 @@
         max-height: 200px;
     }
 }
+
+/* Dark Mode - Gray Theme Overrides */
+[data-theme='dark'] .calendar-container {
+    background-color: #767676;
+    /* Main Container Deep Gray */
+    border-color: #666;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .calendar-title {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .calendar-nav-button {
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .calendar-nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+[data-theme='dark'] .calendar-sidebar {
+    background-color: #555555;
+    /* Dark Gray to match container/Simulation */
+    border-color: #666;
+}
+
+[data-theme='dark'] .calendar-sidebar-title {
+    color: #ffffff;
+    border-bottom-color: #999;
+}
+
+[data-theme='dark'] .calendar-upcoming-event {
+    background-color: #a1a1a1;
+    /* Light Gray cards on Dark Gray bg */
+    border: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .calendar-event-date {
+    color: #555555;
+}
+
+[data-theme='dark'] .calendar-event-desc {
+    color: #333333;
+}
+
+[data-theme='dark'] .calendar-empty-state {
+    color: #e0e0e0;
+}

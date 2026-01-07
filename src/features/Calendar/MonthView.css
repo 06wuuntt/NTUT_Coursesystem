@@ -218,3 +218,71 @@
         font-size: 0.8rem;
     }
 }
+/* Dark Mode - Gray Theme Overrides */
+[data-theme='dark'] .month-view-grid {
+    background-color: #757575; /* Border lines */
+    border-color: #555;
+    gap: 1px; /* Ensure gap shows the background/border color */
+}
+
+[data-theme='dark'] .month-view-day-header {
+    background-color: #555555; /* Header Gray */
+    color: #ffffff;
+    border-color: #444;
+    border-right-color: #444;
+}
+
+[data-theme='dark'] .month-view-day-cell {
+    background-color: #464646; /* Cell Dark Gray */
+    border-color: #555;
+    border-bottom: 1px solid #555;
+    border-right: 1px solid #555;
+}
+
+[data-theme='dark'] .month-view-date-num {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .month-view-other-month {
+    background-color: #383838; /* Even Darker for non-active */
+    color: #777;
+}
+
+[data-theme='dark'] .month-view-weekend {
+    background-color: #424242; /* Slightly different for weekend */
+}
+
+[data-theme='dark'] .month-view-grid> :nth-child(7n),
+[data-theme='dark'] .month-view-grid> :nth-last-child(-n+7) {
+    /* Re-apply border removal logic if needed, but grid gap usually handles this in modern CSS */
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+}
+
+/* Modal Popup */
+[data-theme='dark'] .month-view-modal-content {
+    background-color: #ededed; /* Light Gray Card */
+    color: #333333;
+}
+
+[data-theme='dark'] .month-view-modal-title {
+    color: #333333;
+}
+
+[data-theme='dark'] .month-view-close-button {
+    color: #666;
+}
+
+[data-theme='dark'] .month-view-info-label {
+    color: #444;
+}
+
+[data-theme='dark'] .month-view-info-value {
+    color: #333;
+}
+
+/* Adjust event pills if too bright */
+[data-theme='dark'] .month-view-event {
+    opacity: 0.9;
+}
+

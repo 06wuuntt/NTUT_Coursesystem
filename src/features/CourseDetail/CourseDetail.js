@@ -102,7 +102,7 @@ const SyllabusLinksSection = ({ syllabus }) => {
                 {syllabus.map((item, index) => (
                     <div className="course-detail-value" key={index} style={{ marginBottom: syllabus.length > 1 ? '16px' : '0' }}>
                         {syllabus.length > 1 && <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{item.name}</div>}
-                        <div style={{ lineHeight: '1.6', color: '#334155', whiteSpace: 'pre-wrap' }}>
+                        <div style={{ lineHeight: '1.6', whiteSpace: 'pre-wrap', fontWeight: '400' }}>
                             {item.objective}
                         </div>
                     </div>
@@ -120,12 +120,12 @@ const DetailedSyllabusSection = ({ syllabus }) => {
             <Section title="詳細課程進度與評分" icon={faListUl} style={{ width: '100%', borderLeft: 'none' }}>
                 {syllabus.map((item, index) => (
                     <div key={index} style={{ marginBottom: '24px', borderBottom: index < syllabus.length - 1 ? '1px solid #e2e8f0' : 'none', paddingBottom: index < syllabus.length - 1 ? '24px' : '0' }}>
-                        <h4 style={{ marginBottom: '12px', color: '#475569' }}>{item.name ? `授課教師：${item.name}` : `${index + 1}`} {item.email}</h4>
+                        <h4 style={{ marginBottom: '12px' }}>{item.name ? `授課教師：${item.name}` : `${index + 1}`} {item.email}</h4>
 
                         {item.schedule && (
                             <div style={{ marginBottom: '16px' }}>
-                                <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#334155', marginBottom: '8px' }}>課程進度</h5>
-                                <div className="course-detail-value" style={{ lineHeight: '1.6', color: '#475569', whiteSpace: 'pre-wrap', backgroundColor: '#f8fafc', padding: '12px', borderRadius: '8px' }}>
+                                <h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '8px' }}>課程進度</h5>
+                                <div className="course-detail-value course-syllabus-box">
                                     {item.schedule}
                                 </div>
                             </div>
@@ -134,7 +134,7 @@ const DetailedSyllabusSection = ({ syllabus }) => {
                         {item.scorePolicy && (
                             <div>
                                 <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#334155', marginBottom: '8px' }}>評分方式</h5>
-                                <div className="course-detail-value" style={{ lineHeight: '1.6', color: '#475569', whiteSpace: 'pre-wrap', backgroundColor: '#f8fafc', padding: '12px', borderRadius: '8px' }}>
+                                <div className="course-detail-value course-syllabus-box">
                                     {item.scorePolicy}
                                 </div>
                             </div>
@@ -142,7 +142,7 @@ const DetailedSyllabusSection = ({ syllabus }) => {
                         {item.materials && (
                             <div>
                                 <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#334155', marginBottom: '8px' }}>使用教材</h5>
-                                <div className="course-detail-value" style={{ lineHeight: '1.6', color: '#475569', whiteSpace: 'pre-wrap', backgroundColor: '#f8fafc', padding: '12px', borderRadius: '8px' }}>
+                                <div className="course-detail-value course-syllabus-box">
                                     {item.materials}
                                 </div>
                             </div>

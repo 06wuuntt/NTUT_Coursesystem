@@ -17,3 +17,32 @@
         padding: 50px 10px 0;
     }
 }
+
+/* Dark Mode - Gray Theme Overrides */
+[data-theme='dark'] .course-standards-container {
+    background-color: transparent;
+    /* Assuming parent page background handles it, or no container bg needed */
+}
+
+/* If there are specific result cards in Course Standards */
+[data-theme='dark'] .standard-results-container {
+    background-color: #ededed;
+    color: #333;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .standard-result-item {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #d1d1d1;
+}
+
+[data-theme='dark'] .standard-group-title {
+    color: #333;
+}
+
+[data-theme='dark'] .standard-result-header {
+    background-color: #e0e0e0;
+    color: #333;
+}

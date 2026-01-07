@@ -91,3 +91,109 @@
         padding: 8px 12px;
     }
 }
+
+@media (max-width: 425px) {
+    .select-input-button {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+}
+/* Dark Mode Overrides */
+[data-theme='dark'] .select-input-button {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .select-input-button:hover:not(:disabled) {
+    background-color: #3d3d3d;
+}
+
+[data-theme='dark'] .select-input-dropdown {
+    background-color: #252525;
+    border: 1px solid #444;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .select-input-item {
+    background-color: #252525;
+    color: #e0e0e0;
+    border-bottom: 1px solid #444;
+}
+
+[data-theme='dark'] .select-input-item:hover {
+    background-color: #3d3d3d;
+}
+
+[data-theme='dark'] .select-input-item.active {
+    background-color: #404040;
+    color: #fff;
+}
+
+/* Dark Mode - Pill Style Override for SelectInput */
+[data-theme='dark'] .select-input-button {
+    background-color: #ededed; /* Very Light Gray/White Pill */
+    color: #333333; /* Dark Text */
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+[data-theme='dark'] .select-input-button:hover:not(:disabled) {
+    background-color: #ffffff;
+}
+
+[data-theme='dark'] .select-input-dropdown {
+    background-color: #ffffff;
+    border: 1px solid #d1d1d1;
+    color: #333333;
+    margin-top: 6px;
+}
+
+[data-theme='dark'] .select-input-item {
+    background-color: #ffffff;
+    color: #333333;
+    border-bottom: 1px solid #eeeeee;
+}
+
+[data-theme='dark'] .select-input-item:hover {
+    background-color: #f2f2f2;
+}
+
+[data-theme='dark'] .select-input-item.active {
+    background-color: #e0e0e0;
+    color: #000;
+}
+
+/* Dark Mode - Pill Style Override for SelectInput */
+[data-theme='dark'] .select-input-button {
+    background-color: #ededed; /* Very Light Gray/White Pill */
+    color: #333333; /* Dark Text */
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+[data-theme='dark'] .select-input-button:hover:not(:disabled) {
+    background-color: #ffffff;
+}
+
+[data-theme='dark'] .select-input-dropdown {
+    background-color: #ffffff;
+    border: 1px solid #d1d1d1;
+    color: #333333;
+    border-radius: 12px;
+    margin-top: 6px;
+}
+
+[data-theme='dark'] .select-input-item {
+    background-color: #ffffff;
+    color: #333333;
+    border-bottom: 1px solid #eeeeee;
+}
+
+[data-theme='dark'] .select-input-item:hover {
+    background-color: #f2f2f2;
+}
+
+[data-theme='dark'] .select-input-item.active {
+    background-color: #e0e0e0;
+    color: #000;
+}

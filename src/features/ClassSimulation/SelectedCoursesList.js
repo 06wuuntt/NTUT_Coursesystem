@@ -59,7 +59,7 @@ const SelectedCoursesList = ({ addedCoursesData = {}, onRemoveCourse, onClearAll
     return (
         <div style={{ padding: '20px', borderTop: '1px solid #F1F5F9' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
-                <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#1E293B' }}>已選課程 ({courses.length})</h3>
+                <h3 className="simulation-selected-title">已選課程 ({courses.length})</h3>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <button
                         onClick={onClearAll}
@@ -143,21 +143,10 @@ const SelectedCoursesList = ({ addedCoursesData = {}, onRemoveCourse, onClearAll
                             }}
                         >
                             <div style={{ flex: 1, minWidth: 0, marginRight: '12px' }}>
-                                <div style={{
-                                    fontWeight: '600',
-                                    fontSize: '0.95rem',
-                                    marginBottom: '2px',
-                                    color: '#1e293b'
-                                }}>
+                                <div className="simulation-selected-item-title">
                                     {title}
                                 </div>
-                                <div style={{
-                                    fontSize: '0.85rem',
-                                    color: '#64748b',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis'
-                                }}>
+                                <div className="simulation-selected-item-info">
                                     {teacher} / {Number(credits).toFixed(1)} 學分
                                 </div>
                             </div>

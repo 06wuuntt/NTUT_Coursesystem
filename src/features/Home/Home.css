@@ -241,6 +241,8 @@
         background-color: #F6F7F8;
     }
 
+    /* Moved dark theme override to bottom of file to ensure precedence */
+
     .home-title {
         margin-bottom: 30px;
     }
@@ -341,5 +343,131 @@
     .home-pagination-button {
         font-size: 13px;
         padding: 6px 10px;
+    }
+}
+
+/* Dark Mode Overrides */
+[data-theme='dark'] .home-container {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .search-input {
+    background-color: #2d2d2d;
+    color: #fff;
+    border: 1px solid #555;
+    outline: none;
+}
+
+[data-theme='dark'] .mode-buttons {
+    background-color: #2d2d2d;
+    box-shadow: inset 0px 0px 8px #1a1a1a;
+}
+
+[data-theme='dark'] .mode-button {
+    color: #a0a0a0;
+}
+
+[data-theme='dark'] .mode-button-active {
+    background-color: #3d3d3d;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .search-button {
+    background-color: #C3E6F5;
+    color: #fff;
+}
+
+/* Dark Mode Refinements - User Requested Gray Theme */
+
+/* Container Background - Medium Dark Gray */
+[data-theme='dark'] .home-container {
+    background-color: #757575;
+    color: #ffffff;
+    border: none;
+}
+
+/* Titles - White */
+[data-theme='dark'] .section-title,
+[data-theme='dark'] .home-section-label,
+[data-theme='dark'] .home-search-title {
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Search Section - Light/White Theme on Dark Bg */
+[data-theme='dark'] .mode-buttons {
+    background-color: #E0E0E0;
+    box-shadow: none;
+    gap: 8px;
+}
+
+[data-theme='dark'] .mode-button {
+    background-color: #e0e0e0;
+    color: #555555;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    font-weight: 600;
+}
+
+[data-theme='dark'] .mode-button-active {
+    background-color: #ffffff;
+    color: #333333;
+}
+
+[data-theme='dark'] .search-input {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 30px;
+    /* Pill shape */
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .search-button {
+    background-color: #aed9e0;
+    /* Light Pastel Blue */
+    color: #2c5282;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Cards - Light Gray with Blue Accents */
+[data-theme='dark'] .card {
+    background-color: #e0e0e0;
+    /* Light Gray Card */
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .card-title {
+    color: #333333;
+}
+
+[data-theme='dark'] .card-id {
+    background-color: #90cdf4;
+    /* Blue Pill */
+    color: #1a365d;
+    font-weight: bold;
+}
+
+[data-theme='dark'] .information,
+[data-theme='dark'] .information span {
+    color: #555555;
+}
+
+[data-theme='dark'] .icon-svg {
+    color: #718096;
+}
+
+[data-theme='dark'] .divider {
+    background-color: #cbd5e0;
+}
+
+@media (max-width: 768px) {
+    [data-theme='dark'] .home-container {
+        background-color: transparent !important;
+        border: none;
+        box-shadow: none;
     }
 }

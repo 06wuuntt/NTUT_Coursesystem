@@ -122,7 +122,7 @@ const Calendar = () => {
                         key={index}
                         className="calendar-upcoming-event"
                       >
-                        <div className="calendar-event-desc" style={{ fontWeight: '600', marginBottom: '6px', color: '#334155' }}>{event.description}</div>
+                        <div className="calendar-event-desc" style={{ fontWeight: '600', marginBottom: '6px'}}>{event.description}</div>
                         <div className="calendar-event-date">
                           {isSingleDay ? event.date : `${event.date} ~ ${actualEndStr}`}
                         </div>

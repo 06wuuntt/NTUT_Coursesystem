@@ -63,6 +63,14 @@
     gap: 15px;
 }
 
+.main-layout-buttons {
+    display: flex;
+    flex-direction: row;
+    order: 3;
+    align-items: center;
+    gap: 8px;
+}
+
 .main-layout-semester-select {
     width: 150px;
     order: 3;
@@ -88,6 +96,17 @@
     /* Added top padding to clear fixed nav */
     flex: 1;
     animation: global-fadein 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.main-layout-theme-toggle {
+    background: none;
+    border: none;
+    color: #464646;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
 }
 
 @keyframes global-fadein {
@@ -134,7 +153,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 1070px) {
     .main-layout-link {
         font-size: 14px;
         padding: 6px 4px;
@@ -145,7 +164,7 @@
     }
 }
 
-@media (max-width: 855px) {
+@media (max-width: 880px) {
     .main-layout-nav {
         gap: 0 8px;
         justify-content: stretch;
@@ -284,6 +303,7 @@
     .main-layout-hamburger {
         display: block;
         order: 3;
+        padding: 0px;
     }
 
     .main-layout-nav-links {
@@ -319,4 +339,66 @@
         justify-content: center;
         font-size: 12px;
     }
+
+    .main-layout-buttons {
+        gap: 3px;
+    }
+
+    .main-layout-theme-toggle {
+        padding: 2px;
+    }
+}
+
+/* Dark Mode Nav Overrides */
+[data-theme='dark'] .main-layout-nav {
+    background-color: #363636;
+    box-shadow: 8px 8px 30px #4d4c4c;
+}
+
+[data-theme='dark'] .main-layout-title {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .main-layout-link {
+    color: #b0b0b0;
+}
+
+[data-theme='dark'] .main-layout-link:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+[data-theme='dark'] .main-layout-theme-toggle {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .main-layout-footer {
+    background-color: #363636;
+}
+
+[data-theme='dark'] .main-layout-footer-link {
+    background-color: #464646;
+    color: #C3E6F5;
+}
+
+.main-layout-footer-copyright {
+    margin: 0;
+    color: #41809E;
+}
+
+[data-theme='dark'] .main-layout-footer-copyright {
+    color: #C3E6F5;
+}
+
+.main-layout-footer-title {
+    color: #464646;
+    margin: 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #dfdfdf;
+    font-size: 16px;
+}
+
+[data-theme='dark'] .main-layout-footer-title {
+    color: #ffffff;
+    border-bottom: 1px solid #B4B4B4;
 }

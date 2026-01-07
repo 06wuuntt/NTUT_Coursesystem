@@ -132,3 +132,17 @@
         font-size: 0.85rem;
     }
 }
+/* Card View Item Style */
+[data-theme='dark'] .card-view-card {
+    background-color: #757575;
+    border: none;
+}
+
+[data-theme='dark'] .card-view-title {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .card-view-id,
+[data-theme='dark'] .card-view-info {
+    color: #dddddd;
+}

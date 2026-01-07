@@ -41,7 +41,7 @@ export const standardizeCourse = (rawCourse) => {
             const dayIdx = dayMap[k.toLowerCase()] || Number(k);
             const periods = Array.isArray(v) ? v : [v];
             periods.forEach(p => {
-                if(dayIdx && p) times.push({ day: dayIdx, period: String(p) });
+                if (dayIdx && p) times.push({ day: dayIdx, period: String(p) });
             });
         }
         c.time = times;
@@ -57,11 +57,11 @@ export const standardizeCourse = (rawCourse) => {
             c.location = c.classroom?.name || String(c.classroom || '無教室資訊');
         }
     }
-        // Default to '無教室資訊' if empty, to ensure it displays on TimeTable
+    // Default to '無教室資訊' if empty, to ensure it displays on TimeTable
     if (!c.location || c.location === 'undefined') {
         c.location = '無教室資訊';
     }
-        return c;
+    return c;
 };
 
 const convertSemesterId = (semesterId) => {

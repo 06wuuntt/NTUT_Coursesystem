@@ -76,3 +76,11 @@
         padding: 16px;
     }
 }
+
+[data-theme='dark'] .page-title {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .page-subtitle {
+    color: #ffffff;
+}

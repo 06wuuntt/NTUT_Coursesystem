@@ -46,3 +46,8 @@ body {
         transform: none;
     }
 }
+/* Dark Mode Support */
+[data-theme='dark'] body {
+    background-color: #464646;
+    color: #e0e0e0;
+}
