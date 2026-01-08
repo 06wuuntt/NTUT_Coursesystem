@@ -9,7 +9,6 @@
 
 .simulation-timetable-grid-container {
     display: grid;
-    /* Define default column width variable */
     --time-col-width: 60px;
     grid-template-columns: var(--time-col-width) repeat(6, 1fr);
     gap: 2px;
@@ -101,7 +100,6 @@
 .simulation-timetable-course-name {
     margin-bottom: 2px;
     width: 100%;
-    /* Allowed wrapping for auto height */
     overflow: visible;
     text-overflow: clip;
     white-space: normal;
@@ -112,7 +110,6 @@
     font-size: 0.75em;
     opacity: 0.8;
     white-space: normal;
-    /* Allowed wrapping */
     overflow: visible;
     text-overflow: clip;
     max-width: 100%;
@@ -124,14 +121,12 @@
         padding: 2px;
         width: 100%;
         overflow-x: hidden;
-        /* Prevent horizontal scroll, force fit */
         display: block;
     }
 
     .simulation-timetable-grid-container {
         min-width: auto;
         width: 100%;
-        /* Mobile: smaller time column */
         --time-col-width: 30px;
         grid-template-columns: var(--time-col-width) repeat(auto-fit, minmax(10px, 1fr));
         gap: 1px;
@@ -164,100 +159,38 @@
     }
 }
 
-/* Dark Mode Overrides */
-[data-theme='dark'] .simulation-timetable-container {
-    background-color: #1e1e1e;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme='dark'] .simulation-timetable-grid-container {
-    background-color: #333;
-}
-
-[data-theme='dark'] .simulation-timetable-header-cell,
-[data-theme='dark'] .simulation-timetable-time-cell {
-    background-color: #2d2d2d;
-    color: #e0e0e0;
-}
-
-[data-theme='dark'] .simulation-timetable-course-cell {
-    background-color: #1e1e1e;
-}
-
-[data-theme='dark'] .simulation-timetable-course-card {
-    background-color: rgba(60, 60, 60, 0.8);
-    color: #e0e0e0;
-}
-
-[data-theme='dark'] .simulation-timetable-course-card:hover {
-    background-color: rgba(80, 80, 80, 0.9);
-}
-
-/* Dark Mode - Gray Theme Overrides */
-[data-theme='dark'] .simulation-timetable-container {
-    background-color: #757575;
-    /* Dark Gray Container */
-    color: #ffffff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme='dark'] .simulation-timetable-grid-container {
-    background-color: #333;
-    /* Dark Grid Lines */
-}
-
-[data-theme='dark'] .simulation-timetable-header-cell,
-[data-theme='dark'] .simulation-timetable-time-cell {
-    background-color: #555555;
-    /* Medium Gray Header */
-    color: #ffffff;
-}
-
-[data-theme='dark'] .simulation-timetable-course-cell {
-    background-color: #757575;
-    /* Match container */
-}
-
-[data-theme='dark'] .simulation-timetable-course-card {
-    background-color: rgba(255, 255, 255, 0.9);
-    /* Light card */
-    color: #333333;
-    backdrop-filter: none;
-}
-
-/* Dark Mode - Gray Theme Overrides */
 [data-theme='dark'] .simulation-timetable-section {
     border-bottom: none;
 }
 
 [data-theme='dark'] .simulation-timetable-container {
     background-color: #767676;
-    /* Deep Gray Block - User Request */
     color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 [data-theme='dark'] .simulation-timetable-grid-container {
     background-color: #757575;
-    /* Dark Grid Lines */
 }
 
 [data-theme='dark'] .simulation-timetable-header-cell,
 [data-theme='dark'] .simulation-timetable-time-cell {
     background-color: #555555;
-    /* Medium Gray Headers */
     color: #ffffff;
 }
 
 [data-theme='dark'] .simulation-timetable-course-cell {
     background-color: #464646;
-    /* Empty Cells */
 }
 
 [data-theme='dark'] .simulation-timetable-course-card {
     background-color: rgba(168, 168, 168, 0.9);
     color: #ffffff;
     backdrop-filter: none;
+}
+
+[data-theme='dark'] .simulation-timetable-course-card:hover {
+    background-color: rgba(80, 80, 80, 0.9);
 }
 
 [data-theme='dark'] .simulation-timetable-course-location {

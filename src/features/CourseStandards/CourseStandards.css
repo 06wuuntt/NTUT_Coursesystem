@@ -18,13 +18,10 @@
     }
 }
 
-/* Dark Mode - Gray Theme Overrides */
 [data-theme='dark'] .course-standards-container {
     background-color: transparent;
-    /* Assuming parent page background handles it, or no container bg needed */
 }
 
-/* If there are specific result cards in Course Standards */
 [data-theme='dark'] .standard-results-container {
     background-color: #ededed;
     color: #333;

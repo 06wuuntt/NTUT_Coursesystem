@@ -299,7 +299,6 @@
         font-size: 0.9rem;
     }
 
-    /* Compact List View for Mobile */
     .course-table thead {
         display: block;
     }
@@ -343,7 +342,6 @@
         white-space: nowrap;
     }
 
-    /* Column 1: Year */
     .course-table td:nth-child(1),
     .course-th:nth-child(1) {
         width: 24px;
@@ -354,7 +352,6 @@
         content: "";
     }
 
-    /* Column 2: Sem */
     .course-table td:nth-child(2),
     .course-th:nth-child(2) {
         width: 24px;
@@ -365,7 +362,6 @@
         content: "";
     }
 
-    /* Column 3: Type */
     .course-table td:nth-child(3),
     .course-th:nth-child(3) {
         width: 70px;
@@ -377,7 +373,6 @@
         font-size: 0.65rem;
     }
 
-    /* Column 4: Name */
     .course-table td:nth-child(4),
     .course-th:nth-child(4) {
         flex: 1;
@@ -391,7 +386,6 @@
         justify-content: flex-start;
     }
 
-    /* Column 5: Credit */
     .course-table td:nth-child(5),
     .course-th:nth-child(5) {
         width: 32px;
@@ -403,17 +397,14 @@
         content: "";
     }
 
-    /* Column 6: Hours - Remove */
     .course-table td:nth-child(6),
     .course-th:nth-child(6) {
         display: none;
     }
 }
 
-/* Dark Mode - Gray Theme Overrides */
 [data-theme='dark'] .standard-results {
     background-color: #767676;
-    /* Deep Gray Container */
     color: #ffffff;
 }
 
@@ -429,16 +420,13 @@
     color: #ffffff;
 }
 
-/* Summary Cards */
 [data-theme='dark'] .summary-card {
     background-color: #555555;
-    /* Darker container */
     border: none;
 }
 
 [data-theme='dark'] .summary-item {
     background-color: #444444;
-    /* Dark Card */
     color: #ffffff;
     border-color: #666;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -452,23 +440,19 @@
     color: #ffffff;
 }
 
-/* Rule Items */
 [data-theme='dark'] .rule-item {
     background-color: #4a4a4a;
     color: #e0e0e0;
     border-color: #666;
 }
 
-/* Course Group Tables */
 [data-theme='dark'] .course-group-card {
     border-color: #555;
     background-color: #4a4a4a;
-    /* Dark Table Container */
 }
 
 [data-theme='dark'] .course-group-header {
     background-color: #555555;
-    /* Dark Header */
     color: #ffffff;
     border-bottom-color: #666;
 }
@@ -482,7 +466,6 @@
     color: #fff;
 }
 
-/* Table Rows */
 [data-theme='dark'] .course-table {
     color: #e0e0e0;
 }
@@ -506,7 +489,6 @@
     background-color: #4a4a4a;
 }
 
-/* Mobile Specific for Table */
 @media (max-width: 768px) {
     [data-theme='dark'] .standard-results {
         background-color: transparent;

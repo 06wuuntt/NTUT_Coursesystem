@@ -56,24 +56,20 @@
 
 .simulation-timetable-section {
     flex-grow: 1;
-    /* Was 0, restored to 1 but with min-height */
     flex-shrink: 1;
     overflow-y: auto;
     border-bottom: 4px solid #F1F5F9;
     position: relative;
     min-height: 600px;
-    /* Increased from 300px to ensure it doesn't feel too short */
 }
 
 .simulation-courselist-section {
     min-height: 220px;
     flex-grow: 0;
-    /* Changed from 1 to 0 to prioritize timetable height */
     flex-shrink: 0;
     overflow-y: auto;
     background-color: #FCFCFD;
     max-height: 40%;
-    /* Prevent it from taking too much space */
 }
 
 .simulation-header-bar {

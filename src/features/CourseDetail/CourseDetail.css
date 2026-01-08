@@ -169,9 +169,8 @@
     }
 }
 
-/* Dark Mode Overrides */
 [data-theme='dark'] .course-detail-header {
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #555;
 }
 
 [data-theme='dark'] .course-detail-subtitle {
@@ -194,11 +193,9 @@
     border-top-color: #333;
 }
 
-/* Dark Mode - Gray Theme Overrides */
 [data-theme='dark'] .content-card.course-detail-card,
 [data-theme='dark'] .course-detail-card {
     background-color: #444444;
-    /* Dark Card */
     border: 1px solid #555;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     color: #ffffff;
@@ -230,10 +227,6 @@
     border-top-color: #555;
 }
 
-[data-theme='dark'] .course-detail-header {
-    border-bottom: 1px solid #555;
-}
-
 [data-theme='dark'] .course-detail-back-btn {
     color: #e0e0e0;
 }
@@ -244,6 +237,5 @@
 
 [data-theme='dark'] .course-syllabus-box {
     background-color: #555555;
-    /* Lighter than card #444444 */
     color: #e0e0e0;
 }

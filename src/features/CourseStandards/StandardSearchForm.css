@@ -46,10 +46,8 @@
     }
 }
 
-/* Dark Mode - Gray Theme Overrides */
 [data-theme='dark'] .standard-search-form-container {
     background-color: #767676;
-    /* Match Class Schedule Filter */
     color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
