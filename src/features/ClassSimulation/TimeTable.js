@@ -1,4 +1,4 @@
-﻿import React, { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PERIODS } from '../../constants/periods';
 import './TimeTable.css';
@@ -14,12 +14,7 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemes
         let maxDayIndex = 0; // 0-based for DayNames (0=Mon, 5=Sat)
         let maxPeriodIndex = 0; // 0-based for PERIODS
 
-        // Default minimums (e.g., Mon-Fri, Periods 1-9)
-        // If users want strictly crop, set to -1 
-        // But usually a schedule looks better with at least some structure.
-        // The user request "if empty... don't output", implies strict dynamic sizing.
-        // Let's start with minimal 4 days and 9 periods? 
-        // Or just iterate ALL keys and find max.
+        // Default minimums (Mon-Fri, Periods 1-9)
 
         // Scan standard full grid to find actual max
         Object.keys(scheduleGrid).forEach(key => {
@@ -37,8 +32,6 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemes
                 if (pIdx > maxPeriodIndex) maxPeriodIndex = pIdx;
             }
         });
-
-        // Ensure reasonable minimums so it doesn't look broken if empty
         // Defaults: Mon-Fri (4), Periods 1-9 (9)
         maxDayIndex = Math.max(maxDayIndex, 4);
         maxPeriodIndex = Math.max(maxPeriodIndex, 9);
@@ -53,8 +46,6 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemes
     // Derived day indices for mapping (1-based)
     const dayIndices = visibleDays.map((_, i) => i + 1);
 
-    // Pre-calculate spans for merging consecutive cells
-    // Only calculate for the visible range
     const cellConfig = useMemo(() => {
         const config = {};
 
@@ -69,7 +60,6 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemes
 
                 if (courseId) {
                     let span = 1;
-                    // Look ahead for same course
                     for (let j = i + 1; j < visiblePeriods.length; j++) {
                         const nextPeriod = visiblePeriods[j];
                         const nextKey = `${day}_${nextPeriod.id}`;
@@ -115,8 +105,6 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemes
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
                 style={{
-                    // Dynamic columns: Header + N Days
-                    // Use CSS variable so mobile can shrink the first col
                     gridTemplateColumns: `var(--time-col-width, 60px) repeat(${visibleDays.length}, 1fr)`
                 }}
             >
@@ -172,7 +160,7 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemes
                                     padding: '4px',
                                     zIndex: 10,
                                     position: 'relative',
-                                    pointerEvents: 'none', // Let clicks pass through to the card inside
+                                    pointerEvents: 'none',
                                     display: 'flex',
                                 }}
                             >
@@ -180,7 +168,7 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemes
                                     data-export-target="card"
                                     className={`simulation-timetable-course-card ${isHovered ? 'hover' : ''}`}
                                     style={{
-                                        pointerEvents: 'auto', // Re-enable pointer events
+                                        pointerEvents: 'auto',
                                         backgroundColor: 'rgba(199, 196, 196, 0.6)',
                                         borderRadius: '6px',
                                         padding: '4px',
@@ -214,7 +202,7 @@ const SchedulerTable = ({ scheduleGrid, courseData, onRemoveCourse, currentSemes
                                             fontWeight: 'bold',
                                             fontSize: '0.85em',
                                             marginBottom: '2px',
-                                            display: 'block', // Ensure it takes space
+                                            display: 'block',
                                             width: '100%',
                                             textAlign: 'center',
                                             lineHeight: '1.2'

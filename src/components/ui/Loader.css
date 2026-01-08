@@ -21,3 +21,7 @@
 .loader svg rect {
     fill: #6887df79;
 }
+
+[data-theme='dark'] .loader-overlay {
+    background-color: rgba(173, 173, 173, 0.7);
+}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import './CourseSearchPanel.css'; // Reuse styles for consistency
 
 const Icons = {
@@ -9,52 +9,9 @@ const Icons = {
     )
 };
 
-const formatTime = (timeArray) => {
-    if (!timeArray || timeArray.length === 0) return '無時間資訊';
-
-    const dayMap = ['日', '一', '二', '三', '四', '五', '六'];
-    const grouped = {};
-
-    timeArray.forEach(t => {
-        if (!grouped[t.day]) grouped[t.day] = [];
-        grouped[t.day].push(t.period);
-    });
-
-    const parts = [];
-    Object.keys(grouped).sort().forEach(dayIdx => {
-        const dayName = dayMap[dayIdx] || dayIdx;
-        const periods = grouped[dayIdx].join(', ');
-        parts.push(`${dayName} / ${periods}`);
-    });
-
-    return parts.join('；');
-};
 
 const SelectedCoursesList = ({ addedCoursesData = {}, onRemoveCourse, onClearAll, onExport }) => {
     const courses = useMemo(() => Object.values(addedCoursesData), [addedCoursesData]);
-    const [searchTerm, setSearchTerm] = useState('');
-
-    const normalize = (s = '') => String(s).replace(/[^0-9a-zA-Z一-鿿\s]/g, '').toLowerCase();
-
-    const displayedCourses = useMemo(() => {
-        const q = normalize(searchTerm);
-        if (!q) return courses;
-
-        return courses.filter(course => {
-            const hayParts = [];
-            if (course.name) {
-                if (typeof course.name === 'string') hayParts.push(course.name);
-                else { hayParts.push(course.name?.zh || ''); hayParts.push(course.name?.en || ''); }
-            }
-            if (Array.isArray(course.teacher)) hayParts.push(course.teacher.map(t => t.name || t).join(' '));
-            else if (course.teacher) hayParts.push(course.teacher);
-            hayParts.push(String(course.id));
-            if (course.code) hayParts.push(String(course.code));
-
-            const hay = normalize(hayParts.join(' '));
-            return hay.includes(q);
-        });
-    }, [courses, searchTerm]);
 
     return (
         <div style={{ padding: '20px', borderTop: '1px solid #F1F5F9' }}>
@@ -99,30 +56,12 @@ const SelectedCoursesList = ({ addedCoursesData = {}, onRemoveCourse, onClearAll
                 flexDirection: 'column',
                 gap: '8px'
             }}>
-                {displayedCourses.map(course => {
+                {courses.map(course => {
                     const courseId = Number(course.id ?? course.courseId);
 
-                    const title = typeof course.name === 'string' ? course.name : (course.name?.zh || course.name?.en || 'Unknown');
+                    const title = typeof course.name === 'string' ? course.name : (course.name?.zh || course.name?.en);
                     const teacher = Array.isArray(course.teacher) ? course.teacher.map(t => t.name || t).join('、') : (course.teacher || 'Unknown');
                     const credits = course.credit ?? course.credits ?? 0;
-
-                    let timeDisplay = '無時間資訊';
-                    if (Array.isArray(course.time)) {
-                        timeDisplay = formatTime(course.time);
-                    } else if (course.time && typeof course.time === 'object') {
-                        const tempTime = [];
-                        const dayMap = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 };
-                        for (const k in course.time) {
-                            const dayIdx = (dayMap[k] !== undefined ? dayMap[k] : (Number(k) || null));
-                            if (dayIdx) {
-                                const periods = course.time[k] || [];
-                                if (Array.isArray(periods)) {
-                                    periods.forEach(p => tempTime.push({ day: dayIdx, period: String(p) }));
-                                }
-                            }
-                        }
-                        if (tempTime.length > 0) timeDisplay = formatTime(tempTime);
-                    }
 
                     return (
                         <div
@@ -136,10 +75,10 @@ const SelectedCoursesList = ({ addedCoursesData = {}, onRemoveCourse, onClearAll
                                 alignItems: 'center',
                                 padding: '10px 14px',
                                 minHeight: 'auto',
-                                cursor: 'default', // Changed from default CSS
-                                transform: 'none', // Override potential hover transform
-                                boxShadow: '0 1px 2px rgba(0,0,0,0.05)', // Simple shadow, no hover change intended
-                                transition: 'none' // Remove transition
+                                cursor: 'default', 
+                                transform: 'none',
+                                boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                                transition: 'none'
                             }}
                         >
                             <div style={{ flex: 1, minWidth: 0, marginRight: '12px' }}>

@@ -46,7 +46,21 @@ body {
         transform: none;
     }
 }
-/* Dark Mode Support */
+
+body,
+.main-layout-nav,
+.main-layout-footer,
+.content-card,
+.page-title,
+.page-subtitle,
+.main-layout-link,
+button,
+input,
+select,
+textarea {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 [data-theme='dark'] body {
     background-color: #464646;
     color: #e0e0e0;

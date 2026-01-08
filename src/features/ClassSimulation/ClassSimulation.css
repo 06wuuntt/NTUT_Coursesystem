@@ -55,22 +55,25 @@
 }
 
 .simulation-timetable-section {
-    /* flex: 1; was causing it to stretch to fill the container height even if content was small */
     flex-grow: 1;
+    /* Was 0, restored to 1 but with min-height */
+    flex-shrink: 1;
     overflow-y: auto;
     border-bottom: 4px solid #F1F5F9;
     position: relative;
-    min-height: 0;
-    /* Removed height: fit-content which conflicts with flex-grow */
+    min-height: 600px;
+    /* Increased from 300px to ensure it doesn't feel too short */
 }
 
 .simulation-courselist-section {
-    height: 220px;
-    /* Fixed height for the list */
+    min-height: 220px;
+    flex-grow: 0;
+    /* Changed from 1 to 0 to prioritize timetable height */
     flex-shrink: 0;
-    /* Prevent shrinking */
     overflow-y: auto;
     background-color: #FCFCFD;
+    max-height: 40%;
+    /* Prevent it from taking too much space */
 }
 
 .simulation-header-bar {
@@ -85,6 +88,17 @@
     display: none;
 }
 
+.simulation-credits-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.simulation-credits-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
 
 .simulation-credit-display {
     font-size: 1.25rem;
@@ -96,6 +110,17 @@
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.simulation-credit-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.simulation-credit-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #334155;
 }
 
 .simulation-drag-overlay {
@@ -222,29 +247,6 @@
     gap: 8px;
 }
 
-.simulation-credits-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-}
-
-.simulation-credits-wrapper {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.simulation-credit-label {
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.simulation-credit-value {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #334155;
-}
-
 .simulation-mobile-tabs {
     display: none;
 }
@@ -252,7 +254,6 @@
 @media (max-width: 768px) {
     .simulation-containers {
         padding: 50px 10px 0;
-
     }
 
     .simulation-title {
@@ -376,20 +377,12 @@
     }
 }
 
-/* Dark Mode - Gray Theme Overrides */
 [data-theme='dark'] .simulation-container {
     background-color: transparent;
 }
 
-/* Dark Mode - Gray Theme Overrides */
-[data-theme='dark'] .simulation-container {
-    background-color: transparent;
-}
-
-/* Dark Mode - Gray Theme Overrides */
 [data-theme='dark'] .simulation-right-panel {
     background-color: transparent;
-    /* Remove white bg */
     border: none;
     box-shadow: none;
 }

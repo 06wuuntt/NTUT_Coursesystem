@@ -6,12 +6,16 @@
     padding: 20px;
 }
 
+.main-layout-content {
+    padding: 160px 20px 0;
+    flex: 1;
+    animation: global-fadein 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
 .main-layout-nav {
     background-color: #FFFFFF;
-    /* max-width: 0.7fr; Removed invalid property */
     padding: 20px 40px;
     margin: 10px 50px 0;
-    /* Removed bottom margin as it doesn't affect flow when fixed */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -24,25 +28,6 @@
     right: 0;
     z-index: 1000;
     width: auto;
-    /* Let margins control width */
-}
-
-.main-layout-hamburger {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #464646;
-    cursor: pointer;
-}
-
-/* 控制漢堡選單 icon 大小 */
-.main-layout-hamburger svg {
-    font-size: 20px;
-    /* 你可以改成你想要的大小，例如 28px、32px、40px */
-    width: 1em;
-    height: 1em;
-    padding-left: 5px;
 }
 
 .main-layout-title {
@@ -63,19 +48,6 @@
     gap: 15px;
 }
 
-.main-layout-buttons {
-    display: flex;
-    flex-direction: row;
-    order: 3;
-    align-items: center;
-    gap: 8px;
-}
-
-.main-layout-semester-select {
-    width: 150px;
-    order: 3;
-}
-
 .main-layout-link {
     color: #797979ff;
     font-weight: 500;
@@ -91,11 +63,17 @@
     color: #336F8B;
 }
 
-.main-layout-content {
-    padding: 160px 20px 0;
-    /* Added top padding to clear fixed nav */
-    flex: 1;
-    animation: global-fadein 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+.main-layout-buttons {
+    display: flex;
+    flex-direction: row;
+    order: 3;
+    align-items: center;
+    gap: 8px;
+}
+
+.main-layout-semester-select {
+    width: 150px;
+    order: 3;
 }
 
 .main-layout-theme-toggle {
@@ -109,16 +87,20 @@
     align-items: center;
 }
 
-@keyframes global-fadein {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
+.main-layout-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #464646;
+    cursor: pointer;
+}
 
-    to {
-        opacity: 1;
-        transform: none;
-    }
+.main-layout-hamburger svg {
+    font-size: 20px;
+    width: 1em;
+    height: 1em;
+    padding-left: 5px;
 }
 
 .main-layout-footer {
@@ -153,6 +135,31 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+.main-layout-footer-title {
+    color: #464646;
+    margin: 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #dfdfdf;
+    font-size: 16px;
+}
+
+.main-layout-footer-copyright {
+    margin: 0;
+    color: #41809E;
+}
+
+@keyframes global-fadein {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 @media (max-width: 1070px) {
     .main-layout-link {
         font-size: 14px;
@@ -170,8 +177,6 @@
         justify-content: stretch;
         text-align: center;
         padding: 10px 15px;
-        /* Remove row-gap to prevent space when menu is closed */
-        /* Inherits fixed position, top, left, right, z-index from desktop */
     }
 
     .main-layout-title {
@@ -200,10 +205,7 @@
         gap: 5px;
         order: 4;
         align-items: stretch;
-        /* 強制子元素左右拉伸佔滿 */
         text-align: center;
-        /* 讓子元素裡的文字保持置中 */
-        /* Animation properties */
         max-height: 0;
         opacity: 0;
         overflow: hidden;
@@ -213,7 +215,6 @@
 
     .main-layout-nav-links.open {
         max-height: 300px;
-        /* Adjust based on content height */
         opacity: 1;
         margin-top: 10px;
         border-top: 1px #e7e7e7 solid;
@@ -275,7 +276,6 @@
 
     .main-layout-content {
         padding: 80px 2px 0;
-        /* Adjusted top padding for mobile fixed nav */
     }
 
     .main-layout-nav {
@@ -283,8 +283,6 @@
         padding: 15px 10px;
         gap: 0 8px;
         border-radius: 0;
-        /* Remove row-gap to prevent space when menu is closed */
-        /* Inherits fixed position, top, left, right, z-index from desktop */
     }
 
     .main-layout-title {
@@ -312,8 +310,6 @@
         width: 100%;
         gap: 5px;
         order: 4;
-
-        /* Animation properties */
         max-height: 0;
         opacity: 0;
         overflow: hidden;
@@ -326,7 +322,6 @@
     .main-layout-nav-links.open {
         max-height: 300px;
         padding-top: 2px;
-        /* Adjust based on content height */
         opacity: 1;
         margin-top: 10px;
     }
@@ -349,7 +344,6 @@
     }
 }
 
-/* Dark Mode Nav Overrides */
 [data-theme='dark'] .main-layout-nav {
     background-color: #363636;
     box-shadow: 8px 8px 30px #4d4c4c;
@@ -369,7 +363,7 @@
 }
 
 [data-theme='dark'] .main-layout-theme-toggle {
-    color: #ffffff;
+    color: #f3d77a;
 }
 
 [data-theme='dark'] .main-layout-footer {
@@ -381,21 +375,8 @@
     color: #C3E6F5;
 }
 
-.main-layout-footer-copyright {
-    margin: 0;
-    color: #41809E;
-}
-
 [data-theme='dark'] .main-layout-footer-copyright {
     color: #C3E6F5;
-}
-
-.main-layout-footer-title {
-    color: #464646;
-    margin: 0;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #dfdfdf;
-    font-size: 16px;
 }
 
 [data-theme='dark'] .main-layout-footer-title {
